@@ -1,0 +1,47 @@
+.Navlinks {
+    display: flex;
+    background-color: #f4f4f4;
+    justify-content: space-between;
+    width: 100vw;
+    padding: 10px;
+    position: fixed;
+    z-index: 10;
+    border-bottom: 1px solid lightgray;
+    box-shadow: 0 0px 10px -5px rgba(0, 0, 0, 0.425);
+}
+
+.nav-logo {
+    color: #0d2e49;
+    margin-left: 15%;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 17%;
+    margin-right: 15%;
+    color: #f4f4f4;
+}
+
+.btn-link {
+    width: 7vw;
+    border-radius: 20px;
+    font-size: 1vw;
+}
+
+.btn-login {
+    border: 3px solid #0d2e49;
+    background-color: transparent;
+}
+
+.btn-signup {
+    border: 3px solid #0d2e49;
+    background-color: #0d2e49;
+    color: #f4f4f4;
+}
+
+.btn-username {
+    font-size: 20px;
+}
