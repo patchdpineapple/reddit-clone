@@ -24,13 +24,14 @@ body {
 }
 
 .btn {
+  display: inline-block;
   border: none;
   border-radius: 5px;
-  padding: 10px 20px;
   cursor: pointer;
   color: #0d2e49;
   text-decoration: none;
   background-color: transparent;
+  padding: 10px 20px;
 }
 
 .btn:focus {

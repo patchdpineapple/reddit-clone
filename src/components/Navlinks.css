@@ -31,13 +31,20 @@
     font-size: 1vw;
 }
 
-.btn-login {
+.btn-login, .btn-signup {
     border: 3px solid #0d2e49;
+    text-align: center;
+    height: 50px;
+    width: 100px;
+    font-size: 2vh;
+    margin: 0 5px;
+}
+
+.btn-login {
     background-color: transparent;
 }
 
 .btn-signup {
-    border: 3px solid #0d2e49;
     background-color: #0d2e49;
     color: #f4f4f4;
 }
