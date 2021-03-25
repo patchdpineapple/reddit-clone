@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navlinks from "./Navlinks";
 import Main from "./Main";
 import Profile from "./Profile";
+import Signup from "./Signup";
 
 //data
 import arrCategories from "../data/categories";
@@ -13,6 +14,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(() => {
     //get all posts
@@ -30,7 +32,8 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setShowSignup={setShowSignup} />
+        {showSignup && <Signup setShowSignup={setShowSignup} />}
         <Switch>
         <Route path="/reddit-clone" component={()=>(
             <Main allCategories={allCategories} allPosts={allPosts}/>
@@ -41,6 +44,7 @@ function App() {
           <Route path="/profile" component={()=>(
             <Profile allPosts={allPosts}/>
           )} />
+          
 
         </Switch> 
       </div>
