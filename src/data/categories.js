@@ -11,8 +11,9 @@ const arrCategories = [
         image: gaminglogo,
         posts: [
             {
+                id: "gaming0",
                 category: "Gaming",
-                poster: "Rimuru",
+                poster: "GuestUser",
                 date: "2020-03-31",
                 title: "Is this game any good?",
                 text: "I have played only MH 3, is this any good?",
@@ -22,11 +23,12 @@ const arrCategories = [
 
             },
             {
+                id: "gaming1",
                 category: "Gaming",
                 poster: "Beako",
                 date: "2020-05-15",
                 title: "Worst game of all time",
-                text: "I want to know if this is a good alternative",
+                text: "What is your worst game of all time",
                 image: "",
                 votes: 2,
                 comments: 0,
@@ -41,6 +43,7 @@ const arrCategories = [
         image: artlogo,
         posts: [
             {
+                id: "art0",
                 category: "Art",
                 poster: "Megumi",
                 date: "2020-05-05",
@@ -48,6 +51,25 @@ const arrCategories = [
                 text: "What is your favorite artwork?",
                 image: "",
                 votes: 3,
+                comments: 0,
+            },
+        ]
+    },
+    {
+        id: 2,
+        name: "Poetry",
+        members: 1,
+        image: "",
+        posts: [
+            {
+                id: "poetry0",
+                category: "Poetry",
+                poster: "GuestUser",
+                date: "2020-01-07",
+                title: "Your favorite poet?",
+                text: "Who is your favorite poet?",
+                image: "",
+                votes: 1,
                 comments: 0,
             },
         ]
