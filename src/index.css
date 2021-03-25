@@ -19,8 +19,10 @@ body {
   background-color: #f4f4f4;
 }
 
+
 .link {
   text-decoration: none;
+  cursor: pointer;
 }
 
 .btn {

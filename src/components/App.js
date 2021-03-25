@@ -6,7 +6,7 @@ import Navlinks from "./Navlinks";
 import Main from "./Main";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <Router>

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./Main.css";
-import waldo from "../images/waldo_beach.jpg";
 import arrCategories from "../data/categories";
 
-function Category({name, members}) {
+function Category({ id, name, members, image }) {
   return (
-    <div className="Category">
+    <div className="Category" data-id={id}>
       <div className="category-info">
-        <img className="category-img" src={waldo} alt="category" />
+        <img className="category-img" src={image} alt="" />
         <div className="category-text-container">
-          <strong className="category-title">/Gaming</strong>
-          <span className="category-members">1 member</span>
+          <strong className="category-title">/{name}</strong>
+          <span className="category-members">{members} members</span>
         </div>
       </div>
       <button className="btn btn-join">Join</button>
@@ -58,26 +57,22 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
         <button className="btn btn-vote btn-upvote">
           <i className="fas fa-chevron-up"></i>
         </button>
-  <p className="votes">{votes}</p>
+        <p className="votes">{votes}</p>
         <button className="btn btn-vote btn-downvote">
           <i className="fas fa-chevron-down"></i>
         </button>
       </div>
       <div className="container post-content-container">
         <div className="post-header">
-  <strong className="post-group">/{category}</strong>
-          <p className="post-user">
-  posted by {poster}
-          </p>
-  <p className="post-time">{date}</p>
+          <strong className="post-group">/{category}</strong>
+          <p className="post-user">posted by {poster}</p>
+          <p className="post-time">{date}</p>
         </div>
         <div className="post-main">
           <h2 className="post-title">{title}</h2>
-          <p className="post-message">
-            {text}
-          </p>
+          <p className="post-message">{text}</p>
           <div className="post-img-container">
-            <img className="post-img" src={image} alt=""/>
+            <img className="post-img" src={image} alt="" />
           </div>
           <div className="post-comment-container">
             <div className="post-comment">
@@ -132,7 +127,16 @@ function Main() {
       </div>
       <div className="categories-container container">
         <p className="category-header">Categories</p>
-        <Category />
+        {arrCategories.map((category) => {
+          return (
+            <Category
+              id={category.id}
+              name={category.name}
+              members={category.members}
+              image={category.image}
+            />
+          );
+        })}
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
-import waldo from "../images/waldo_beach.jpg";
+import mhrise from "../images/mhrise.jpg";
+import gaminglogo from "../images/gaminglogo.png";
+import artlogo from "../images/artlogo.png";
 
 
 const arrCategories = [
@@ -6,14 +8,15 @@ const arrCategories = [
         id: 0,
         name: "Gaming",
         members: 5,
+        image: gaminglogo,
         posts: [
             {
                 category: "Gaming",
                 poster: "Rimuru",
                 date: "2020-03-31",
-                title: "Is it good?",
-                text: "I want to know if this is a good alternative",
-                image: waldo,
+                title: "Is this game any good?",
+                text: "I have played only MH 3, is this any good?",
+                image: mhrise,
                 votes: 5,
                 comments: 0,
 
@@ -35,6 +38,7 @@ const arrCategories = [
         id: 1,
         name: "Art",
         members: 2,
+        image: artlogo,
         posts: [
             {
                 category: "Art",

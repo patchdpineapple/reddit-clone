@@ -102,8 +102,8 @@
 .post-img {
     min-width: 0px;
     min-height: 0px;
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 50vw;
+    max-height: 50vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -165,19 +165,20 @@
     border-radius: 50%;
     width: 30px;
     height: 30px;
+    border: 1px solid rgb(211, 211, 211)
 }
 
 .category-text-container {
     display: flex;
     flex-flow: column;
-    justify-content: center;
-    align-items: flex-end;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 5px;
 }
 
 .category-title {
     font-size: 12px;
     cursor: pointer;
-    margin-left: 10px;
 
 }
 
