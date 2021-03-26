@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import guest from "../data/guest";
-import {Post} from "./Main";
+import { Post } from "./Main";
 
-function Profile({allPosts}) {
-  const [guestData, setGuestData] = useState(guest);
-  const [userPosts, setUserPosts] = useState([]);
+function Profile({ allPosts, guestData, setGuestData, userPosts, setUserPosts }) {
 
+  
   useEffect(() => {
+    //set user data/info on render
+    let tempPostPoints = 0;
     let tempUserPosts = allPosts.filter((post) => {
       let idChecker = false;
-      guestData.postsIds.map( id => {
-        if(id===post.id) idChecker = true;
+      guestData.postsIds.map((id) => {
+        if (id === post.id) idChecker = true;
         return id;
       });
       return idChecker;
-
     });
 
+    tempUserPosts.map((post) => (tempPostPoints += post.votes));
+    setGuestData({ ...guestData, postPoints: tempPostPoints });
     setUserPosts(tempUserPosts);
-    
   }, []);
 
   return (
@@ -27,7 +27,7 @@ function Profile({allPosts}) {
       <div className="profile-info">
         <img src="" className="profile-pic" alt="" />
         <h2>{guestData.name}</h2>
-        <h3>Post pts:{guestData.postPoints}</h3>
+        <h3>Post pts:&nbsp;{guestData.postPoints}</h3>
         <h3>Comment pts:{guestData.commentPoints}</h3>
       </div>
       <div className="profile-divider"></div>

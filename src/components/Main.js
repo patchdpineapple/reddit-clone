@@ -1,5 +1,6 @@
 import React from "react";
 import "./Main.css";
+import { Link } from "react-router-dom";
 
 function Category({ id, name, members, image }) {
   return (
@@ -7,7 +8,7 @@ function Category({ id, name, members, image }) {
       <div className="category-info">
         <img className="category-img" src={image} alt="" />
         <div className="category-text-container">
-          <strong className="category-title">/{name}</strong>
+          <Link to={`hub/${name}`} className="link"><strong className="category-title">/{name}</strong></Link>
           <span className="category-members">{members} members</span>
         </div>
       </div>

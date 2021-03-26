@@ -4,6 +4,9 @@ const guest = {
     commentPoints: 0,
     postsIds: [
         "gaming0", "poetry0"
+    ],
+    hubs: [
+        "Gaming", "Poetry"
     ]
 }
 

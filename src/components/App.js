@@ -5,17 +5,26 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navlinks from "./Navlinks";
 import Main from "./Main";
 import Profile from "./Profile";
+import Login from "./Login";
 import Signup from "./Signup";
+import HubPage from "./HubPage";
 
 //data
 import arrCategories from "../data/categories";
+import guest from "../data/guest";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+//ui state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+//data state
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
-  const [showSignup, setShowSignup] = useState(false);
-
+  const [guestData, setGuestData] = useState(guest);
+  const [userPosts, setUserPosts] = useState([]);
+ 
+//USE EFFECT
   useEffect(() => {
     //get all posts
     let tempPosts = [];
@@ -32,7 +41,8 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setShowSignup={setShowSignup} />
+        <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />
+        {showLogin && <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} />}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
         <Switch>
         <Route path="/reddit-clone" component={()=>(
@@ -42,7 +52,10 @@ function App() {
             <Main allCategories={allCategories} allPosts={allPosts}/>
           )} />
           <Route path="/profile" component={()=>(
-            <Profile allPosts={allPosts}/>
+            <Profile allPosts={allPosts} guestData={guestData} setGuestData={setGuestData} userPosts={userPosts} setUserPosts={setUserPosts}/>
+          )} />
+          <Route path="/hub/:name" component={()=>(
+            <HubPage allPosts={allPosts} />
           )} />
           
 

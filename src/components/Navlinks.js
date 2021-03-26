@@ -14,9 +14,9 @@ function LoggedIn({setIsLoggedIn}) {
   );
 }
 
-function LoggedOut({setIsLoggedIn, setShowSignup}) {
+function LoggedOut({setIsLoggedIn, setShowLogin, setShowSignup}) {
   const handleLogin = ()=>{
-    setIsLoggedIn(true);
+    setShowLogin(true);
   }
 
   const handleSignup = ()=>{
@@ -25,17 +25,17 @@ function LoggedOut({setIsLoggedIn, setShowSignup}) {
 
   return (
     <ul className="nav-links">
-          <li><Link to="/" className="link btn btn-link btn-login" onClick={handleLogin} >Login</Link></li>
+          <li><button className="link btn btn-link btn-login" onClick={handleLogin} >Login</button></li>
           <li><button className="link btn btn-link btn-signup" onClick={handleSignup}>Sign Up</button></li>
         </ul>
   );
 }
 
-function Navlinks({isLoggedIn, setIsLoggedIn, setShowSignup}) {
+function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup}) {
   return (
   <div className="Navlinks">
     <h1 className="nav-logo"><Link to="/" className="link">The Hub</Link></h1>
-        {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} /> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowSignup={setShowSignup} />}
+        {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} /> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />}
   </div>
   );
 }
