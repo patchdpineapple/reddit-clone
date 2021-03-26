@@ -2,6 +2,18 @@ import React from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
 
+function PostFloater({setShowMakePost}) {
+  const handleMakePost = () => {
+    setShowMakePost(true);
+  }
+
+  return (
+    <div className="PostFloater">
+      <button className="btn btn-post-floater" onClick={handleMakePost}><i class="fas fa-plus"></i></button>
+      </div>
+  );
+}
+
 function Category({ id, name, members, image }) {
   return (
     <div className="Category" data-id={id}>
@@ -56,7 +68,7 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
   );
 }
 
-function Main({allCategories, allPosts}) {
+function Main({allCategories, allPosts, isLoggedIn, setShowMakePost}) {
   
 
   return (
@@ -95,6 +107,7 @@ function Main({allCategories, allPosts}) {
           );
         })}
       </div>
+      {isLoggedIn && <PostFloater setShowMakePost={setShowMakePost} />}
     </div>
   );
 }

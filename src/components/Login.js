@@ -24,7 +24,7 @@ function Login({ setShowLogin, setIsLoggedIn }) {
         onClick={(e) => e.stopPropagation()}
         onSubmit={ e => handleSubmit(e) }
       >
-        <h1>Signup</h1>
+        <h1>Login</h1>
         <label for="username">Username:</label>
         <input
           className="input-login"

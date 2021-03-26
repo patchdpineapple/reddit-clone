@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import Login from "./Login";
 import Signup from "./Signup";
 import HubPage from "./HubPage";
+import MakePost from "./MakePost";
 
 //data
 import arrCategories from "../data/categories";
@@ -18,6 +19,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [showMakePost, setShowMakePost] = useState(false);
 //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
@@ -44,12 +46,13 @@ function App() {
         <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />
         {showLogin && <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} />}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
+        {showMakePost && <MakePost setShowMakePost={setShowMakePost} />}
         <Switch>
         <Route path="/reddit-clone" component={()=>(
             <Main allCategories={allCategories} allPosts={allPosts}/>
           )}  />
           <Route exact path="/" component={()=>(
-            <Main allCategories={allCategories} allPosts={allPosts}/>
+            <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} setShowMakePost={setShowMakePost}/>
           )} />
           <Route path="/profile" component={()=>(
             <Profile allPosts={allPosts} guestData={guestData} setGuestData={setGuestData} userPosts={userPosts} setUserPosts={setUserPosts}/>

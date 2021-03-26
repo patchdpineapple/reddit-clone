@@ -31,7 +31,7 @@
     padding: 5px;
     background-color: #f4f4f4;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
     display: flex;
     align-items: flex-start;
     border: 1px solid lightgray;
@@ -128,7 +128,7 @@
     font-size: 12px;
  }
 
- /* Categories List */
+ /* Categories */
 .categories-container {
     display: flex;
     flex-flow: column;
@@ -139,7 +139,7 @@
     padding: 10px;
     background-color: #f4f4f4;  
     border: 1px solid lightgray;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-right: 10%;
     grid-area: categories;
 }
@@ -194,3 +194,28 @@
     color: #f4f4f4;
 
 }
+
+ /* Post Button */
+ .PostFloater {
+     position: fixed;
+     bottom: 0;
+     right: 0;
+     z-index: 10;
+     margin-right: 10vw;
+     margin-bottom: 5vh;
+ }
+
+ .btn-post-floater {
+     border: 1px solid #0d2e49;
+     width: 50px;
+     height: 50px;
+     font-size: 24px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+    border-radius:  50%;
+    box-shadow: 0 0px 5px 3px rgba(0, 0, 0, 0.288);
+    background-color:  #f4f4f4;
+    text-align: center;
+ }
+

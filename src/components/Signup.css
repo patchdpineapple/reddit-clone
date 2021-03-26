@@ -29,16 +29,19 @@
 .signup-form > button {
     margin: 10px;
     padding: 10px;
-    width: 100px;
+    width: 200px;
     height: 20px;
     border: 1px solid #0d2e49;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #0d2e49;
+    color: #f4f4f4;
 }
 
 .input-signup {
     margin: 5px;
-    width: 200;
+    width: 200px;
+    height: 30px;
 }
 
