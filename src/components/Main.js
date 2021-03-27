@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./Main.css";
-import { Link } from "react-router-dom";
+import { Link, useParams, useRouteMatch } from "react-router-dom";
 
 function PostFloater({setShowMakePost}) {
   const handleMakePost = () => {
@@ -15,12 +15,15 @@ function PostFloater({setShowMakePost}) {
 }
 
 function Category({ id, name, members, image }) {
+  let {path, url} = useRouteMatch();
+
+
   return (
     <div className="Category" data-id={id}>
       <div className="category-info">
         <img className="category-img" src={image} alt="" />
         <div className="category-text-container">
-          <Link to={`hub/${name}`} className="link"><strong className="category-title">/{name}</strong></Link>
+          <Link to={url === "/" ? `hub/${name}`: `/hub/${name}`} className="link"><strong className="category-title">/{name}</strong></Link>
           <span className="category-members">{members} members</span>
         </div>
       </div>
@@ -68,16 +71,29 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
   );
 }
 
-function Main({allCategories, allPosts, isLoggedIn, setShowMakePost}) {
+function Main({allCategories, allPosts, isLoggedIn, setShowMakePost, categoryName}) {
   
+  const [categoryPosts, setCategoryPosts] = useState([]);
+console.log(categoryName);
+  useEffect(() => {
+    
+    //get posts from same category only or all posts if no category name
+    if(categoryName){
+      let tempCategoryPosts = allPosts.filter(
+        (post) => post.category === categoryName
+      );
+      setCategoryPosts(tempCategoryPosts);
+    } else setCategoryPosts(allPosts);
+    
+  }, [categoryName]);
 
   return (
     <div className="Main container">
       <div className="current-category">
-        <h1>/All</h1>
+  <h1>{categoryName ? categoryName:"/All"}</h1>
       </div>
       <div className="posts-container container">
-        {allPosts.map((post) => {
+        {categoryPosts.map((post) => {
           return (
             <Post
               key={post.id}
@@ -113,4 +129,4 @@ function Main({allCategories, allPosts, isLoggedIn, setShowMakePost}) {
 }
 
 export default Main;
-export {Post};
+export {Post, PostFloater};

@@ -58,7 +58,7 @@ function App() {
             <Profile allPosts={allPosts} guestData={guestData} setGuestData={setGuestData} userPosts={userPosts} setUserPosts={setUserPosts}/>
           )} />
           <Route path="/hub/:category" component={()=>(
-            <HubPage allPosts={allPosts} />
+            <HubPage allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn}/>
           )} />
           
 
