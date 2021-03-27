@@ -31,10 +31,14 @@ function LoggedOut({setIsLoggedIn, setShowLogin, setShowSignup}) {
   );
 }
 
-function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup}) {
+function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory}) {
+  const resetCurrentCategory = () => {
+    setCurrentCategory("");
+  }
+
   return (
   <div className="Navlinks">
-    <h1 className="nav-logo"><Link to="/" className="link">The Hub</Link></h1>
+    <h1 className="nav-logo"><Link to="/" className="link" onClick={resetCurrentCategory}>The Hub</Link></h1>
         {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} /> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />}
   </div>
   );

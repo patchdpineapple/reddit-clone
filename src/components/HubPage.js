@@ -3,13 +3,16 @@ import "./HubPage.css";
 import { useParams } from "react-router-dom";
 import Main from "./Main";
 
-function HubPage({ allCategories, allPosts, isLoggedIn }) {
+function HubPage({ allCategories, allPosts, isLoggedIn, setShowMakePost, currentCategory, setCurrentCategory}) {
   let { category } = useParams();
   
+  useEffect(()=>{
+    setCurrentCategory(category);
+  },[category]);
 
   return (
     <>
-      <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} categoryName={category} />
+      <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} setShowMakePost={setShowMakePost} categoryName={currentCategory} />
       
     </>
   );

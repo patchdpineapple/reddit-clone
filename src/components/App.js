@@ -15,20 +15,21 @@ import arrCategories from "../data/categories";
 import guest from "../data/guest";
 
 function App() {
-//ui state
+  //ui state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showMakePost, setShowMakePost] = useState(false);
-//data state
+  //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
   const [guestData, setGuestData] = useState(guest);
   const [userPosts, setUserPosts] = useState([]);
- 
-//USE EFFECT
+  const [currentCategory, setCurrentCategory] = useState("");
+
+  //USE EFFECT
   useEffect(() => {
-    //get all posts
+    //get all posts from all categories
     let tempPosts = [];
     allCategories.map((category) => {
       category.posts.map((post) => {
@@ -43,26 +44,69 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navlinks isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />
-        {showLogin && <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} />}
+        <Navlinks
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          setShowLogin={setShowLogin}
+          setShowSignup={setShowSignup}
+          setCurrentCategory={setCurrentCategory}
+        />
+        {showLogin && (
+          <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} />
+        )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
-        {showMakePost && <MakePost setShowMakePost={setShowMakePost} />}
+        {showMakePost && (
+          <MakePost
+            allCategories={allCategories}
+            setShowMakePost={setShowMakePost}
+            currentCategory={currentCategory}
+          />
+        )}
         <Switch>
-        <Route path="/reddit-clone" component={()=>(
-            <Main allCategories={allCategories} allPosts={allPosts}/>
-          )}  />
-          <Route exact path="/" component={()=>(
-            <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} setShowMakePost={setShowMakePost}/>
-          )} />
-          <Route path="/profile" component={()=>(
-            <Profile allPosts={allPosts} guestData={guestData} setGuestData={setGuestData} userPosts={userPosts} setUserPosts={setUserPosts}/>
-          )} />
-          <Route path="/hub/:category" component={()=>(
-            <HubPage allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn}/>
-          )} />
-          
-
-        </Switch> 
+          <Route
+            path="/reddit-clone"
+            component={() => (
+              <Main allCategories={allCategories} allPosts={allPosts} />
+            )}
+          />
+          <Route
+            exact
+            path="/"
+            component={() => (
+              <Main
+                allCategories={allCategories}
+                allPosts={allPosts}
+                isLoggedIn={isLoggedIn}
+                setShowMakePost={setShowMakePost}
+              />
+            )}
+          />
+          <Route
+            path="/profile"
+            component={() => (
+              <Profile
+                allPosts={allPosts}
+                guestData={guestData}
+                setGuestData={setGuestData}
+                userPosts={userPosts}
+                setUserPosts={setUserPosts}
+              />
+            )}
+          />
+          <Route
+            path="/hub/:category"
+            component={() => (
+              <HubPage
+                allCategories={allCategories}
+                allPosts={allPosts}
+                isLoggedIn={isLoggedIn}
+                setShowMakePost={setShowMakePost}
+                currentCategory={currentCategory}
+                setCurrentCategory={setCurrentCategory}
+              />
+            )}
+          />
+        </Switch>
       </div>
     </Router>
   );
