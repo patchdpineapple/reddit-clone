@@ -9,10 +9,10 @@ import Login from "./Login";
 import Signup from "./Signup";
 import HubPage from "./HubPage";
 import MakePost from "./MakePost";
+import Comments from "./Comments";
 
 //data
 import arrCategories from "../data/categories";
-import guest from "../data/guest";
 
 function App() {
   //ui state
@@ -23,9 +23,11 @@ function App() {
   //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
-  const [guestData, setGuestData] = useState(guest);
+  const [currentUser, setCurrentUser] = useState({});
   const [userPosts, setUserPosts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
+  const [currentPost, setCurrentPost] = useState({});
+
 
   //USE EFFECT
   useEffect(() => {
@@ -52,7 +54,7 @@ function App() {
           setCurrentCategory={setCurrentCategory}
         />
         {showLogin && (
-          <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} />
+          <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
         )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
         {showMakePost && (
@@ -78,6 +80,7 @@ function App() {
                 allPosts={allPosts}
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
+                setCurrentPost={setCurrentPost}
               />
             )}
           />
@@ -86,10 +89,11 @@ function App() {
             component={() => (
               <Profile
                 allPosts={allPosts}
-                guestData={guestData}
-                setGuestData={setGuestData}
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
                 userPosts={userPosts}
                 setUserPosts={setUserPosts}
+                
               />
             )}
           />
@@ -103,7 +107,14 @@ function App() {
                 setShowMakePost={setShowMakePost}
                 currentCategory={currentCategory}
                 setCurrentCategory={setCurrentCategory}
+                setCurrentPost={setCurrentPost}
               />
+            )}
+          />
+          <Route
+            path="/post/:id"
+            component={() => (
+              <Comments post={currentPost}/>
             )}
           />
         </Switch>

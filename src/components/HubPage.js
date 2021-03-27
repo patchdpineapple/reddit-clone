@@ -3,7 +3,7 @@ import "./HubPage.css";
 import { useParams } from "react-router-dom";
 import Main from "./Main";
 
-function HubPage({ allCategories, allPosts, isLoggedIn, setShowMakePost, currentCategory, setCurrentCategory}) {
+function HubPage({ allCategories, allPosts, isLoggedIn, setShowMakePost, currentCategory, setCurrentCategory, setCurrentPost}) {
   let { category } = useParams();
   
   useEffect(()=>{
@@ -12,7 +12,7 @@ function HubPage({ allCategories, allPosts, isLoggedIn, setShowMakePost, current
 
   return (
     <>
-      <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} setShowMakePost={setShowMakePost} categoryName={currentCategory} />
+      <Main allCategories={allCategories} allPosts={allPosts} isLoggedIn={isLoggedIn} setShowMakePost={setShowMakePost} categoryName={currentCategory} setCurrentPost={setCurrentPost} />
       
     </>
   );

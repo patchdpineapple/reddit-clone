@@ -74,12 +74,14 @@
     margin: 5px;
 }
 
-.post-group {
+.post-group,.post-postedBy, .post-user, .post-time {
     font-size: 12px;
 }
 
-.post-user, .post-time {
-    font-size: 12px;
+.post-group, .post-user, .post-title {
+    cursor: pointer;
+}
+.post-postedBy, .post-user, .post-time {
     color: #1d1d1d80;
 }
     /* post content */

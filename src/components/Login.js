@@ -1,7 +1,8 @@
 import React from 'react';
 import "./Login.css";
+import guest from "../data/guest";
 
-function Login({ setShowLogin, setIsLoggedIn }) {
+function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
     const closeLogin = () => {
         setShowLogin(false);
       };
@@ -13,6 +14,7 @@ function Login({ setShowLogin, setIsLoggedIn }) {
 
       const handleGuest = (e) => {
         e.preventDefault();
+        setCurrentUser(guest);
         setIsLoggedIn(true);
         closeLogin();
       }

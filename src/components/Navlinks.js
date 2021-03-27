@@ -31,7 +31,7 @@ function LoggedOut({setIsLoggedIn, setShowLogin, setShowSignup}) {
   );
 }
 
-function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory}) {
+function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory }) {
   const resetCurrentCategory = () => {
     setCurrentCategory("");
   }

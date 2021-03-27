@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import { Post } from "./Main";
 
-function Profile({ allPosts, guestData, setGuestData, userPosts, setUserPosts }) {
+function Profile({ allPosts, currentUser, setCurrentUser, userPosts, setUserPosts,  }) {
 
   
   useEffect(() => {
@@ -11,7 +11,7 @@ function Profile({ allPosts, guestData, setGuestData, userPosts, setUserPosts })
     let tempUserPosts = allPosts.filter((post) => {
       let idChecker = false;
       //check if post id is the same to user post id
-      guestData.postsIds.map((id) => {
+      currentUser.postsIds.map((id) => {
         if (id === post.id) idChecker = true;
         return id;
       });
@@ -19,7 +19,7 @@ function Profile({ allPosts, guestData, setGuestData, userPosts, setUserPosts })
     });
 
     tempUserPosts.map((post) => (tempPostPoints += post.votes));
-    setGuestData({ ...guestData, postPoints: tempPostPoints });
+    setCurrentUser({ ...currentUser, postPoints: tempPostPoints });
     setUserPosts(tempUserPosts);
   }, []);
 
@@ -27,9 +27,9 @@ function Profile({ allPosts, guestData, setGuestData, userPosts, setUserPosts })
     <div className="Profile">
       <div className="profile-info">
         <img src="" className="profile-pic" alt="" />
-        <h2>{guestData.name}</h2>
-        <h3>Post pts:&nbsp;{guestData.postPoints}</h3>
-        <h3>Comment pts:{guestData.commentPoints}</h3>
+        <h2>{currentUser.name}</h2>
+        <h3>Post pts:&nbsp;{currentUser.postPoints}</h3>
+        <h3>Comment pts:{currentUser.commentPoints}</h3>
       </div>
       <div className="profile-divider"></div>
       <h3>Posts</h3>

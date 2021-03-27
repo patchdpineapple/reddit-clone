@@ -1,5 +1,6 @@
 const guest = {
-    name: "GuestUser",
+    username: "GuestUser",
+    password: "1",
     postPoints: 0,
     commentPoints: 0,
     postsIds: [

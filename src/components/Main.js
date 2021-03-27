@@ -32,9 +32,18 @@ function Category({ id, name, members, image }) {
   );
 }
 
-function Post({ category, poster, date, title, text, image, votes, comments }) {
+function Post({ id, category, poster, date, title, text, image, votes, comments, allPosts, setCurrentPost }) {
+
+  let {path, url} = useRouteMatch();
+
+  const handleSelectPost = () => {
+    //finds the post with same id as selected post and sets as current post to be displayed on the post page
+    let tempCurrentPost = allPosts.find( post => post.id === id);
+    setCurrentPost(tempCurrentPost);
+  }
+
   return (
-    <div className="Post">
+    <div className="Post" data-id={id}>
       <div className="container votes-container">
         <button className="btn btn-vote btn-upvote">
           <i className="fas fa-chevron-up"></i>
@@ -46,12 +55,12 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
       </div>
       <div className="container post-content-container">
         <div className="post-header">
-          <strong className="post-group">/{category}</strong>
-          <p className="post-user">posted by {poster}</p>
+        <Link to={url === "/" ? `hub/${category}`: `/hub/${category}`} className="link"><strong className="post-group">/{category}</strong></Link>
+          <p className="post-postedBy">posted by <span className="post-user">{poster}</span></p>
           <p className="post-time">{date}</p>
         </div>
         <div className="post-main">
-          <h3 className="post-title">{title}</h3>
+        <Link to={url === "/" ? `post/${id}`: `/post/${id}`} className="link" onClick={handleSelectPost}><h3 className="post-title">{title}</h3></Link>
           <p className="post-message">{text}</p>
           <div className="post-img-container">
             <img className="post-img" src={image} alt="" />
@@ -62,7 +71,7 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
                 className="fas fa-comment-alt"
                 style={{ "fontSize": "12px" }}
               ></i>
-              <span className="post-comment-text">{comments} Comments</span>
+              <Link to={url === "/" ? `post/${id}`: `/post/${id}`} className="link" onClick={handleSelectPost}><span className="post-comment-text">{comments} Comments</span></Link>
             </div>
           </div>
         </div>
@@ -71,7 +80,7 @@ function Post({ category, poster, date, title, text, image, votes, comments }) {
   );
 }
 
-function Main({allCategories, allPosts, isLoggedIn, setShowMakePost, categoryName}) {
+function Main({allCategories, allPosts, isLoggedIn, setShowMakePost, categoryName, setCurrentPost}) {
   
   const [categoryPosts, setCategoryPosts] = useState([]);
 console.log(categoryName);
@@ -97,6 +106,7 @@ console.log(categoryName);
           return (
             <Post
               key={post.id}
+              id={post.id}
               category={post.category}
               poster={post.poster}
               date={post.date}
@@ -105,6 +115,8 @@ console.log(categoryName);
               image={post.image}
               votes={post.votes}
               comments={post.comments}
+              allPosts={allPosts}
+              setCurrentPost={setCurrentPost}
             />
           );
         })}
