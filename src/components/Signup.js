@@ -19,7 +19,7 @@ function Signup({ setShowSignup }) {
         onSubmit={(e) => handleSubmit(e)}
       >
         <h1>Signup</h1>
-        <label for="username">Username:</label>
+        <label htmlFor="username">Username:</label>
         <input
           className="input-signup"
           type="text"
@@ -28,7 +28,7 @@ function Signup({ setShowSignup }) {
           placeholder="User"
           required
         />
-        <label for="email">Email:</label>
+        <label htmlFor="email">Email:</label>
         <input
           className="input-signup"
           type="email"
@@ -37,7 +37,7 @@ function Signup({ setShowSignup }) {
           placeholder="sample@sample.com"
           required
         />
-        <label for="password">Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
           className="input-signup"
           type="password"

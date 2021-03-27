@@ -57,7 +57,7 @@ function App() {
           <Route path="/profile" component={()=>(
             <Profile allPosts={allPosts} guestData={guestData} setGuestData={setGuestData} userPosts={userPosts} setUserPosts={setUserPosts}/>
           )} />
-          <Route path="/hub/:name" component={()=>(
+          <Route path="/hub/:category" component={()=>(
             <HubPage allPosts={allPosts} />
           )} />
           

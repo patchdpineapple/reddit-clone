@@ -25,7 +25,7 @@ function Login({ setShowLogin, setIsLoggedIn }) {
         onSubmit={ e => handleSubmit(e) }
       >
         <h1>Login</h1>
-        <label for="username">Username:</label>
+        <label htmlFor="username">Username:</label>
         <input
           className="input-login"
           type="text"
@@ -35,7 +35,7 @@ function Login({ setShowLogin, setIsLoggedIn }) {
           required
         />
        
-        <label for="password">Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
           className="input-login"
           type="password"

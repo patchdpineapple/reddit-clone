@@ -9,7 +9,7 @@ function PostFloater({setShowMakePost}) {
 
   return (
     <div className="PostFloater">
-      <button className="btn btn-post-floater" onClick={handleMakePost}><i class="fas fa-plus"></i></button>
+      <button className="btn btn-post-floater" onClick={handleMakePost}><i className="fas fa-plus"></i></button>
       </div>
   );
 }
