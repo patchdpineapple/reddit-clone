@@ -2,32 +2,29 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import { Post } from "./Main";
 
-function Profile({ allPosts, currentUser, setCurrentUser, userPosts, setUserPosts,  }) {
+function Profile({ allPosts, currentUser, setCurrentUser, userPosts, setUserPosts, setCurrentPost  }) {
 
-  
-  useEffect(() => {
-    //set user data/info on render
-    let tempPostPoints = 0;
-    let tempUserPosts = allPosts.filter((post) => {
-      let idChecker = false;
-      //check if post id is the same to user post id
-      currentUser.postsIds.map((id) => {
-        if (id === post.id) idChecker = true;
-        return id;
-      });
-      return idChecker;
-    });
 
-    tempUserPosts.map((post) => (tempPostPoints += post.votes));
-    setCurrentUser({ ...currentUser, postPoints: tempPostPoints });
-    setUserPosts(tempUserPosts);
-  }, []);
+  // useEffect(() => {
+  //   //set user data/info on render
+  //   let tempUserPosts = allPosts.filter((post) => {
+  //     let idChecker = false;
+  //     //check if post id is the same to user post id
+  //     currentUser.postsIds.map((id) => {
+  //       if (id === post.id) idChecker = true;
+  //       return id;
+  //     });
+  //     return idChecker;
+  //   });
+
+  //   setUserPosts(tempUserPosts);
+  // }, []);
 
   return (
-    <div className="Profile">
+    <div className="Profile">{console.log("render")}
       <div className="profile-info">
         <img src="" className="profile-pic" alt="" />
-        <h2>{currentUser.name}</h2>
+        <h2>{currentUser.username}</h2>
         <h3>Post pts:&nbsp;{currentUser.postPoints}</h3>
         <h3>Comment pts:{currentUser.commentPoints}</h3>
       </div>
@@ -38,6 +35,7 @@ function Profile({ allPosts, currentUser, setCurrentUser, userPosts, setUserPost
           return (
             <Post
               key={post.id}
+              id={post.id}
               category={post.category}
               poster={post.poster}
               date={post.date}
@@ -46,6 +44,8 @@ function Profile({ allPosts, currentUser, setCurrentUser, userPosts, setUserPost
               image={post.image}
               votes={post.votes}
               comments={post.comments}
+              allPosts={allPosts}
+              setCurrentPost={setCurrentPost}
             />
           );
         })}

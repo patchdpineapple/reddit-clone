@@ -150,6 +150,24 @@
     padding: 10px;
 }
 
+.btn-new-category {
+    margin: 10px;
+    padding: 10px;
+    height: 20px;
+    border: 1px solid #0d2e49;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: #0d2e49;
+}
+
+.btn-new-category:hover {
+    background-color: #0d2e49;
+    color: #f4f4f4;
+
+}
+
 .Category {
     display: flex;
     justify-content: space-between;

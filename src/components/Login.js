@@ -1,8 +1,10 @@
 import React from 'react';
 import "./Login.css";
 import guest from "../data/guest";
+import accounts from "../data/accounts";
 
-function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
+
+function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUserPosts, allPosts }) {
     const closeLogin = () => {
         setShowLogin(false);
       };
@@ -13,8 +15,25 @@ function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
       };
 
       const handleGuest = (e) => {
+        //set current user to guest account
+
         e.preventDefault();
-        setCurrentUser(guest);
+
+        let guestUser = accounts[0];
+        let tempUserPosts = allPosts.filter((post) => {
+          let idChecker = false;
+          //check if post id is the same to user post id
+          guestUser.postsIds.map((id) => {
+            if (id === post.id) idChecker = true;
+            return id;
+          });
+          return idChecker;
+        });
+
+        setCurrentUser(guestUser);
+        setUserPosts(tempUserPosts);
+
+
         setIsLoggedIn(true);
         closeLogin();
       }

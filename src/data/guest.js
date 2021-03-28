@@ -1,10 +1,10 @@
 const guest = {
     username: "GuestUser",
     password: "1",
-    postPoints: 0,
+    postPoints: 6,
     commentPoints: 0,
     postsIds: [
-        "gaming0", "poetry0"
+        "Gaming0", "Poetry0"
     ],
     hubs: [
         "Gaming", "Poetry"

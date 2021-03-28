@@ -134,6 +134,7 @@ console.log(categoryName);
             />
           );
         })}
+        {isLoggedIn && <button className="btn btn-new-category">Add Category</button>}
       </div>
       {isLoggedIn && <PostFloater setShowMakePost={setShowMakePost} />}
     </div>

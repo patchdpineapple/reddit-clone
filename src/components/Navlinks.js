@@ -2,13 +2,13 @@ import React from "react";
 import "./Navlinks.css";
 import { Link } from "react-router-dom";
 
-function LoggedIn({setIsLoggedIn}) {
+function LoggedIn({setIsLoggedIn, currentUser}) {
   const handleLogout = ()=>{
     setIsLoggedIn(false);
   }
   return (
     <ul className="nav-links">
-          <li><Link to="/profile" className="link btn btn-link btn-username">GuestUser</Link></li>
+          <li><Link to="/profile" className="link btn btn-link btn-username">{currentUser.username}</Link></li>
           <li><Link to="/" className="link btn btn-link btn-logout" onClick={handleLogout} >Logout</Link></li>
         </ul>
   );
@@ -31,7 +31,7 @@ function LoggedOut({setIsLoggedIn, setShowLogin, setShowSignup}) {
   );
 }
 
-function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory }) {
+function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory, currentUser }) {
   const resetCurrentCategory = () => {
     setCurrentCategory("");
   }
@@ -39,7 +39,7 @@ function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCu
   return (
   <div className="Navlinks">
     <h1 className="nav-logo"><Link to="/" className="link" onClick={resetCurrentCategory}>The Hub</Link></h1>
-        {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} /> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />}
+        {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} currentUser={currentUser} /> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />}
   </div>
   );
 }

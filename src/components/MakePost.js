@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./MakePost.css";
 
-function MakePost({ allCategories, setShowMakePost, currentCategory }) {
+function MakePost({ allCategories, setAllCategories, setShowMakePost, currentCategory }) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [hub, setHub] = useState(currentCategory);
@@ -42,6 +42,7 @@ function MakePost({ allCategories, setShowMakePost, currentCategory }) {
           id="make-post-category"
           value={hub}
           onChange={handleHubChange}
+          required
         >
           <option value=""></option>
           {allCategories.map((category) => {

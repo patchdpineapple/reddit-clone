@@ -28,7 +28,6 @@ function App() {
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentPost, setCurrentPost] = useState({});
 
-
   //USE EFFECT
   useEffect(() => {
     //get all posts from all categories
@@ -52,14 +51,23 @@ function App() {
           setShowLogin={setShowLogin}
           setShowSignup={setShowSignup}
           setCurrentCategory={setCurrentCategory}
+          currentUser={currentUser}
         />
         {showLogin && (
-          <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} setCurrentUser={setCurrentUser} />
+          <Login
+            setShowLogin={setShowLogin}
+            setIsLoggedIn={setIsLoggedIn}
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
+            setUserPosts={setUserPosts}
+            allPosts={allPosts}
+          />
         )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
         {showMakePost && (
           <MakePost
             allCategories={allCategories}
+            setAllCategories={setAllCategories}
             setShowMakePost={setShowMakePost}
             currentCategory={currentCategory}
           />
@@ -93,7 +101,7 @@ function App() {
                 setCurrentUser={setCurrentUser}
                 userPosts={userPosts}
                 setUserPosts={setUserPosts}
-                
+                setCurrentPost={setCurrentPost}
               />
             )}
           />
@@ -114,7 +122,11 @@ function App() {
           <Route
             path="/post/:id"
             component={() => (
-              <Comments post={currentPost}/>
+              <Comments
+                post={currentPost}
+                allPosts={allPosts}
+                setCurrentPost={setCurrentPost}
+              />
             )}
           />
         </Switch>

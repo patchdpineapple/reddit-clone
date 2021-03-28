@@ -11,7 +11,7 @@ const arrCategories = [
         image: gaminglogo,
         posts: [
             {
-                id: "gaming0",
+                id: "Gaming0",
                 category: "Gaming",
                 poster: "GuestUser",
                 date: "2020-03-31",
@@ -23,7 +23,7 @@ const arrCategories = [
 
             },
             {
-                id: "gaming1",
+                id: "Gaming1",
                 category: "Gaming",
                 poster: "Beako",
                 date: "2020-05-15",
@@ -43,7 +43,7 @@ const arrCategories = [
         image: artlogo,
         posts: [
             {
-                id: "art0",
+                id: "Art0",
                 category: "Art",
                 poster: "Megumi",
                 date: "2020-05-05",
@@ -62,7 +62,7 @@ const arrCategories = [
         image: "",
         posts: [
             {
-                id: "poetry0",
+                id: "Poetry0",
                 category: "Poetry",
                 poster: "GuestUser",
                 date: "2020-01-07",

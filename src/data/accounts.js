@@ -1,11 +1,11 @@
 const accounts = [
   {
     id: 0,
-    username: "GuestUser",
+    username: "GuestUser123",
     password: "1",
-    postPoints: 0,
+    postPoints: 6,
     commentPoints: 0,
-    postsIds: ["gaming0", "poetry0"],
+    postsIds: ["Gaming0", "Poetry0"],
     hubs: ["Gaming", "Poetry"],
   },
   {
@@ -14,7 +14,7 @@ const accounts = [
     password: "123",
     postPoints: 0,
     commentPoints: 0,
-    postsIds: ["gaming1"],
+    postsIds: ["Gaming1"],
     hubs: ["Gaming"],
   },
   {
@@ -23,7 +23,7 @@ const accounts = [
     password: "123",
     postPoints: 0,
     commentPoints: 0,
-    postsIds: ["art0"],
+    postsIds: ["Art0"],
     hubs: ["Art"],
   },
 ];
