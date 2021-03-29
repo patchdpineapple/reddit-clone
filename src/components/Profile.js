@@ -13,7 +13,9 @@ function Profile({
   setProfilePosts
 }) {
   let { username } = useParams();
-  console.log(username);
+  useEffect(() => {
+    console.log("useEffect profile", username)
+  }, [username]);
 
   return (
     <div className="Profile">

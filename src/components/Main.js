@@ -43,29 +43,21 @@ function Post({
 }) {
   const handleClickPoster = () => {
     let tempUser = accounts.find((account) => account.username === thisPost.poster);
-    let tempUserPosts = allPosts.filter((post) => {
-      let idChecker = false;
-      //check if post id is the same to user post id
-      tempUser.postsIds.map((id) => {
-        if (id === thisPost.id) idChecker = true;
-        return id;
-      });
-      return idChecker;
-    });
-
+    let tempUserPosts = allPosts.filter((post) => post.poster === tempUser.username);
+    
     setProfileUser(tempUser);
     setProfilePosts(tempUserPosts);
   };
 
   const handleSelectPost = () => {
     //finds the post with same id as selected post and sets as current post to be displayed on the post page
-    console.log("this post: ", thisPost);
+    
     let tempCurrentPost = allPosts.find((post) => post.id === thisPost.id);
     setCurrentPost(tempCurrentPost);
   };
 
   return (
-    <div className="Post" data-id={thisPost.id}>{console.log("render post", thisPost)}
+    <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
         <button className="btn btn-vote btn-upvote">
           <i className="fas fa-chevron-up"></i>
@@ -140,7 +132,7 @@ function Main({
   return (
     <div className="Main container">
       <div className="current-category">
-        <h1>{categoryName ? categoryName : "/All"}</h1>
+        <h1>{categoryName ? `/${categoryName}` : "/All"}</h1>
       </div>
       <div className="posts-container container">
         {categoryPosts.map((post) => {

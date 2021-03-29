@@ -122,6 +122,8 @@ function App() {
                 currentCategory={currentCategory}
                 setCurrentCategory={setCurrentCategory}
                 setCurrentPost={setCurrentPost}
+                setProfileUser={setProfileUser}
+                setProfilePosts={setProfilePosts}
               />
             )}
           />
