@@ -7,8 +7,6 @@ function Comments({
   post,
   allPosts,
   setCurrentPost,
-  setProfileUser,
-  setProfilePosts,
 }) {
   return (
     <div className="Comments">
@@ -19,8 +17,6 @@ function Comments({
           thisPost={post}
           allPosts={allPosts}
           setCurrentPost={setCurrentPost}
-          setProfileUser={setProfileUser}
-          setProfilePosts={setProfilePosts}
         />
       </div>
       <div className="comments-divider"></div>

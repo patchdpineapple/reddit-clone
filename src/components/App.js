@@ -13,7 +13,9 @@ import Comments from "./Comments";
 
 //data
 import arrCategories from "../data/categories";
+import accounts from "../data/accounts";
 
+/* COMPONENT */
 function App() {
   //ui state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,9 +29,8 @@ function App() {
   const [userPosts, setUserPosts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentPost, setCurrentPost] = useState({});
-  const [profileUser, setProfileUser] = useState({});
-  const [profilePosts, setProfilePosts] = useState([]);
 
+  //FUNCTIONS
 
   //USE EFFECT
   useEffect(() => {
@@ -43,8 +44,9 @@ function App() {
       return category;
     });
     setAllPosts(tempPosts);
-  }, []);
+  }, [allCategories]);
 
+  //RENDER
   return (
     <Router>
       <div className="App">
@@ -64,7 +66,6 @@ function App() {
             setCurrentUser={setCurrentUser}
             setUserPosts={setUserPosts}
             allPosts={allPosts}
-
           />
         )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
@@ -93,22 +94,13 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
                 setCurrentPost={setCurrentPost}
-                setProfileUser={setProfileUser}
-                setProfilePosts={setProfilePosts}
               />
             )}
           />
           <Route
             path="/profile/:username"
             component={() => (
-              <Profile
-                allPosts={allPosts}
-                setCurrentPost={setCurrentPost}
-                profileUser={profileUser}
-                profilePosts={profilePosts}
-                setProfileUser={setProfileUser}
-                setProfilePosts={setProfilePosts}
-              />
+              <Profile allPosts={allPosts} setCurrentPost={setCurrentPost} />
             )}
           />
           <Route
@@ -122,8 +114,6 @@ function App() {
                 currentCategory={currentCategory}
                 setCurrentCategory={setCurrentCategory}
                 setCurrentPost={setCurrentPost}
-                setProfileUser={setProfileUser}
-                setProfilePosts={setProfilePosts}
               />
             )}
           />
@@ -134,8 +124,6 @@ function App() {
                 post={currentPost}
                 allPosts={allPosts}
                 setCurrentPost={setCurrentPost}
-                setProfileUser={setProfileUser}
-                setProfilePosts={setProfilePosts}
               />
             )}
           />

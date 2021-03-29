@@ -11,11 +11,8 @@ function HubPage({
   currentCategory,
   setCurrentCategory,
   setCurrentPost,
-  setProfileUser,
-  setProfilePosts,
 }) {
   let { category } = useParams();
-  console.log(category);
   useEffect(() => {
     setCurrentCategory(category);
   }, [category]);
@@ -29,8 +26,6 @@ function HubPage({
         setShowMakePost={setShowMakePost}
         categoryName={currentCategory}
         setCurrentPost={setCurrentPost}
-        setProfileUser={setProfileUser}
-        setProfilePosts={setProfilePosts}
       />
     </>
   );

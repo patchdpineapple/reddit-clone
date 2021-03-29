@@ -38,16 +38,8 @@ function Post({
   thisPost,
   allPosts,
   setCurrentPost,
-  setProfileUser,
-  setProfilePosts,
 }) {
-  const handleClickPoster = () => {
-    let tempUser = accounts.find((account) => account.username === thisPost.poster);
-    let tempUserPosts = allPosts.filter((post) => post.poster === tempUser.username);
-    
-    setProfileUser(tempUser);
-    setProfilePosts(tempUserPosts);
-  };
+  
 
   const handleSelectPost = () => {
     //finds the post with same id as selected post and sets as current post to be displayed on the post page
@@ -72,7 +64,7 @@ function Post({
           <Link to={`/hub/${thisPost.category}`} className="link">
             <strong className="post-group">/{thisPost.category}</strong>
           </Link>
-          <Link to={`/profile/${thisPost.poster}`} className="link" onClick={handleClickPoster}>
+          <Link to={`/profile/${thisPost.poster}`} className="link">
             <p className="post-postedBy">
               posted by <span className="post-user">{thisPost.poster}</span>
             </p>
@@ -115,8 +107,7 @@ function Main({
   setShowMakePost,
   categoryName,
   setCurrentPost,
-  setProfileUser,
-  setProfilePosts,
+  
 }) {
   const [categoryPosts, setCategoryPosts] = useState([]);
   useEffect(() => {
@@ -142,8 +133,6 @@ function Main({
               thisPost={post}
               allPosts={allPosts}
               setCurrentPost={setCurrentPost}
-              setProfileUser={setProfileUser}
-              setProfilePosts={setProfilePosts}
             />
           );
         })}
