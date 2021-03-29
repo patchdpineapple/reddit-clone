@@ -8,7 +8,7 @@ function LoggedIn({setIsLoggedIn, currentUser}) {
   }
   return (
     <ul className="nav-links">
-          <li><Link to="/profile" className="link btn btn-link btn-username">{currentUser.username}</Link></li>
+          <li><Link to={`/profile/${currentUser.username}`} className="link btn btn-link btn-username">{currentUser.username}</Link></li>
           <li><Link to="/" className="link btn btn-link btn-logout" onClick={handleLogout} >Logout</Link></li>
         </ul>
   );

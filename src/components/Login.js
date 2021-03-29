@@ -20,7 +20,7 @@ function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUs
         e.preventDefault();
 
         let guestUser = accounts[0];
-        let tempUserPosts = allPosts.filter((post) => {
+        let  guestPosts = allPosts.filter((post) => {
           let idChecker = false;
           //check if post id is the same to user post id
           guestUser.postsIds.map((id) => {
@@ -31,7 +31,7 @@ function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUs
         });
 
         setCurrentUser(guestUser);
-        setUserPosts(tempUserPosts);
+        setUserPosts(guestPosts);
 
 
         setIsLoggedIn(true);

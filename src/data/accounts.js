@@ -1,7 +1,7 @@
 const accounts = [
   {
     id: 0,
-    username: "GuestUser123",
+    username: "GuestUser",
     password: "1",
     postPoints: 6,
     commentPoints: 0,

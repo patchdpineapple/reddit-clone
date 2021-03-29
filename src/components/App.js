@@ -27,6 +27,9 @@ function App() {
   const [userPosts, setUserPosts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentPost, setCurrentPost] = useState({});
+  const [profileUser, setProfileUser] = useState({});
+  const [profilePosts, setProfilePosts] = useState([]);
+
 
   //USE EFFECT
   useEffect(() => {
@@ -61,6 +64,7 @@ function App() {
             setCurrentUser={setCurrentUser}
             setUserPosts={setUserPosts}
             allPosts={allPosts}
+
           />
         )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
@@ -89,19 +93,21 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
                 setCurrentPost={setCurrentPost}
+                setProfileUser={setProfileUser}
+                setProfilePosts={setProfilePosts}
               />
             )}
           />
           <Route
-            path="/profile"
+            path="/profile/:username"
             component={() => (
               <Profile
                 allPosts={allPosts}
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
-                userPosts={userPosts}
-                setUserPosts={setUserPosts}
                 setCurrentPost={setCurrentPost}
+                profileUser={profileUser}
+                profilePosts={profilePosts}
+                setProfileUser={setProfileUser}
+                setProfilePosts={setProfilePosts}
               />
             )}
           />
@@ -126,6 +132,8 @@ function App() {
                 post={currentPost}
                 allPosts={allPosts}
                 setCurrentPost={setCurrentPost}
+                setProfileUser={setProfileUser}
+                setProfilePosts={setProfilePosts}
               />
             )}
           />

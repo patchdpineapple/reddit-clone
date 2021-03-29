@@ -5,7 +5,7 @@ import Main from "./Main";
 
 function HubPage({ allCategories, allPosts, isLoggedIn, setShowMakePost, currentCategory, setCurrentCategory, setCurrentPost}) {
   let { category } = useParams();
-  
+  console.log(category)
   useEffect(()=>{
     setCurrentCategory(category);
   },[category]);

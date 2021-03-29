@@ -1,29 +1,31 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./Main.css";
-import { Link, useParams, useRouteMatch } from "react-router-dom";
+import { Link } from "react-router-dom";
+import accounts from "../data/accounts";
 
-function PostFloater({setShowMakePost}) {
+function PostFloater({ setShowMakePost }) {
   const handleMakePost = () => {
     setShowMakePost(true);
-  }
+  };
 
   return (
     <div className="PostFloater">
-      <button className="btn btn-post-floater" onClick={handleMakePost}><i className="fas fa-plus"></i></button>
-      </div>
+      <button className="btn btn-post-floater" onClick={handleMakePost}>
+        <i className="fas fa-plus"></i>
+      </button>
+    </div>
   );
 }
 
 function Category({ id, name, members, image }) {
-  let {path, url} = useRouteMatch();
-
-
   return (
     <div className="Category" data-id={id}>
       <div className="category-info">
         <img className="category-img" src={image} alt="" />
         <div className="category-text-container">
-          <Link to={url === "/" ? `hub/${name}`: `/hub/${name}`} className="link"><strong className="category-title">/{name}</strong></Link>
+          <Link to={`/hub/${name}`} className="link">
+            <strong className="category-title">/{name}</strong>
+          </Link>
           <span className="category-members">{members} members</span>
         </div>
       </div>
@@ -32,46 +34,80 @@ function Category({ id, name, members, image }) {
   );
 }
 
-function Post({ id, category, poster, date, title, text, image, votes, comments, allPosts, setCurrentPost }) {
+function Post({
+  thisPost,
+  allPosts,
+  setCurrentPost,
+  setProfileUser,
+  setProfilePosts,
+}) {
+  const handleClickPoster = () => {
+    let tempUser = accounts.find((account) => account.username === thisPost.poster);
+    let tempUserPosts = allPosts.filter((post) => {
+      let idChecker = false;
+      //check if post id is the same to user post id
+      tempUser.postsIds.map((id) => {
+        if (id === thisPost.id) idChecker = true;
+        return id;
+      });
+      return idChecker;
+    });
 
-  let {path, url} = useRouteMatch();
+    setProfileUser(tempUser);
+    setProfilePosts(tempUserPosts);
+  };
 
   const handleSelectPost = () => {
     //finds the post with same id as selected post and sets as current post to be displayed on the post page
-    let tempCurrentPost = allPosts.find( post => post.id === id);
+    console.log("this post: ", thisPost);
+    let tempCurrentPost = allPosts.find((post) => post.id === thisPost.id);
     setCurrentPost(tempCurrentPost);
-  }
+  };
 
   return (
-    <div className="Post" data-id={id}>
+    <div className="Post" data-id={thisPost.id}>{console.log("render post", thisPost)}
       <div className="container votes-container">
         <button className="btn btn-vote btn-upvote">
           <i className="fas fa-chevron-up"></i>
         </button>
-        <p className="votes">{votes}</p>
+        <p className="votes">{thisPost.votes}</p>
         <button className="btn btn-vote btn-downvote">
           <i className="fas fa-chevron-down"></i>
         </button>
       </div>
       <div className="container post-content-container">
         <div className="post-header">
-        <Link to={url === "/" ? `hub/${category}`: `/hub/${category}`} className="link"><strong className="post-group">/{category}</strong></Link>
-          <p className="post-postedBy">posted by <span className="post-user">{poster}</span></p>
-          <p className="post-time">{date}</p>
+          <Link to={`/hub/${thisPost.category}`} className="link">
+            <strong className="post-group">/{thisPost.category}</strong>
+          </Link>
+          <Link to={`/profile/${thisPost.poster}`} className="link" onClick={handleClickPoster}>
+            <p className="post-postedBy">
+              posted by <span className="post-user">{thisPost.poster}</span>
+            </p>
+          </Link>
+          <p className="post-time">{thisPost.date}</p>
         </div>
         <div className="post-main">
-        <Link to={url === "/" ? `post/${id}`: `/post/${id}`} className="link" onClick={handleSelectPost}><h3 className="post-title">{title}</h3></Link>
-          <p className="post-message">{text}</p>
+          <Link to={`/post/${thisPost.id}`} className="link" onClick={handleSelectPost}>
+            <h3 className="post-title">{thisPost.title}</h3>
+          </Link>
+          <p className="post-message">{thisPost.text}</p>
           <div className="post-img-container">
-            <img className="post-img" src={image} alt="" />
+            <img className="post-img" src={thisPost.image} alt="" />
           </div>
           <div className="post-comment-container">
             <div className="post-comment">
               <i
                 className="fas fa-comment-alt"
-                style={{ "fontSize": "12px" }}
+                style={{ fontSize: "12px" }}
               ></i>
-              <Link to={url === "/" ? `post/${id}`: `/post/${id}`} className="link" onClick={handleSelectPost}><span className="post-comment-text">{comments} Comments</span></Link>
+              <Link
+                to={`/post/${thisPost.id}`}
+                className="link"
+                onClick={handleSelectPost}
+              >
+                <span className="post-comment-text">{thisPost.comments} Comments</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -80,43 +116,42 @@ function Post({ id, category, poster, date, title, text, image, votes, comments,
   );
 }
 
-function Main({allCategories, allPosts, isLoggedIn, setShowMakePost, categoryName, setCurrentPost}) {
-  
+function Main({
+  allCategories,
+  allPosts,
+  isLoggedIn,
+  setShowMakePost,
+  categoryName,
+  setCurrentPost,
+  setProfileUser,
+  setProfilePosts,
+}) {
   const [categoryPosts, setCategoryPosts] = useState([]);
-console.log(categoryName);
   useEffect(() => {
-    
     //get posts from same category only or all posts if no category name
-    if(categoryName){
+    if (categoryName) {
       let tempCategoryPosts = allPosts.filter(
         (post) => post.category === categoryName
       );
       setCategoryPosts(tempCategoryPosts);
     } else setCategoryPosts(allPosts);
-    
   }, [categoryName]);
 
   return (
     <div className="Main container">
       <div className="current-category">
-  <h1>{categoryName ? categoryName:"/All"}</h1>
+        <h1>{categoryName ? categoryName : "/All"}</h1>
       </div>
       <div className="posts-container container">
         {categoryPosts.map((post) => {
           return (
             <Post
               key={post.id}
-              id={post.id}
-              category={post.category}
-              poster={post.poster}
-              date={post.date}
-              title={post.title}
-              text={post.text}
-              image={post.image}
-              votes={post.votes}
-              comments={post.comments}
+              thisPost={post}
               allPosts={allPosts}
               setCurrentPost={setCurrentPost}
+              setProfileUser={setProfileUser}
+              setProfilePosts={setProfilePosts}
             />
           );
         })}
@@ -134,7 +169,9 @@ console.log(categoryName);
             />
           );
         })}
-        {isLoggedIn && <button className="btn btn-new-category">Add Category</button>}
+        {isLoggedIn && (
+          <button className="btn btn-new-category">Add Category</button>
+        )}
       </div>
       {isLoggedIn && <PostFloater setShowMakePost={setShowMakePost} />}
     </div>
@@ -142,4 +179,4 @@ console.log(categoryName);
 }
 
 export default Main;
-export {Post, PostFloater};
+export { Post, PostFloater };

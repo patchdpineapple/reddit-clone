@@ -3,24 +3,24 @@ import "./Comments.css";
 import { useParams } from "react-router-dom";
 import { Post } from "./Main";
 
-function Comments({ post, allPosts, setCurrentPost }) {
+function Comments({
+  post,
+  allPosts,
+  setCurrentPost,
+  setProfileUser,
+  setProfilePosts,
+}) {
   return (
     <div className="Comments">
       <h1>Comments</h1>
       <div className="profile-posts">
         <Post
           key={post.id}
-          id={post.id}
-          category={post.category}
-          poster={post.poster}
-          date={post.date}
-          title={post.title}
-          text={post.text}
-          image={post.image}
-          votes={post.votes}
-          comments={post.comments}
+          thisPost={post}
           allPosts={allPosts}
           setCurrentPost={setCurrentPost}
+          setProfileUser={setProfileUser}
+          setProfilePosts={setProfilePosts}
         />
       </div>
       <div className="comments-divider"></div>
