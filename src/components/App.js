@@ -81,7 +81,13 @@ function App() {
           <Route
             path="/reddit-clone"
             component={() => (
-              <Main allCategories={allCategories} allPosts={allPosts} />
+              <Main
+                allCategories={allCategories}
+                allPosts={allPosts}
+                isLoggedIn={isLoggedIn}
+                setShowMakePost={setShowMakePost}
+                setCurrentPost={setCurrentPost}
+              />
             )}
           />
           <Route
@@ -121,9 +127,10 @@ function App() {
             path="/post/:id"
             component={() => (
               <Comments
-                post={currentPost}
                 allPosts={allPosts}
                 setCurrentPost={setCurrentPost}
+              isLoggedIn={isLoggedIn}
+
               />
             )}
           />

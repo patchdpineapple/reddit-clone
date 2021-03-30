@@ -90,7 +90,7 @@ function Post({
                 className="link"
                 onClick={handleSelectPost}
               >
-                <span className="post-comment-text">{thisPost.comments} Comments</span>
+                <span className="post-comment-text">{`${thisPost.comments ? thisPost.comments.length : ""} Comments`}</span>
               </Link>
             </div>
           </div>

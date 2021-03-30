@@ -16,9 +16,14 @@
 }
 
 body {
-  background-color: #f4f4f4;
+  background-color: cadetblue;
 }
 
+textarea {
+  padding: 10px;
+  resize: none;
+
+}
 
 .link {
   text-decoration: none;
@@ -34,6 +39,7 @@ body {
   text-decoration: none;
   background-color: transparent;
   padding: 10px 20px;
+  font-size: 12px;
 }
 
 .btn:focus {
