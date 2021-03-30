@@ -20,6 +20,7 @@ function Profile({
     setProfPosts(tempUserPosts);
   };
 
+  //USE EFFECT
   useEffect(()=>{
     handleGetProfileData();
   },[username]);

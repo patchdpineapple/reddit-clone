@@ -130,6 +130,7 @@ function App() {
                 allPosts={allPosts}
                 setCurrentPost={setCurrentPost}
               isLoggedIn={isLoggedIn}
+              setAllCategories={setAllCategories}
 
               />
             )}

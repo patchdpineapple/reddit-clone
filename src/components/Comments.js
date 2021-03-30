@@ -14,17 +14,36 @@ function Comment({ user, text }) {
   );
 }
 
-function Comments({ allPosts, setCurrentPost, isLoggedIn }) {
+function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [thisPost, setThisPost] = useState({});
   const [allComments, setAllComments] = useState([]);
-  const [allCurrentPosts, setAllCurrentPosts] = useState([]);
   
 
   const handleSubmit = (e) => {
+    //add comment to database
+
     e.preventDefault();
-    alert(comment);
+    if(comment === "") return;
+
+    //find index of category where post belongs
+    let categoryIndex = arrCategories.findIndex((category) => category.name === thisPost.category);
+    //find index of post from the same category
+    let postIndex = arrCategories[categoryIndex].posts.findIndex((post) => post.id === thisPost.id)
+    //generate id of comment
+    let commentId = Math.floor(Math.random() * 10000);
+    //record comment
+    let newComment = {
+      id: commentId,
+      user: thisPost.poster,
+      text: comment
+    }
+    //add the comment using both indices
+    arrCategories[categoryIndex].posts[postIndex].comments.push(newComment);
+    //update database state 
+    setAllCategories(arrCategories);
+
     setComment("");
   };
 
@@ -32,8 +51,8 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn }) {
     setComment(e.target.value);
   };
 
-  const handleGetPostAndCommentsData = () => {
-    
+  //USE EFFECT
+  const getPostAndCommentsData = () => {
     //get all posts
     let tempPosts = [];
     arrCategories.map((category) => {
@@ -54,8 +73,10 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn }) {
   };
 
   useEffect(()=>{
-    handleGetPostAndCommentsData();
+    getPostAndCommentsData();
   },[id]);
+
+  
 
   return (
     <div className="Comments">
