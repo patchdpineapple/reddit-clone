@@ -107,9 +107,15 @@ function Main({
   setShowMakePost,
   categoryName,
   setCurrentPost,
-  
+  setShowNewHub
 }) {
   const [categoryPosts, setCategoryPosts] = useState([]);
+
+  const handleNewHub = () => {
+    setShowNewHub(true);
+  }
+
+  //USE EFFECT
   useEffect(() => {
     //get posts from same category only or all posts if no category name
     if (categoryName) {
@@ -151,7 +157,7 @@ function Main({
           );
         })}
         {isLoggedIn && (
-          <button className="btn btn-new-category">Add Category</button>
+          <button className="btn btn-new-category" onClick={handleNewHub}>Add Category</button>
         )}
       </div>
       {isLoggedIn && <PostFloater setShowMakePost={setShowMakePost} />}

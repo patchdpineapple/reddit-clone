@@ -10,6 +10,7 @@ import Signup from "./Signup";
 import HubPage from "./HubPage";
 import MakePost from "./MakePost";
 import Comments from "./Comments";
+import NewHub from "./NewHub"
 
 //data
 import arrCategories from "../data/categories";
@@ -22,6 +23,8 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showMakePost, setShowMakePost] = useState(false);
+  const [showNewHub, setShowNewHub] = useState(false);
+
   //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
@@ -77,6 +80,7 @@ function App() {
             currentCategory={currentCategory}
           />
         )}
+        {showNewHub && <NewHub setShowNewHub={setShowNewHub}/>}
         <Switch>
           <Route
             path="/reddit-clone"
@@ -87,6 +91,7 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
                 setCurrentPost={setCurrentPost}
+                setShowNewHub={setShowNewHub}
               />
             )}
           />
@@ -100,6 +105,7 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
                 setCurrentPost={setCurrentPost}
+                setShowNewHub={setShowNewHub}
               />
             )}
           />

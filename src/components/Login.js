@@ -46,7 +46,7 @@ function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUs
         onSubmit={ e => handleSubmit(e) }
       >
         <h1>Login</h1>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="login-username">Username:</label>
         <input
           className="input-login"
           type="text"

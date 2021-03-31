@@ -68,6 +68,7 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
       return post.id === id;
     });
     setThisPost(tempPost);
+    tempPost.comments.reverse();
     setAllComments(tempPost.comments);
 
   };
