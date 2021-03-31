@@ -47,7 +47,9 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
     setComment("");
   };
 
+
   const handleCommentChange = (e) => {
+    //update input state
     setComment(e.target.value);
   };
 
