@@ -7,6 +7,7 @@ import accounts from "../data/accounts";
 function Profile({
   allPosts,
   allCategories,
+  currentUser
 }) {
   let { username } = useParams();
   const [profUser, setProfUser] = useState({});
@@ -40,6 +41,7 @@ function Profile({
         <div className="profile-info">
           <img src="" className="profile-pic" alt="" />
           <h2>{profUser.username}</h2>
+          {currentUser.username === username && <h3>Email: {profUser.email}</h3>}
           <h3>Post pts:&nbsp;{profUser.postPoints}</h3>
           <h3>Comment pts:{profUser.commentPoints}</h3>
         </div>

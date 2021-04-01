@@ -9,7 +9,7 @@ function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
   //submit handlers
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    //check if account exists
     let user = accounts.find((account) => account.username.toUpperCase() === username.toUpperCase());
     if (user) {
       if (password === user.password) {

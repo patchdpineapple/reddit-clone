@@ -1,14 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Signup.css";
+import accounts from "../data/accounts";
 
-function Signup({ setShowSignup }) {
+function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  //submit handlers
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //check if account exists
+    let user = accounts.find(
+      (account) => account.username.toUpperCase() === username.toUpperCase()
+    );
+    if (user) alert("Account already exists");
+    else {
+      //add new user account to database
+      let newUser = {
+        id: Math.floor(Math.random() * 10000),
+        username: username,
+        password: password,
+        email: email,
+        postPoints: 0,
+        commentPoints: 0,
+        postsIds: [],
+        hubs: [],
+      };
+      accounts.push(newUser);
+
+      //automatically login the newly created account
+      user = accounts.find(
+        (account) => account.username.toUpperCase() === username.toUpperCase()
+      );
+      setCurrentUser(user);
+      setUsername("");
+      setPassword("");
+      setEmail("");
+      setIsLoggedIn(true);
+      closeSignup();
+    }
+  };
+
+  //input onchange handlers
   const closeSignup = () => {
     setShowSignup(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    closeSignup();
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   return (
@@ -19,34 +67,42 @@ function Signup({ setShowSignup }) {
         onSubmit={(e) => handleSubmit(e)}
       >
         <h1>Signup</h1>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="signup-username">Username:</label>
         <input
           className="input-signup"
           type="text"
-          id="username"
+          id="signup-username"
           name="username"
           placeholder="User"
+          onChange={handleUsernameChange}
+          value={username}
           required
         />
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="signup-email">Email:</label>
         <input
           className="input-signup"
           type="email"
-          id="email"
+          id="signup-email"
           name="email"
           placeholder="sample@sample.com"
+          onChange={handleEmailChange}
+          value={email}
           required
         />
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="signup-password">Password:</label>
         <input
           className="input-signup"
           type="password"
-          id="password"
+          id="signup-password"
           name="password"
           placeholder="password"
+          onChange={handlePasswordChange}
+          value={password}
           required
         />
-        <button className="btn" type="submit">Submit</button>
+        <button className="btn" type="submit">
+          Submit
+        </button>
       </form>
     </div>
   );

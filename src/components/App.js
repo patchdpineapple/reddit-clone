@@ -29,7 +29,6 @@ function App() {
   const [allCategories, setAllCategories] = useState(arrCategories);
   const [allPosts, setAllPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
-  const [userPosts, setUserPosts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
   const [categoryPosts, setCategoryPosts] = useState([]);
 
@@ -46,16 +45,15 @@ function App() {
     });
 
     //sort all posts by newest to oldest
-    tempPosts.sort((a,b) => a.fulldate < b.fulldate ? 1:-1);
+    tempPosts.sort((a, b) => (a.fulldate < b.fulldate ? 1 : -1));
     //update all posts state
     setAllPosts(tempPosts);
-  }
+  };
 
   //USE EFFECT
-  useEffect(()=>{
+  useEffect(() => {
     updateAllPosts();
-  },[])
-;;  /*
+  }, []); /*
   useEffect(() => {
     //get all posts from all categories
     let tempPosts = [];
@@ -69,7 +67,6 @@ function App() {
     setAllPosts(tempPosts);
   }, [allCategories]);
   */
-
 
   //RENDER
   return (
@@ -90,7 +87,13 @@ function App() {
             setCurrentUser={setCurrentUser}
           />
         )}
-        {showSignup && <Signup setShowSignup={setShowSignup} />}
+        {showSignup && (
+          <Signup
+            setShowSignup={setShowSignup}
+            setIsLoggedIn={setIsLoggedIn}
+            setCurrentUser={setCurrentUser}
+          />
+        )}
         {showMakePost && (
           <MakePost
             allCategories={allCategories}
@@ -136,7 +139,9 @@ function App() {
           />
           <Route
             path="/profile/:username"
-            component={() => <Profile allPosts={allPosts} allCategories={allCategories}/>}
+            component={() => (
+              <Profile allPosts={allPosts} allCategories={allCategories} currentUser={currentUser} />
+            )}
           />
           <Route
             path="/hub/:category"
