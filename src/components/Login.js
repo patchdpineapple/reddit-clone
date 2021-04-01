@@ -1,49 +1,58 @@
-import React from 'react';
+import React, { useState } from "react";
 import "./Login.css";
-import guest from "../data/guest";
 import accounts from "../data/accounts";
 
+function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUserPosts, allPosts }) {
-    const closeLogin = () => {
-        setShowLogin(false);
-      };
+  //submit handlers
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        closeLogin();
-      };
-
-      const handleGuest = (e) => {
-        //set current user to guest account
-
-        e.preventDefault();
-
-        let guestUser = accounts[0];
-        let  guestPosts = allPosts.filter((post) => {
-          let idChecker = false;
-          //check if post id is the same to user post id
-          guestUser.postsIds.map((id) => {
-            if (id === post.id) idChecker = true;
-            return id;
-          });
-          return idChecker;
-        });
-
-        setCurrentUser(guestUser);
-        setUserPosts(guestPosts);
-
-
+    let user = accounts.find((account) => account.username.toUpperCase() === username.toUpperCase());
+    if (user) {
+      if (password === user.password) {
+        setCurrentUser(user);
+        setUsername("");
+        setPassword("");
         setIsLoggedIn(true);
         closeLogin();
-      }
+      } else alert("Wrong password");
+    } else alert("No such username");
 
-    return (
-        <div className="Login" onClick={closeLogin}>
-            <form
+  };
+
+  const handleGuest = (e) => {
+    //this method sets current user to guest account
+    e.preventDefault();
+    let guestUser = accounts[0];
+    setCurrentUser(guestUser);
+    setIsLoggedIn(true);
+    setUsername("");
+    setPassword("");
+    closeLogin();
+  };
+
+  //input onchange handlers
+  const closeLogin = () => {
+    setShowLogin(false);
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  return (
+    <div className="Login" onClick={closeLogin}>
+      <form
         className="login-form"
         onClick={(e) => e.stopPropagation()}
-        onSubmit={ e => handleSubmit(e) }
+        onSubmit={(e) => handleSubmit(e)}
       >
         <h1>Login</h1>
         <label htmlFor="login-username">Username:</label>
@@ -53,9 +62,11 @@ function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUs
           id="login-username"
           name="username"
           placeholder="User"
+          onChange={handleUsernameChange}
+          value={username}
           required
         />
-       
+
         <label htmlFor="password">Password:</label>
         <input
           className="input-login"
@@ -63,13 +74,19 @@ function Login({ setShowLogin, setIsLoggedIn, currentUser, setCurrentUser, setUs
           id="login-password"
           name="password"
           placeholder="password"
+          onChange={handlePasswordChange}
+          value={password}
           required
         />
-        <button className="btn" type="submit">Submit</button>
-        <button className="btn" onClick={ e => handleGuest(e)}>Guest</button>
+        <button className="btn" type="submit">
+          Submit
+        </button>
+        <button className="btn" onClick={(e) => handleGuest(e)}>
+          Guest
+        </button>
       </form>
-        </div>
-    )
+    </div>
+  );
 }
 
-export default Login
+export default Login;

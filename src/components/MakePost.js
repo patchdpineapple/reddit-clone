@@ -9,13 +9,11 @@ function MakePost({
   setShowMakePost,
   currentCategory,
   currentUser,
-  updateAllPosts
+  updateAllPosts,
 }) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [hub, setHub] = useState(currentCategory);
-  const [postId, setPostId] = useState(hub + Math.floor(Math.random() * 10000));
-
 
   //FUNCTIONS
   const getCurrentDate = () => {
@@ -38,33 +36,34 @@ function MakePost({
 
     //get time with format hh:mm:ss
     let a = date.getHours().toString();
-if(a.length === 1) a = `0${a}`;
-let b = date.getMinutes().toString();
-if(b.length === 1) b = `0${b}`;
-let c = date.getSeconds().toString();
-if(c.length === 1) c = `0${c}`;
+    if (a.length === 1) a = `0${a}`;
+    let b = date.getMinutes().toString();
+    if (b.length === 1) b = `0${b}`;
+    let c = date.getSeconds().toString();
+    if (c.length === 1) c = `0${c}`;
 
-let combinedTime = `${a}:${b}:${c}`
+    let combinedTime = `${a}:${b}:${c}`;
 
     return {
       date: combineDate,
       time: combinedTime,
-      fulldate: date
+      fulldate: date,
     };
   };
 
   const getId = () => {
     //generate id
     return hub + Math.floor(Math.random() * 10000);
-  }
+  };
 
-
-  //submit
+  //submit handlers
   const handleSubmit = (e) => {
     //add a new post to chosen category
     e.preventDefault();
     //find index of category where the new post will be added
-    let categoryIndex = arrCategories.findIndex((category) => category.name === hub);
+    let categoryIndex = arrCategories.findIndex(
+      (category) => category.name === hub
+    );
     //create a new post object
 
     let currentDate = getCurrentDate();
@@ -81,12 +80,12 @@ let combinedTime = `${a}:${b}:${c}`
       votes: 1,
       comments: [],
     };
-   
+
     //add the post
     arrCategories[categoryIndex].posts.unshift(newPost);
     //update all posts list
     updateAllPosts();
-    //update database state 
+    //update database state
     setAllCategories(arrCategories);
 
     closeMakePost();
@@ -110,7 +109,6 @@ let combinedTime = `${a}:${b}:${c}`
   };
 
   //USE EFFECT
- 
 
   return (
     <div className="MakePost" onClick={closeMakePost}>

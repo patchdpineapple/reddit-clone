@@ -87,10 +87,7 @@ function App() {
           <Login
             setShowLogin={setShowLogin}
             setIsLoggedIn={setIsLoggedIn}
-            currentUser={currentUser}
             setCurrentUser={setCurrentUser}
-            setUserPosts={setUserPosts}
-            allPosts={allPosts}
           />
         )}
         {showSignup && <Signup setShowSignup={setShowSignup} />}
