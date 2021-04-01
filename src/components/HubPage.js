@@ -10,7 +10,9 @@ function HubPage({
   setShowMakePost,
   currentCategory,
   setCurrentCategory,
-  setCurrentPost,
+  setShowNewHub,
+  categoryPosts,
+  setCategoryPosts
 }) {
   let { category } = useParams();
   useEffect(() => {
@@ -24,8 +26,11 @@ function HubPage({
         allPosts={allPosts}
         isLoggedIn={isLoggedIn}
         setShowMakePost={setShowMakePost}
+        setShowNewHub={setShowNewHub}
         categoryName={currentCategory}
-        setCurrentPost={setCurrentPost}
+        categoryPosts={categoryPosts}
+        setCategoryPosts={setCategoryPosts}
+
       />
     </>
   );

@@ -13,12 +13,10 @@ function NewHub({ setShowNewHub }) {
   const handleSubmit = (e) => {
     //add a new category
     e.preventDefault();
-
     //check if category exist
     let categoryChecker = arrCategories.findIndex(
       (category) => category.name.toUpperCase() === hubName.toUpperCase()
     );
-
     //if new category does not exist yet, add to database
     if (categoryChecker === -1) {
         //create new category object
@@ -29,7 +27,6 @@ function NewHub({ setShowNewHub }) {
         image: "",
         posts: [],
       };
-
       //add new category to array 
       arrCategories.push(newCategory);
     } else {

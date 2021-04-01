@@ -6,7 +6,7 @@ import accounts from "../data/accounts";
 
 function Profile({
   allPosts,
-  setCurrentPost,
+  allCategories,
 }) {
   let { username } = useParams();
   const [profUser, setProfUser] = useState({});
@@ -15,7 +15,17 @@ function Profile({
 
   const handleGetProfileData = () => {
     let tempUser = accounts.find((account) => account.username === username);
-    let tempUserPosts = allPosts.filter((post) => post.poster === username);
+    let tempUserPosts = [];
+    allCategories.map((category) => {
+      category.posts.map((post) => {
+        if(post.poster === username){
+          tempUserPosts.push(post);
+        }
+      });
+
+    });
+
+    tempUserPosts.sort((a,b) => a.fulldate < b.fulldate ? 1:-1);
     setProfUser(tempUser);
     setProfPosts(tempUserPosts);
   };
@@ -42,7 +52,7 @@ function Profile({
                 key={post.id}
                 thisPost={post}
                 allPosts={allPosts}
-                setCurrentPost={setCurrentPost}
+                
               />
             );
           })}

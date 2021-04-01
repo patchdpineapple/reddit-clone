@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
 import accounts from "../data/accounts";
+import arrCategories from "../data/categories";
 
 function PostFloater({ setShowMakePost }) {
   const handleMakePost = () => {
@@ -34,20 +35,7 @@ function Category({ id, name, members, image }) {
   );
 }
 
-function Post({
-  thisPost,
-  allPosts,
-  setCurrentPost,
-}) {
-  
-
-  const handleSelectPost = () => {
-    //finds the post with same id as selected post and sets as current post to be displayed on the post page
-    
-    let tempCurrentPost = allPosts.find((post) => post.id === thisPost.id);
-    setCurrentPost(tempCurrentPost);
-  };
-
+function Post({ thisPost }) {
   return (
     <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
@@ -72,7 +60,7 @@ function Post({
           <p className="post-time">{thisPost.date}</p>
         </div>
         <div className="post-main">
-          <Link to={`/post/${thisPost.id}`} className="link" onClick={handleSelectPost}>
+          <Link to={`/post/${thisPost.id}`} className="link">
             <h3 className="post-title">{thisPost.title}</h3>
           </Link>
           <p className="post-message">{thisPost.text}</p>
@@ -85,12 +73,10 @@ function Post({
                 className="fas fa-comment-alt"
                 style={{ fontSize: "12px" }}
               ></i>
-              <Link
-                to={`/post/${thisPost.id}`}
-                className="link"
-                onClick={handleSelectPost}
-              >
-                <span className="post-comment-text">{`${thisPost.comments ? thisPost.comments.length : ""} Comments`}</span>
+              <Link to={`/post/${thisPost.id}`} className="link">
+                <span className="post-comment-text">{`${
+                  thisPost.comments ? thisPost.comments.length : ""
+                } Comments`}</span>
               </Link>
             </div>
           </div>
@@ -105,17 +91,18 @@ function Main({
   allPosts,
   isLoggedIn,
   setShowMakePost,
+  setShowNewHub,
   categoryName,
-  setCurrentPost,
-  setShowNewHub
+  categoryPosts,
+  setCategoryPosts
 }) {
-  const [categoryPosts, setCategoryPosts] = useState([]);
 
   const handleNewHub = () => {
     setShowNewHub(true);
-  }
+  };
 
   //USE EFFECT
+  /*
   useEffect(() => {
     //get posts from same category only or all posts if no category name
     if (categoryName) {
@@ -124,7 +111,18 @@ function Main({
       );
       setCategoryPosts(tempCategoryPosts);
     } else setCategoryPosts(allPosts);
-  }, [categoryName]);
+  }, [allPosts, categoryName, setCategoryPosts]);
+  */
+
+ useEffect(() => {
+  //get posts from same category only or all posts if no category name
+  if (categoryName) {
+    let categoryIndex = allCategories.findIndex((category) => category.name === categoryName);
+    setCategoryPosts(allCategories[categoryIndex].posts);
+  } else {
+    setCategoryPosts(allPosts);
+  }
+}, [allCategories, categoryName]);
 
   return (
     <div className="Main container">
@@ -133,18 +131,12 @@ function Main({
       </div>
       <div className="posts-container container">
         {categoryPosts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              thisPost={post}
-              allPosts={allPosts}
-              setCurrentPost={setCurrentPost}
-            />
-          );
+          return <Post key={post.id} thisPost={post} />;
         })}
       </div>
       <div className="categories-container container">
         <p className="category-header">Categories</p>
+        {console.log("main all categ", allCategories)}
         {allCategories.map((category) => {
           return (
             <Category
@@ -157,7 +149,9 @@ function Main({
           );
         })}
         {isLoggedIn && (
-          <button className="btn btn-new-category" onClick={handleNewHub}>Add Category</button>
+          <button className="btn btn-new-category" onClick={handleNewHub}>
+            Add Category
+          </button>
         )}
       </div>
       {isLoggedIn && <PostFloater setShowMakePost={setShowMakePost} />}

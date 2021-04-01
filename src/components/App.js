@@ -10,7 +10,7 @@ import Signup from "./Signup";
 import HubPage from "./HubPage";
 import MakePost from "./MakePost";
 import Comments from "./Comments";
-import NewHub from "./NewHub"
+import NewHub from "./NewHub";
 
 //data
 import arrCategories from "../data/categories";
@@ -31,11 +31,31 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [userPosts, setUserPosts] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
-  const [currentPost, setCurrentPost] = useState({});
+  const [categoryPosts, setCategoryPosts] = useState([]);
 
   //FUNCTIONS
+  const updateAllPosts = () => {
+    //get all posts from all categories
+    let tempPosts = [];
+    allCategories.map((category) => {
+      category.posts.map((post) => {
+        tempPosts.push(post);
+        return post;
+      });
+      return category;
+    });
+
+    //sort all posts by newest to oldest
+    tempPosts.sort((a,b) => a.fulldate < b.fulldate ? 1:-1);
+    //update all posts state
+    setAllPosts(tempPosts);
+  }
 
   //USE EFFECT
+  useEffect(()=>{
+    updateAllPosts();
+  },[])
+;;  /*
   useEffect(() => {
     //get all posts from all categories
     let tempPosts = [];
@@ -48,6 +68,8 @@ function App() {
     });
     setAllPosts(tempPosts);
   }, [allCategories]);
+  */
+
 
   //RENDER
   return (
@@ -78,9 +100,11 @@ function App() {
             setAllCategories={setAllCategories}
             setShowMakePost={setShowMakePost}
             currentCategory={currentCategory}
+            currentUser={currentUser}
+            updateAllPosts={updateAllPosts}
           />
         )}
-        {showNewHub && <NewHub setShowNewHub={setShowNewHub}/>}
+        {showNewHub && <NewHub setShowNewHub={setShowNewHub} />}
         <Switch>
           <Route
             path="/reddit-clone"
@@ -90,8 +114,10 @@ function App() {
                 allPosts={allPosts}
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
-                setCurrentPost={setCurrentPost}
                 setShowNewHub={setShowNewHub}
+                categoryName={currentCategory}
+                categoryPosts={categoryPosts}
+                setCategoryPosts={setCategoryPosts}
               />
             )}
           />
@@ -104,16 +130,16 @@ function App() {
                 allPosts={allPosts}
                 isLoggedIn={isLoggedIn}
                 setShowMakePost={setShowMakePost}
-                setCurrentPost={setCurrentPost}
                 setShowNewHub={setShowNewHub}
+                categoryName={currentCategory}
+                categoryPosts={categoryPosts}
+                setCategoryPosts={setCategoryPosts}
               />
             )}
           />
           <Route
             path="/profile/:username"
-            component={() => (
-              <Profile allPosts={allPosts} setCurrentPost={setCurrentPost} />
-            )}
+            component={() => <Profile allPosts={allPosts} allCategories={allCategories}/>}
           />
           <Route
             path="/hub/:category"
@@ -125,7 +151,9 @@ function App() {
                 setShowMakePost={setShowMakePost}
                 currentCategory={currentCategory}
                 setCurrentCategory={setCurrentCategory}
-                setCurrentPost={setCurrentPost}
+                setShowNewHub={setShowNewHub}
+                categoryPosts={categoryPosts}
+                setCategoryPosts={setCategoryPosts}
               />
             )}
           />
@@ -134,10 +162,9 @@ function App() {
             component={() => (
               <Comments
                 allPosts={allPosts}
-                setCurrentPost={setCurrentPost}
-              isLoggedIn={isLoggedIn}
-              setAllCategories={setAllCategories}
-
+                isLoggedIn={isLoggedIn}
+                setAllCategories={setAllCategories}
+                currentUser={currentUser}
               />
             )}
           />

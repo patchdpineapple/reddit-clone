@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Comments.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
 import arrCategories from "../data/categories";
 
@@ -8,13 +8,13 @@ import arrCategories from "../data/categories";
 function Comment({ user, text }) {
   return (
     <div className="Comment">
-      <span>{user}</span>
+      <Link to={`/profile/${user}`} className="link"><span>{user}</span></Link>
       <p>{text}</p>
     </div>
   );
 }
 
-function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
+function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [thisPost, setThisPost] = useState({});
@@ -36,11 +36,11 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
     //record comment
     let newComment = {
       id: commentId,
-      user: thisPost.poster,
+      user: currentUser.username,
       text: comment
     }
     //add the comment using both indices
-    arrCategories[categoryIndex].posts[postIndex].comments.push(newComment);
+    arrCategories[categoryIndex].posts[postIndex].comments.unshift(newComment);
     //update database state 
     setAllCategories(arrCategories);
 
@@ -70,7 +70,6 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
       return post.id === id;
     });
     setThisPost(tempPost);
-    tempPost.comments.reverse();
     setAllComments(tempPost.comments);
 
   };
@@ -88,7 +87,6 @@ function Comments({ allPosts, setCurrentPost, isLoggedIn, setAllCategories }) {
           key={thisPost.id}
           thisPost={thisPost}
           allPosts={allPosts}
-          setCurrentPost={setCurrentPost}
         /> 
         {isLoggedIn && (
           <form
