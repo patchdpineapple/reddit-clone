@@ -79,6 +79,7 @@ function App() {
           setShowSignup={setShowSignup}
           setCurrentCategory={setCurrentCategory}
           currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
         />
         {showLogin && (
           <Login
@@ -167,6 +168,7 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 setAllCategories={setAllCategories}
                 currentUser={currentUser}
+                updateAllPosts={updateAllPosts}
               />
             )}
           />

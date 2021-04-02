@@ -52,12 +52,12 @@ function Post({ thisPost }) {
           <Link to={`/hub/${thisPost.category}`} className="link">
             <strong className="post-group">/{thisPost.category}</strong>
           </Link>
-          <Link to={`/profile/${thisPost.poster}`} className="link">
+          
             <p className="post-postedBy">
-              posted by <span className="post-user">{thisPost.poster}</span>
+              posted by <Link to={`/profile/${thisPost.poster}`} className="link"><span className="post-user">{thisPost.poster}</span></Link>
             </p>
-          </Link>
-  <p className="post-time">{thisPost.date}<span style={{"margin-left": 8, "color": "#1d1d1d80"}}>{thisPost.time}</span></p>
+          
+  <p className="post-time">{thisPost.date}<span style={{"marginLeft": 8, "color": "#1d1d1d80"}}>{thisPost.time}</span></p>
         </div>
         <div className="post-main">
           <Link to={`/post/${thisPost.id}`} className="link">

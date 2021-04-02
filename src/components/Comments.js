@@ -4,49 +4,98 @@ import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
 import arrCategories from "../data/categories";
 
+function Comment({ id, user, text, currentUser, thisPost, setAllCategories, updateAllPosts }) {
+  //functions
+  const getCommentIndexes = () => {
+    //returns indexes for finding this comment from the database
+    //find index of category where post belongs
+    let categoryIndex = arrCategories.findIndex(
+      (category) => category.name === thisPost.category
+    );
+    //find index of post from the same category
+    let postIndex = arrCategories[categoryIndex].posts.findIndex(
+      (post) => post.id === thisPost.id
+    );
+    //find index of comment
+    let commentIndex = arrCategories[categoryIndex].posts[
+      postIndex
+    ].comments.findIndex((comment) => comment.id === id);
 
-function Comment({ user, text }) {
+    return {
+      categoryIndex: categoryIndex,
+      postIndex: postIndex,
+      commentIndex: commentIndex,
+    };
+  };
+
+  //handlers
+  const handleDeleteComment = () => {
+    let indexes = getCommentIndexes();
+    //delete comment from database
+    arrCategories[indexes.categoryIndex].posts[
+      indexes.postIndex
+    ].comments.splice(indexes.commentIndex, 1);
+    //update posts
+    updateAllPosts();
+    //update database state
+    setAllCategories(arrCategories);
+
+    console.log(`Deleted comment id${id} user${user}`, indexes);
+  };
+
   return (
     <div className="Comment">
-      <Link to={`/profile/${user}`} className="link"><span>{user}</span></Link>
-      <p>{text}</p>
+      <Link to={`/profile/${user}`} className="link">
+        <span>{user}</span>
+      </Link>
+
+      <div className="text-container">
+        <p>{text}</p>
+        {currentUser.username === user && (
+          <button className="btn btn-delete" onClick={handleDeleteComment}>
+            <i className="fas fa-times"></i>
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
-function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser }) {
+function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser, updateAllPosts }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [thisPost, setThisPost] = useState({});
   const [allComments, setAllComments] = useState([]);
-  
 
   const handleSubmit = (e) => {
     //add comment to database
 
     e.preventDefault();
-    if(comment === "") return;
+    if (comment === "") return;
 
     //find index of category where post belongs
-    let categoryIndex = arrCategories.findIndex((category) => category.name === thisPost.category);
+    let categoryIndex = arrCategories.findIndex(
+      (category) => category.name === thisPost.category
+    );
     //find index of post from the same category
-    let postIndex = arrCategories[categoryIndex].posts.findIndex((post) => post.id === thisPost.id)
+    let postIndex = arrCategories[categoryIndex].posts.findIndex(
+      (post) => post.id === thisPost.id
+    );
     //generate id of comment
     let commentId = Math.floor(Math.random() * 10000);
     //record comment
     let newComment = {
       id: commentId,
       user: currentUser.username,
-      text: comment
-    }
+      text: comment,
+    };
     //add the comment using both indices
     arrCategories[categoryIndex].posts[postIndex].comments.unshift(newComment);
-    //update database state 
+    //update database state
     setAllCategories(arrCategories);
 
     setComment("");
   };
-
 
   const handleCommentChange = (e) => {
     //update input state
@@ -71,23 +120,16 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser }) {
     });
     setThisPost(tempPost);
     setAllComments(tempPost.comments);
-
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getPostAndCommentsData();
-  },[id]);
-
-  
+  }, [id]);
 
   return (
     <div className="Comments">
       <div className="posts-container">
-        <Post
-          key={thisPost.id}
-          thisPost={thisPost}
-          allPosts={allPosts}
-        /> 
+        <Post key={thisPost.id} thisPost={thisPost} allPosts={allPosts} />
         {isLoggedIn && (
           <form
             className="comments-form"
@@ -97,6 +139,7 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser }) {
             <textarea
               id="comments-textarea"
               placeholder="What are your thoughts?"
+              maxLength="290"
               onChange={(e) => handleCommentChange(e)}
               value={comment}
             ></textarea>
@@ -110,7 +153,16 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser }) {
         <div className="comments-container">
           {allComments.map((comment) => {
             return (
-              <Comment key={comment.id} user={comment.user} text={comment.text} />
+              <Comment
+                key={comment.id}
+                id={comment.id}
+                user={comment.user}
+                text={comment.text}
+                currentUser={currentUser}
+                thisPost={thisPost}
+                setAllCategories={setAllCategories}
+                updateAllPosts={updateAllPosts}
+              />
             );
           })}
         </div>
