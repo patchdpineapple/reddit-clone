@@ -119,6 +119,9 @@ function App() {
                 categoryName={currentCategory}
                 categoryPosts={categoryPosts}
                 setCategoryPosts={setCategoryPosts}
+                currentUser={currentUser}
+                setAllCategories={setAllCategories}
+                updateAllPosts={updateAllPosts}
               />
             )}
           />
@@ -135,13 +138,21 @@ function App() {
                 categoryName={currentCategory}
                 categoryPosts={categoryPosts}
                 setCategoryPosts={setCategoryPosts}
+                currentUser={currentUser}
+                setAllCategories={setAllCategories}
+                updateAllPosts={updateAllPosts}
               />
             )}
           />
           <Route
             path="/profile/:username"
             component={() => (
-              <Profile allCategories={allCategories} currentUser={currentUser} />
+              <Profile
+                allCategories={allCategories}
+                currentUser={currentUser}
+                setAllCategories={setAllCategories}
+              updateAllPosts={updateAllPosts}
+              />
             )}
           />
           <Route
@@ -157,6 +168,9 @@ function App() {
                 setShowNewHub={setShowNewHub}
                 categoryPosts={categoryPosts}
                 setCategoryPosts={setCategoryPosts}
+                currentUser={currentUser}
+                setAllCategories={setAllCategories}
+                updateAllPosts={updateAllPosts}
               />
             )}
           />

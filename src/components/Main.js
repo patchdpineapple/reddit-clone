@@ -35,7 +35,10 @@ function Category({ id, name, members, image }) {
   );
 }
 
-function Post({ thisPost }) {
+function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDelete }) {
+  //handlers
+  const handleDeletePost = () => {};
+
   return (
     <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
@@ -52,12 +55,33 @@ function Post({ thisPost }) {
           <Link to={`/hub/${thisPost.category}`} className="link">
             <strong className="post-group">/{thisPost.category}</strong>
           </Link>
-          
-            <p className="post-postedBy">
-              posted by <Link to={`/profile/${thisPost.poster}`} className="link"><span className="post-user">{thisPost.poster}</span></Link>
-            </p>
-          
-  <p className="post-time">{thisPost.date}<span style={{"marginLeft": 8, "color": "#1d1d1d80"}}>{thisPost.time}</span></p>
+
+          <p className="post-postedBy">
+            posted by{" "}
+            <Link to={`/profile/${thisPost.poster}`} className="link">
+              <span className="post-user">{thisPost.poster}</span>
+            </Link>
+          </p>
+
+          <p className="post-time">
+            {thisPost.date}
+            <span style={{ marginLeft: 8, color: "#1d1d1d80" }}>
+              {thisPost.time}
+            </span>
+          </p>
+          {!showDelete ? "" : 
+          !currentUser ? "" : currentUser.username === thisPost.poster && (
+            <button className="btn btn-delete-post" onClick={handleDeletePost}>
+              <i className="fas fa-times"></i>
+            </button>
+          ) 
+          }
+          {/* {!currentUser ? "" : currentUser.username === thisPost.poster && (
+            <button className="btn btn-delete-post" onClick={handleDeletePost}>
+              <i className="fas fa-times"></i>
+            </button>
+          ) 
+           } */}
         </div>
         <div className="post-main">
           <Link to={`/post/${thisPost.id}`} className="link">
@@ -94,35 +118,27 @@ function Main({
   setShowNewHub,
   categoryName,
   categoryPosts,
-  setCategoryPosts
+  setCategoryPosts,
+  currentUser,
+  setAllCategories,
+  updateAllPosts,
 }) {
-
   const handleNewHub = () => {
     setShowNewHub(true);
   };
 
   //USE EFFECT
-  /*
   useEffect(() => {
     //get posts from same category only or all posts if no category name
     if (categoryName) {
-      let tempCategoryPosts = allPosts.filter(
-        (post) => post.category === categoryName
+      let categoryIndex = allCategories.findIndex(
+        (category) => category.name === categoryName
       );
-      setCategoryPosts(tempCategoryPosts);
-    } else setCategoryPosts(allPosts);
-  }, [allPosts, categoryName, setCategoryPosts]);
-  */
-
- useEffect(() => {
-  //get posts from same category only or all posts if no category name
-  if (categoryName) {
-    let categoryIndex = allCategories.findIndex((category) => category.name === categoryName);
-    setCategoryPosts(allCategories[categoryIndex].posts);
-  } else {
-    setCategoryPosts(allPosts);
-  }
-}, [allCategories, categoryName]);
+      setCategoryPosts(allCategories[categoryIndex].posts);
+    } else {
+      setCategoryPosts(allPosts);
+    }
+  }, [allCategories, categoryName]);
 
   return (
     <div className="Main container">
@@ -131,7 +147,15 @@ function Main({
       </div>
       <div className="posts-container container">
         {categoryPosts.map((post) => {
-          return <Post key={post.id} thisPost={post} />;
+          return (
+            <Post
+              key={post.id}
+              thisPost={post}
+              currentUser={currentUser}
+              setAllCategories={setAllCategories}
+              updateAllPosts={updateAllPosts}
+            />
+          );
         })}
       </div>
       <div className="categories-container container">

@@ -4,7 +4,15 @@ import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
 import arrCategories from "../data/categories";
 
-function Comment({ id, user, text, currentUser, thisPost, setAllCategories, updateAllPosts }) {
+function Comment({
+  id,
+  user,
+  text,
+  thisPost,
+  currentUser,
+  setAllCategories,
+  updateAllPosts,
+}) {
   //functions
   const getCommentIndexes = () => {
     //returns indexes for finding this comment from the database
@@ -29,7 +37,8 @@ function Comment({ id, user, text, currentUser, thisPost, setAllCategories, upda
   };
 
   //handlers
-  const handleDeleteComment = () => {
+  const handleDeleteComment = (e) => {
+    e.preventDefault();
     let indexes = getCommentIndexes();
     //delete comment from database
     arrCategories[indexes.categoryIndex].posts[
@@ -61,7 +70,13 @@ function Comment({ id, user, text, currentUser, thisPost, setAllCategories, upda
   );
 }
 
-function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser, updateAllPosts }) {
+function Comments({
+  allPosts,
+  isLoggedIn,
+  setAllCategories,
+  currentUser,
+  updateAllPosts,
+}) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [thisPost, setThisPost] = useState({});
@@ -104,6 +119,7 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser, updateA
 
   //USE EFFECT
   const getPostAndCommentsData = () => {
+    //find the post and its comments from the database and set as state
     //get all posts
     let tempPosts = [];
     arrCategories.map((category) => {
@@ -129,7 +145,13 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser, updateA
   return (
     <div className="Comments">
       <div className="posts-container">
-        <Post key={thisPost.id} thisPost={thisPost} allPosts={allPosts} />
+        <Post
+          key={thisPost.id}
+          thisPost={thisPost}
+          currentUser={currentUser}
+          setAllCategories={setAllCategories}
+          updateAllPosts={updateAllPosts}
+        />
         {isLoggedIn && (
           <form
             className="comments-form"
@@ -158,8 +180,8 @@ function Comments({ allPosts, isLoggedIn, setAllCategories, currentUser, updateA
                 id={comment.id}
                 user={comment.user}
                 text={comment.text}
-                currentUser={currentUser}
                 thisPost={thisPost}
+                currentUser={currentUser}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
               />
