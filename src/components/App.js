@@ -45,7 +45,7 @@ function App() {
     });
 
     //sort all posts by newest to oldest
-    tempPosts.sort((a, b) => (a.fulldate < b.fulldate ? 1 : -1));
+    tempPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
     //update all posts state
     setAllPosts(tempPosts);
   };
@@ -140,7 +140,7 @@ function App() {
           <Route
             path="/profile/:username"
             component={() => (
-              <Profile allPosts={allPosts} allCategories={allCategories} currentUser={currentUser} />
+              <Profile allCategories={allCategories} currentUser={currentUser} />
             )}
           />
           <Route

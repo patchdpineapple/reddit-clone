@@ -5,7 +5,6 @@ import { Post } from "./Main";
 import accounts from "../data/accounts";
 
 function Profile({
-  allPosts,
   allCategories,
   currentUser
 }) {
@@ -26,7 +25,7 @@ function Profile({
 
     });
 
-    tempUserPosts.sort((a,b) => a.fulldate < b.fulldate ? 1:-1);
+    tempUserPosts.sort((a,b) => a.datems < b.datems ? 1:-1);
     setProfUser(tempUser);
     setProfPosts(tempUserPosts);
   };
@@ -53,7 +52,6 @@ function Profile({
               <Post
                 key={post.id}
                 thisPost={post}
-                allPosts={allPosts}
                 
               />
             );

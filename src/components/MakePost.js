@@ -16,38 +16,34 @@ function MakePost({
   const [hub, setHub] = useState(currentCategory);
 
   //FUNCTIONS
-  const getCurrentDate = () => {
+  const getCurrentDate = () => {  
     //generate a new current date and time
     let date = new Date();
 
     //get date with format yyyy-mm-dd
-    let year = date.getFullYear().toString();
-    let month = date.getMonth() + 1;
-    month = month.toString();
-    if (month.length === 1) {
-      month = "0" + month;
-    }
-    let day = date.getDate().toString();
-    if (day.length === 1) {
-      day = "0" + day;
-    }
-
-    let combineDate = `${year}-${month}-${day}`;
+    let allMonths = ["January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"];
+    let year = date.getFullYear();
+    let month = allMonths[date.getMonth()];
+    let day = date.getDate();
+    let combineDate = `${month} ${day}, ${year}`;
 
     //get time with format hh:mm:ss
-    let a = date.getHours().toString();
-    if (a.length === 1) a = `0${a}`;
-    let b = date.getMinutes().toString();
-    if (b.length === 1) b = `0${b}`;
-    let c = date.getSeconds().toString();
-    if (c.length === 1) c = `0${c}`;
+    let hours = date.getHours();
+    let meridiem = hours > 11 ? "PM" : "AM";
 
-    let combinedTime = `${a}:${b}:${c}`;
+    if(hours === 0) {
+        hours = 12;
+    } else if (hours > 12) {
+        hours = hours - 12;
+    }
+    let minutes = date.getMinutes();
+    let combinedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${meridiem}`;
 
     return {
       date: combineDate,
       time: combinedTime,
-      fulldate: date,
+      datems: date.getTime(),
     };
   };
 
@@ -73,7 +69,7 @@ function MakePost({
       poster: currentUser.username,
       date: currentDate.date,
       time: currentDate.time,
-      fulldate: currentDate.fulldate,
+      datems: currentDate.datems,
       title: title,
       text: message,
       image: "",

@@ -57,7 +57,7 @@ function Post({ thisPost }) {
               posted by <span className="post-user">{thisPost.poster}</span>
             </p>
           </Link>
-          <p className="post-time">{thisPost.date}</p>
+  <p className="post-time">{thisPost.date}<span style={{"margin-left": 8, "color": "#1d1d1d80"}}>{thisPost.time}</span></p>
         </div>
         <div className="post-main">
           <Link to={`/post/${thisPost.id}`} className="link">
