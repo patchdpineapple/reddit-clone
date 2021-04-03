@@ -31,7 +31,7 @@ textarea {
 }
 
 .btn {
-  display: inline-block;
+  display: inline;
   border: none;
   border-radius: 5px;
   cursor: pointer;

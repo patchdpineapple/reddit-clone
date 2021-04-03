@@ -13,6 +13,10 @@ function Comment({
   setAllCategories,
   updateAllPosts,
 }) {
+  //states
+  const [showEdit, setShowEdit] = useState(false);
+  const [newComment, setNewComment] = useState(text);
+
   //functions
   const getCommentIndexes = () => {
     //returns indexes for finding this comment from the database
@@ -37,6 +41,7 @@ function Comment({
   };
 
   //handlers
+  
   const handleDeleteComment = (e) => {
     e.preventDefault();
     let indexes = getCommentIndexes();
@@ -49,8 +54,29 @@ function Comment({
     //update database state
     setAllCategories(arrCategories);
 
-    console.log(`Deleted comment id${id} user${user}`, indexes);
   };
+
+  const handleEditChange = (e) => {
+    setNewComment(e.target.value);
+  };
+
+  const toggleShowEdit = () => {
+    setShowEdit(!showEdit);
+  }
+
+  const handleSubmitEdit =(e)=>{
+    e.preventDefault();
+    if(newComment === "") return;
+    let indexes = getCommentIndexes();
+    //edit comment from database
+    arrCategories[indexes.categoryIndex].posts[
+      indexes.postIndex
+    ].comments[indexes.commentIndex].text = newComment;
+    //update posts
+    updateAllPosts();
+    //update database state
+    setAllCategories(arrCategories);
+  }
 
   return (
     <div className="Comment">
@@ -60,12 +86,41 @@ function Comment({
 
       <div className="text-container">
         <p className="comment-text">{text}</p>
-        {currentUser.username === user && (
-          <button className="btn btn-delete" onClick={handleDeleteComment}>
-            <i className="fas fa-times"></i>
-          </button>
-        )}
+        <div className="btn-container">
+          {currentUser.username === user && (
+            <button className="btn btn-show-edit" onClick={toggleShowEdit}>
+              <i className="fas fa-edit"></i>
+            </button>
+          )}
+          {currentUser.username === user && (
+            <button className="btn btn-delete" onClick={handleDeleteComment}>
+              <i className="fas fa-times"></i>
+            </button>
+          )}
+        </div>
       </div>
+      {
+        showEdit && (
+          <div className="edit-container">
+            <form 
+            className="comments-form"
+            onClick={(e) => e.stopPropagation()}
+            onSubmit={(e) => handleSubmitEdit(e)}>
+            <textarea
+              id="comment-edit-textarea"
+              placeholder="Edit message"
+              onChange={(e) => handleEditChange(e)}
+              value={newComment}
+            ></textarea>
+            <button type="submit" className="btn btn-edit">
+              Confirm edit
+            </button>
+            </form>
+
+          </div>
+        )
+      }
+      
     </div>
   );
 }
