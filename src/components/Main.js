@@ -54,6 +54,10 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
     setAllCategories(arrCategories);
   };
 
+  const confirmDeletePost = () => {
+    if(window.confirm("Delete this post?")) handleDeletePost();
+  }
+
   return (
     <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
@@ -86,7 +90,7 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
           </p>
           {!showDelete ? "" : 
           !currentUser ? "" : currentUser.username === thisPost.poster && (
-            <button className="btn btn-delete-post" onClick={handleDeletePost}>
+            <button className="btn btn-delete-post" onClick={confirmDeletePost}>
               <i className="fas fa-times"></i>
             </button>
           ) 

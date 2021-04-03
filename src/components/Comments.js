@@ -42,8 +42,8 @@ function Comment({
 
   //handlers
   
-  const handleDeleteComment = (e) => {
-    e.preventDefault();
+  const handleDeleteComment = () => {
+    
     let indexes = getCommentIndexes();
     //delete comment from database
     arrCategories[indexes.categoryIndex].posts[
@@ -55,6 +55,10 @@ function Comment({
     setAllCategories(arrCategories);
 
   };
+
+  const confirmDeleteComment = () => {
+    if(window.confirm("Delete this comment?")) handleDeleteComment();
+  }
 
   const handleEditChange = (e) => {
     setNewComment(e.target.value);
@@ -93,7 +97,7 @@ function Comment({
             </button>
           )}
           {currentUser.username === user && (
-            <button className="btn btn-delete" onClick={handleDeleteComment}>
+            <button className="btn btn-delete" onClick={confirmDeleteComment}>
               <i className="fas fa-times"></i>
             </button>
           )}
