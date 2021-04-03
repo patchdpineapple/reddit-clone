@@ -59,7 +59,7 @@ function Comment({
       </Link>
 
       <div className="text-container">
-        <p>{text}</p>
+        <p className="comment-text">{text}</p>
         {currentUser.username === user && (
           <button className="btn btn-delete" onClick={handleDeleteComment}>
             <i className="fas fa-times"></i>
@@ -161,7 +161,6 @@ function Comments({
             <textarea
               id="comments-textarea"
               placeholder="What are your thoughts?"
-              maxLength="290"
               onChange={(e) => handleCommentChange(e)}
               value={comment}
             ></textarea>

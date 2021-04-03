@@ -37,7 +37,22 @@ function Category({ id, name, members, image }) {
 
 function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDelete }) {
   //handlers
-  const handleDeletePost = () => {};
+  const handleDeletePost = () => {
+    //find category index
+    let categoryIndex = arrCategories.findIndex(
+      (category) => category.name === thisPost.category
+    );
+    //find post index
+    let postIndex = arrCategories[categoryIndex].posts.findIndex(
+      (post) => post.id === thisPost.id
+    );
+    //delete post
+    arrCategories[categoryIndex].posts.splice(postIndex,1);
+    //update posts
+    updateAllPosts();
+    //update database state
+    setAllCategories(arrCategories);
+  };
 
   return (
     <div className="Post" data-id={thisPost.id}>
@@ -76,12 +91,7 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
             </button>
           ) 
           }
-          {/* {!currentUser ? "" : currentUser.username === thisPost.poster && (
-            <button className="btn btn-delete-post" onClick={handleDeletePost}>
-              <i className="fas fa-times"></i>
-            </button>
-          ) 
-           } */}
+          
         </div>
         <div className="post-main">
           <Link to={`/post/${thisPost.id}`} className="link">
@@ -160,7 +170,6 @@ function Main({
       </div>
       <div className="categories-container container">
         <p className="category-header">Categories</p>
-        {console.log("main all categ", allCategories)}
         {allCategories.map((category) => {
           return (
             <Category

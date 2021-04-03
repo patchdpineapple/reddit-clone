@@ -13,6 +13,7 @@ function Profile({
   let { username } = useParams();
   const [profUser, setProfUser] = useState({});
   const [profPosts, setProfPosts] = useState([]);
+  const [profPoints, setProfPoints] = useState([]);
 
   const handleGetProfileData = () => {
     let tempUser = accounts.find((account) => account.username === username);
@@ -26,8 +27,11 @@ function Profile({
     });
 
     tempUserPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
+    let tempPoints = 0;
+    tempUserPosts.map(post=>tempPoints+=post.votes);
     setProfUser(tempUser);
     setProfPosts(tempUserPosts);
+    setProfPoints(tempPoints);
   };
 
   //USE EFFECT
@@ -41,7 +45,7 @@ function Profile({
         <img src="" className="profile-pic" alt="" />
         <h2>{profUser.username}</h2>
         {currentUser.username === username && <h3>Email: {profUser.email}</h3>}
-        <h3>Post pts:&nbsp;{profUser.postPoints}</h3>
+        <h3>Post pts:&nbsp;{profPoints}</h3>
         <h3>Comment pts:{profUser.commentPoints}</h3>
       </div>
       <div className="profile-divider"></div>

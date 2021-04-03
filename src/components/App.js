@@ -52,21 +52,10 @@ function App() {
 
   //USE EFFECT
   useEffect(() => {
+    console.log("updated allPosts");
     updateAllPosts();
-  }, []); /*
-  useEffect(() => {
-    //get all posts from all categories
-    let tempPosts = [];
-    allCategories.map((category) => {
-      category.posts.map((post) => {
-        tempPosts.push(post);
-        return post;
-      });
-      return category;
-    });
-    setAllPosts(tempPosts);
-  }, [allCategories]);
-  */
+  }, [allCategories]); 
+  
 
   //RENDER
   return (
