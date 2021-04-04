@@ -32,6 +32,7 @@ function LoggedOut({setIsLoggedIn, setShowLogin, setShowSignup}) {
   );
 }
 
+/***** PARENT COMPONENT *****/
 function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCurrentCategory, currentUser, setCurrentUser }) {
   const resetCurrentCategory = () => {
     setCurrentCategory("");

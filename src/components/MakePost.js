@@ -74,6 +74,12 @@ function MakePost({
       text: message,
       image: "",
       votes: 1,
+      voters: [
+        {
+          username: currentUser.username,
+          vote: "upvote"
+    }
+    ],
       comments: [],
     };
 

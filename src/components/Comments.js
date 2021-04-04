@@ -41,9 +41,8 @@ function Comment({
   };
 
   //handlers
-  
+
   const handleDeleteComment = () => {
-    
     let indexes = getCommentIndexes();
     //delete comment from database
     arrCategories[indexes.categoryIndex].posts[
@@ -53,12 +52,11 @@ function Comment({
     updateAllPosts();
     //update database state
     setAllCategories(arrCategories);
-
   };
 
   const confirmDeleteComment = () => {
-    if(window.confirm("Delete this comment?")) handleDeleteComment();
-  }
+    if (window.confirm("Delete this comment?")) handleDeleteComment();
+  };
 
   const handleEditChange = (e) => {
     setNewComment(e.target.value);
@@ -66,21 +64,26 @@ function Comment({
 
   const toggleShowEdit = () => {
     setShowEdit(!showEdit);
-  }
+    setNewComment(text);
+  };
 
-  const handleSubmitEdit =(e)=>{
+  const handleSubmitEdit = (e) => {
     e.preventDefault();
-    if(newComment === "") return;
+    if (newComment === "" || newComment === text) {
+      toggleShowEdit();
+      return;
+    }
+
     let indexes = getCommentIndexes();
     //edit comment from database
-    arrCategories[indexes.categoryIndex].posts[
-      indexes.postIndex
-    ].comments[indexes.commentIndex].text = newComment;
+    arrCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
+      indexes.commentIndex
+    ].text = newComment;
     //update posts
     updateAllPosts();
     //update database state
     setAllCategories(arrCategories);
-  }
+  };
 
   return (
     <div className="Comment">
@@ -103,13 +106,13 @@ function Comment({
           )}
         </div>
       </div>
-      {
-        showEdit && (
-          <div className="edit-container">
-            <form 
+      {showEdit && (
+        <div className="edit-container">
+          <form
             className="comments-form"
             onClick={(e) => e.stopPropagation()}
-            onSubmit={(e) => handleSubmitEdit(e)}>
+            onSubmit={(e) => handleSubmitEdit(e)}
+          >
             <textarea
               id="comment-edit-textarea"
               placeholder="Edit message"
@@ -119,22 +122,19 @@ function Comment({
             <button type="submit" className="btn btn-edit">
               Confirm edit
             </button>
-            </form>
-
-          </div>
-        )
-      }
-      
+          </form>
+        </div>
+      )}
     </div>
   );
 }
-
+/***** PARENT COMPONENT *****/
 function Comments({
-  allPosts,
   isLoggedIn,
   setAllCategories,
   currentUser,
   updateAllPosts,
+  setShowLogin
 }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
@@ -210,6 +210,8 @@ function Comments({
           currentUser={currentUser}
           setAllCategories={setAllCategories}
           updateAllPosts={updateAllPosts}
+          isLoggedIn={isLoggedIn}
+          setShowLogin={setShowLogin}
         />
         {isLoggedIn && (
           <form
@@ -242,6 +244,7 @@ function Comments({
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
+                
               />
             );
           })}

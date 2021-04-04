@@ -6,7 +6,7 @@ const arrCategories = [
   {
     id: "Gaming",
     name: "Gaming",
-    members: 5,
+    members: 1,
     image: gaminglogo,
     posts: [ 
       {
@@ -19,7 +19,13 @@ const arrCategories = [
         title: "Monster Hunter Rise",
         text: "I have played only MH 3, should I play this?",
         image: mhrise,
-        votes: 8,
+        votes: 1,
+        voters: [
+          {
+            username: "GuestUser",
+            vote: "upvote"
+         },
+        ],
         comments: [
           {
             id: "Gaming0Comment2",
@@ -48,7 +54,13 @@ const arrCategories = [
         title: "Worst game of all time",
         text: "What is your worst game of all time",
         image: "",
-        votes: 5,
+        votes: 1,
+        voters: [
+          {
+            username: "Beako",
+            vote: "upvote"
+         },
+        ],
         comments: [],
       },
     ],
@@ -56,7 +68,7 @@ const arrCategories = [
   {
     id: "Art",
     name: "Art",
-    members: 2,
+    members: 1,
     image: artlogo,
     posts: [
       {
@@ -69,7 +81,13 @@ const arrCategories = [
         title: "Favorite art?",
         text: "What is your favorite artwork?",
         image: "",
-        votes: 7,
+        votes: 1,
+        voters: [
+          {
+            username: "Megumi",
+            vote: "upvote"
+         },
+        ],
         comments: [],
       },
     ],
@@ -91,6 +109,12 @@ const arrCategories = [
         text: "Who is your favorite poet?",
         image: "",
         votes: 1,
+        voters: [
+          {
+            username: "GuestUser",
+            vote: "upvote"
+         },
+        ],
         comments: [],
       },
     ],

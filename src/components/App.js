@@ -111,6 +111,7 @@ function App() {
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
+                setShowLogin={setShowLogin}
               />
             )}
           />
@@ -130,6 +131,7 @@ function App() {
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
+                setShowLogin={setShowLogin}
               />
             )}
           />
@@ -141,6 +143,8 @@ function App() {
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
               updateAllPosts={updateAllPosts}
+              isLoggedIn={isLoggedIn}
+              setShowLogin={setShowLogin}
               />
             )}
           />
@@ -160,6 +164,7 @@ function App() {
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
+                setShowLogin={setShowLogin}
               />
             )}
           />
@@ -167,11 +172,11 @@ function App() {
             path="/post/:id"
             component={() => (
               <Comments
-                allPosts={allPosts}
                 isLoggedIn={isLoggedIn}
                 setAllCategories={setAllCategories}
                 currentUser={currentUser}
                 updateAllPosts={updateAllPosts}
+                setShowLogin={setShowLogin}
               />
             )}
           />

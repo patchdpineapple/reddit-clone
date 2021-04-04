@@ -35,19 +35,97 @@ function Category({ id, name, members, image }) {
   );
 }
 
-function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDelete }) {
-  //handlers
-  const handleDeletePost = () => {
+function Post({
+  thisPost,
+  currentUser,
+  setAllCategories,
+  updateAllPosts,
+  showDelete,
+  isLoggedIn,
+  setShowLogin,
+}) {
+  const [userVote, setUserVote] = useState(""); // upvote/downvote/""
+
+  //functions
+  const getPostIndexes = () => {
+    //returns the database indexes of this post
     //find category index
     let categoryIndex = arrCategories.findIndex(
       (category) => category.name === thisPost.category
     );
+    if(categoryIndex === -1) return;
     //find post index
     let postIndex = arrCategories[categoryIndex].posts.findIndex(
       (post) => post.id === thisPost.id
     );
+
+    return {
+      categoryIndex: categoryIndex,
+      postIndex: postIndex,
+    };
+  };
+
+  const vote = (choice) => {
+    //get post and voter indexes for updating database
+    let indexes = getPostIndexes();
+    //find if current user voted on this post
+    let voterIndex = arrCategories[indexes.categoryIndex].posts[indexes.postIndex]
+    .voters.findIndex((voter) => voter.username === currentUser.username);
+
+    let newVotes = thisPost.votes;
+    // choice === "upvote" ? newVotes++ : newVotes--;
+
+    if(userVote === ""){
+      choice === "upvote" ? newVotes++ : newVotes--;
+      //create new voter based on current user
+      let newVoter = {
+        username: currentUser.username,
+        vote: choice
+      }
+      //add new voter to database
+      arrCategories[indexes.categoryIndex].posts[
+        indexes.postIndex
+      ].voters.push(newVoter);
+    }
+    else if(userVote === choice){
+      if(choice === "upvote") newVotes--;
+      else newVotes++;
+       //delete vote from database
+       arrCategories[indexes.categoryIndex].posts[
+        indexes.postIndex
+      ].voters.splice(voterIndex,1);
+    }else if(userVote !== choice) {
+      if(choice === "upvote") newVotes+=2;
+      else newVotes-=2;
+      //edit voter's current vote choice
+      arrCategories[indexes.categoryIndex].posts[
+        indexes.postIndex
+      ].voters[voterIndex].vote = choice;
+    }
+
+    //set new votes to database
+    arrCategories[indexes.categoryIndex].posts[
+      indexes.postIndex
+    ].votes = newVotes;
+    //set new voter choice
+   
+    //update posts
+    updateAllPosts();
+    //update database state
+    setAllCategories(arrCategories);
+  };
+
+  //handlers
+  const handleVote = (choice) => {
+    if (isLoggedIn) {
+      vote(choice);
+    } else setShowLogin(true);
+  };
+
+  const handleDeletePost = () => {
+    let indexes = getPostIndexes();
     //delete post
-    arrCategories[categoryIndex].posts.splice(postIndex,1);
+    arrCategories[indexes.categoryIndex].posts.splice(indexes.postIndex, 1);
     //update posts
     updateAllPosts();
     //update database state
@@ -55,17 +133,52 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
   };
 
   const confirmDeletePost = () => {
-    if(window.confirm("Delete this post?")) handleDeletePost();
-  }
+    if (window.confirm("Delete this post?")) handleDeletePost();
+  };
+
+  //USE EFFECT
+  const checkUserVote = () => {
+    //update votes button state if the user already voted or not
+    let indexes = getPostIndexes();
+    if(!indexes) return;
+
+    //find if current user voted on this post
+    let voter = arrCategories[indexes.categoryIndex].posts[
+      indexes.postIndex
+    ].voters.find((voter) => voter.username === currentUser.username);
+
+    voter ? setUserVote(voter.vote): setUserVote("");
+  };
+
+  useEffect(() => {
+    if(isLoggedIn){
+      if(thisPost) checkUserVote();
+    }
+  }, [isLoggedIn, thisPost]);
 
   return (
     <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
-        <button className="btn btn-vote btn-upvote">
+        {console.log(userVote)}
+        <button
+          className={`btn btn-vote ${
+            userVote === "upvote" ? "btn-upvote" : ""
+          }`}
+          onClick={() => {
+            handleVote("upvote");
+          }}
+        >
           <i className="fas fa-chevron-up"></i>
         </button>
         <p className="votes">{thisPost.votes}</p>
-        <button className="btn btn-vote btn-downvote">
+        <button
+          className={`btn btn-vote ${
+            userVote === "downvote" ? "btn-downvote" : ""
+          }`}
+          onClick={() => {
+            handleVote("downvote");
+          }}
+        >
           <i className="fas fa-chevron-down"></i>
         </button>
       </div>
@@ -88,14 +201,18 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
               {thisPost.time}
             </span>
           </p>
-          {!showDelete ? "" : 
-          !currentUser ? "" : currentUser.username === thisPost.poster && (
-            <button className="btn btn-delete-post" onClick={confirmDeletePost}>
-              <i className="fas fa-times"></i>
-            </button>
-          ) 
-          }
-          
+          {!showDelete
+            ? ""
+            : !currentUser
+            ? ""
+            : currentUser.username === thisPost.poster && (
+                <button
+                  className="btn btn-delete-post"
+                  onClick={confirmDeletePost}
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              )}
         </div>
         <div className="post-main">
           <Link to={`/post/${thisPost.id}`} className="link">
@@ -124,6 +241,7 @@ function Post({ thisPost, currentUser, setAllCategories, updateAllPosts, showDel
   );
 }
 
+/***** PARENT COMPONENT *****/
 function Main({
   allCategories,
   allPosts,
@@ -136,6 +254,7 @@ function Main({
   currentUser,
   setAllCategories,
   updateAllPosts,
+  setShowLogin,
 }) {
   const handleNewHub = () => {
     setShowNewHub(true);
@@ -168,6 +287,8 @@ function Main({
               currentUser={currentUser}
               setAllCategories={setAllCategories}
               updateAllPosts={updateAllPosts}
+              isLoggedIn={isLoggedIn}
+              setShowLogin={setShowLogin}
             />
           );
         })}

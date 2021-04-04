@@ -9,12 +9,15 @@ function Profile({
   currentUser,
   setAllCategories,
   updateAllPosts,
+  isLoggedIn,
+  setShowLogin
 }) {
   let { username } = useParams();
   const [profUser, setProfUser] = useState({});
   const [profPosts, setProfPosts] = useState([]);
   const [profPoints, setProfPoints] = useState([]);
 
+  //USE EFFECT
   const handleGetProfileData = () => {
     let tempUser = accounts.find((account) => account.username === username);
     let tempUserPosts = [];
@@ -34,7 +37,6 @@ function Profile({
     setProfPoints(tempPoints);
   };
 
-  //USE EFFECT
   useEffect(() => {
     handleGetProfileData();
   }, [username]);
@@ -45,8 +47,8 @@ function Profile({
         <img src="" className="profile-pic" alt="" />
         <h2>{profUser.username}</h2>
         {currentUser.username === username && <h3>Email: {profUser.email}</h3>}
-        <h3>Post pts:&nbsp;{profPoints}</h3>
-        <h3>Comment pts:{profUser.commentPoints}</h3>
+        <h3>Post karma:&nbsp;{profPoints}</h3>
+        <h3>Comment karma: 0</h3>
       </div>
       <div className="profile-divider"></div>
       <h3>Posts</h3>
@@ -60,6 +62,8 @@ function Profile({
               setAllCategories={setAllCategories}
               updateAllPosts={updateAllPosts}
               showDelete={true}
+              isLoggedIn={isLoggedIn}
+              setShowLogin={setShowLogin}
             />
           );
         })}

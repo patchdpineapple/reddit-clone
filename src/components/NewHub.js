@@ -59,6 +59,7 @@ function NewHub({ setShowNewHub }) {
           placeholder="Hub"
           value={hubName}
           onChange={handleChangeHubName}
+          maxLength="40"
           required
         />
 

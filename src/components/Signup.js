@@ -22,10 +22,6 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
         username: username,
         password: password,
         email: email,
-        postPoints: 0,
-        commentPoints: 0,
-        postsIds: [],
-        hubs: [],
       };
       accounts.push(newUser);
 
