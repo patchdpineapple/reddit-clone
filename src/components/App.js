@@ -14,7 +14,6 @@ import NewHub from "./NewHub";
 
 //data
 import arrCategories from "../data/categories";
-import accounts from "../data/accounts";
 
 /* COMPONENT */
 function App() {
@@ -31,6 +30,9 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [currentCategory, setCurrentCategory] = useState("");
   const [categoryPosts, setCategoryPosts] = useState([]);
+
+
+  
 
   //FUNCTIONS
   const updateAllPosts = () => {
@@ -49,6 +51,10 @@ function App() {
     //update all posts state
     setAllPosts(tempPosts);
   };
+
+  const checkFirebaseAuthentication = () => {
+    
+  }
 
   //USE EFFECT
   useEffect(() => {
@@ -70,6 +76,7 @@ function App() {
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
         />
+        
         {showLogin && (
           <Login
             setShowLogin={setShowLogin}

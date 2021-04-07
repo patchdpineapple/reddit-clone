@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./NewHub.css";
 import arrCategories from "../data/categories";
-import accounts from "../data/accounts";
 
 function NewHub({ setShowNewHub }) {
   const [hubName, setHubName] = useState("");

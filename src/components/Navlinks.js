@@ -1,11 +1,18 @@
 import React from "react";
 import "./Navlinks.css";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase/config";
 
 function LoggedIn({setIsLoggedIn, currentUser, setCurrentUser}) {
   const handleLogout = ()=>{
-    setCurrentUser({});
+    
+    auth.signOut().then(()=>{
+      setCurrentUser({});
     setIsLoggedIn(false);
+    console.log("user signed out");
+    alert("Logout successful")
+
+    });
   }
   return (
     <ul className="nav-links">

@@ -62,8 +62,12 @@
     background-color: lightgray;
 }
 
-.btn-upvote, .btn-downvote {
-    background-color: orange !important;
+.btn-upvote {
+    background-color: orange;
+}
+
+.btn-downvote {
+    background-color: rgb(170, 109, 231);
 }
 
 

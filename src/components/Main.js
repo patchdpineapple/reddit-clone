@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
-import accounts from "../data/accounts";
 import arrCategories from "../data/categories";
 
 function PostFloater({ setShowMakePost }) {
@@ -159,7 +158,6 @@ function Post({
   return (
     <div className="Post" data-id={thisPost.id}>
       <div className="container votes-container">
-        {console.log(userVote)}
         <button
           className={`btn btn-vote ${
             userVote === "upvote" ? "btn-upvote" : ""

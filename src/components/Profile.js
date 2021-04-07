@@ -26,7 +26,9 @@ function Profile({
         if (post.poster === username) {
           tempUserPosts.push(post);
         }
+        return post;
       });
+      return category;
     });
 
     tempUserPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));

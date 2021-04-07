@@ -1,41 +1,94 @@
 import React, { useState } from "react";
 import "./Signup.css";
 import accounts from "../data/accounts";
+import { auth, db } from "../firebase/config";
+import Loading from "./Loading";
 
 function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
 
-  //submit handlers
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //check if account exists
-    let user = accounts.find(
-      (account) => account.username.toUpperCase() === username.toUpperCase()
-    );
-    if (user) alert("Account already exists");
-    else {
-      //add new user account to database
-      let newUser = {
-        id: Math.floor(Math.random() * 10000),
-        username: username,
+  //functions
+  const signupToFirebase = (email, password, username) => {
+    
+    //adds a new user to firebase auth with email, password and username
+    auth.createUserWithEmailAndPassword(email, password).then( cred => {
+      return cred.user.updateProfile({
+        displayName: username
+      });
+    }).then(()=>{
+      console.log("username", auth.currentUser.displayName)
+      console.log("id", auth.currentUser.uid)
+      console.log("email", auth.currentUser.email)
+      console.log("profilepic", auth.currentUser.photoURL)
+
+      //set custom user data on firestore
+      return db.collection("users").doc(auth.currentUser.uid).set({
+        id: auth.currentUser.uid,
+        username: auth.currentUser.displayName,
+        email: auth.currentUser.email,
         password: password,
-        email: email,
-      };
-      accounts.push(newUser);
-
-      //automatically login the newly created account
-      user = accounts.find(
-        (account) => account.username.toUpperCase() === username.toUpperCase()
-      );
-      setCurrentUser(user);
+        photo: auth.currentUser.photoURL
+      });
+    }).then(() => {
+      const tempUser = {
+        id: auth.currentUser.uid,
+        username: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        password: password,
+        photo: auth.currentUser.photoURL
+      }
+      setCurrentUser(tempUser);
       setUsername("");
       setPassword("");
       setEmail("");
       setIsLoggedIn(true);
       closeSignup();
-    }
+      setShowLoading(false);
+      alert(`Signup successful. You are now logged in as ${auth.currentUser.displayName}`);
+    })
+    
+    .catch(err => {
+      setShowLoading(false);
+      console.log(err.code, err.message);
+      if(err.code === "auth/email-already-in-use"){
+        alert("Email already in use.");
+      } else alert(err.message)
+    })
+
+    
+  }
+
+  //submit handlers
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //display loading
+    setShowLoading(true);
+    signupToFirebase(email, password, username);
+
+    // check if account exists
+    // let user = accounts.find(
+    //   (account) => account.username.toUpperCase() === username.toUpperCase()
+    // );
+    // if (user) alert("Account already exists");
+    // else {
+    //   //add new user account to database
+    //   let newUser = {
+    //     id: Math.floor(Math.random() * 10000),
+    //     username: username,
+    //     password: password,
+    //     email: email,
+    //   };
+    //   accounts.push(newUser);
+
+    //   //automatically login the newly created account
+    //    user = accounts.find(
+    //     (account) => account.username.toUpperCase() === username.toUpperCase()
+    //   );
+    // }
+
   };
 
   //input onchange handlers
@@ -92,6 +145,7 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
           id="signup-password"
           name="password"
           placeholder="password"
+          minLength={6}
           onChange={handlePasswordChange}
           value={password}
           required
@@ -100,6 +154,9 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
           Submit
         </button>
       </form>
+      {showLoading && (
+          <Loading text="Signing up..." />
+        )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./MakePost.css";
-import { Link } from "react-router-dom";
 import arrCategories from "../data/categories";
 
 function MakePost({
