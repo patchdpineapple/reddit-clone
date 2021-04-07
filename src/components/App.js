@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { auth, db } from "../firebase/config";
+
 //import components
 import Navlinks from "./Navlinks";
 import Main from "./Main";
@@ -11,6 +13,7 @@ import HubPage from "./HubPage";
 import MakePost from "./MakePost";
 import Comments from "./Comments";
 import NewHub from "./NewHub";
+import Loading from "./Loading";
 
 //data
 import arrCategories from "../data/categories";
@@ -23,6 +26,7 @@ function App() {
   const [showSignup, setShowSignup] = useState(false);
   const [showMakePost, setShowMakePost] = useState(false);
   const [showNewHub, setShowNewHub] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
 
   //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
@@ -52,11 +56,41 @@ function App() {
     setAllPosts(tempPosts);
   };
 
+  
+
+  const getUserDataFromFirestore = async (id) => {
+    const doc = await db.collection("users").doc(id).get();
+      const tempUser = {
+        id: doc.data().id,
+        username: doc.data().username,
+        email: doc.data().email,
+        photo: doc.data().photo
+      }
+      setCurrentUser(tempUser);
+      setIsLoggedIn(true);
+      setShowLoading(false);
+  }
+
   const checkFirebaseAuthentication = () => {
-    
+    auth.onAuthStateChanged( user => {
+      if(user){
+        setShowLoading(true);
+        console.log(`logged in as`, user.displayName);
+        console.log(`logged in ID`, user.uid);
+        getUserDataFromFirestore(user.uid);
+      } else {
+        console.log("logged out");
+      }
+    });
   }
 
   //USE EFFECT
+  
+    useEffect(() => {
+      checkFirebaseAuthentication();
+  }, []); 
+
+
   useEffect(() => {
     console.log("updated allPosts");
     updateAllPosts();
@@ -76,7 +110,9 @@ function App() {
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
         />
-        
+        {showLoading && (
+          <Loading text="Logging in..." />
+        )}
         {showLogin && (
           <Login
             setShowLogin={setShowLogin}
