@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import "./Login.css";
 import accounts from "../data/accounts";
 import { auth, db } from "../firebase/config";
-import Loading from "./Loading";
 
 
-function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
+function Login({ setShowLogin, setIsLoggedIn, setCurrentUser, setShowLoading }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showLoading, setShowLoading] = useState(false);
 
   //functions
   // const loginToFirebase = (email, password) => {
@@ -38,22 +36,22 @@ function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
   const loginToFirebase = async (email, password) => {
     try {
       const cred = await auth.signInWithEmailAndPassword(email, password);
-      const id = cred.user.uid;
-      const doc = await db.collection("users").doc(id).get();
-      const tempUser = {
-        id: doc.data().id,
-        username: doc.data().username,
-        email: doc.data().email,
-        photo: doc.data().photo
-      }
-      setCurrentUser(tempUser);
-      setIsLoggedIn(true);
+      // const id = cred.user.uid;
+      // const doc = await db.collection("users").doc(id).get();
+      // const tempUser = {
+      //   id: doc.data().id,
+      //   username: doc.data().username,
+      //   email: doc.data().email,
+      //   photo: doc.data().photo
+      // }
+      // setCurrentUser(tempUser);
+      // setIsLoggedIn(true);
       setUsername("");
       setPassword("");
       closeLogin();
       setShowLoading(false);
       console.log("successfully logged in");
-      alert(`Successfully logged in as ${doc.data().username}`);
+      // alert(`Successfully logged in as ${doc.data().username}`);
     } catch(err){
       setShowLoading(false);
       console.log(err.message);
@@ -168,9 +166,7 @@ function Login({ setShowLogin, setIsLoggedIn, setCurrentUser }) {
           Guest
         </button>
       </form>
-      {showLoading && (
-          <Loading text="Logging in..." />
-        )}
+      
     </div>
   );
 }

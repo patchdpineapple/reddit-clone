@@ -30,11 +30,12 @@ function App() {
 
   //data state
   const [allCategories, setAllCategories] = useState(arrCategories);
+  const [allUsers, setAllUsers] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [currentCategory, setCurrentCategory] = useState("");
   const [categoryPosts, setCategoryPosts] = useState([]);
-
+  
 
   
 
@@ -58,8 +59,9 @@ function App() {
 
   
 
-  const getUserDataFromFirestore = async (id) => {
-    const doc = await db.collection("users").doc(id).get();
+  const getUserDataFromFirestore = async (username) => {
+    try {
+      const doc = await db.collection("users").doc(username).get();
       const tempUser = {
         id: doc.data().id,
         username: doc.data().username,
@@ -69,24 +71,33 @@ function App() {
       setCurrentUser(tempUser);
       setIsLoggedIn(true);
       setShowLoading(false);
+    } catch(err){
+      setShowLoading(false);
+      console.log("auth status error ", err.message);
+    }
+    
   }
 
   const checkFirebaseAuthentication = () => {
     auth.onAuthStateChanged( user => {
       if(user){
-        setShowLoading(true);
         console.log(`logged in as`, user.displayName);
         console.log(`logged in ID`, user.uid);
-        getUserDataFromFirestore(user.uid);
+        getUserDataFromFirestore(user.displayName);
       } else {
+        setShowLoading(false);
         console.log("logged out");
       }
     });
   }
 
+  
+
   //USE EFFECT
   
     useEffect(() => {
+      setShowLoading(true);
+
       checkFirebaseAuthentication();
   }, []); 
 
@@ -111,13 +122,14 @@ function App() {
           setCurrentUser={setCurrentUser}
         />
         {showLoading && (
-          <Loading text="Logging in..." />
+          <Loading text="Authenticating..." />
         )}
         {showLogin && (
           <Login
             setShowLogin={setShowLogin}
             setIsLoggedIn={setIsLoggedIn}
             setCurrentUser={setCurrentUser}
+            setShowLoading={setShowLoading}
           />
         )}
         {showSignup && (
@@ -185,9 +197,10 @@ function App() {
                 allCategories={allCategories}
                 currentUser={currentUser}
                 setAllCategories={setAllCategories}
-              updateAllPosts={updateAllPosts}
-              isLoggedIn={isLoggedIn}
-              setShowLogin={setShowLogin}
+                updateAllPosts={updateAllPosts}
+                isLoggedIn={isLoggedIn}
+                setShowLogin={setShowLogin}
+                
               />
             )}
           />

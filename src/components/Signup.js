@@ -11,6 +11,25 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
   const [showLoading, setShowLoading] = useState(false);
 
   //functions
+  const checkUsernameFromDatabase = async () => {
+    //check first if username exists from database
+    //if not, creates a new user account and user details in database
+    let usernameExist;
+    let documents = await db.collection("users").get();
+    documents.forEach( doc => {
+      if(doc.data().username.toUpperCase() === username.toUpperCase()){
+        usernameExist = true;
+      }
+    });
+    if(usernameExist) {
+      setShowLoading(false);
+      alert("Username already exists");
+    } else {
+    signupToFirebase(email, password, username);
+    }
+    
+  }
+
   const signupToFirebase = (email, password, username) => {
     
     //adds a new user to firebase auth with email, password and username
@@ -19,13 +38,9 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
         displayName: username
       });
     }).then(()=>{
-      console.log("username", auth.currentUser.displayName)
-      console.log("id", auth.currentUser.uid)
-      console.log("email", auth.currentUser.email)
-      console.log("profilepic", auth.currentUser.photoURL)
-
+      
       //set custom user data on firestore
-      return db.collection("users").doc(auth.currentUser.uid).set({
+      return db.collection("users").doc(auth.currentUser.displayName).set({
         id: auth.currentUser.uid,
         username: auth.currentUser.displayName,
         email: auth.currentUser.email,
@@ -58,7 +73,6 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
       } else alert(err.message)
     })
 
-    
   }
 
   //submit handlers
@@ -66,8 +80,7 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
     e.preventDefault();
     //display loading
     setShowLoading(true);
-    signupToFirebase(email, password, username);
-
+    checkUsernameFromDatabase();
     // check if account exists
     // let user = accounts.find(
     //   (account) => account.username.toUpperCase() === username.toUpperCase()

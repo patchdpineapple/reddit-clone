@@ -10,8 +10,6 @@ function LoggedIn({setIsLoggedIn, currentUser, setCurrentUser}) {
       setCurrentUser({});
     setIsLoggedIn(false);
     console.log("user signed out");
-    alert("Logout successful")
-
     });
   }
   return (

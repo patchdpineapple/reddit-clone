@@ -5,7 +5,7 @@ function Loading({ text }) {
   return (
     <div className="Loading">
       <div className="loading-container">
-        <h1>{text}</h1>
+        <div className="loader"></div>
       </div>
     </div>
   );
