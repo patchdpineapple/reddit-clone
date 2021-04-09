@@ -29,17 +29,30 @@ function App() {
   const [showLoading, setShowLoading] = useState(false);
 
   //data state
-  const [allCategories, setAllCategories] = useState(arrCategories);
-  const [allUsers, setAllUsers] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [currentCategory, setCurrentCategory] = useState("");
   const [categoryPosts, setCategoryPosts] = useState([]);
-  
-
-  
 
   //FUNCTIONS
+  const getHubsFromFirestore = async () => {
+    //get all hubs from database then set as state
+    setShowLoading(true);
+    try {
+      const hubs = await db.collection("hubs").get();
+      setShowLoading(false);
+      let tempHubs = [];
+      hubs.forEach( doc => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+    } catch (err) {
+      setShowLoading(false);
+      console.log(err.message)
+    }
+  };
+
   const updateAllPosts = () => {
     //get all posts from all categories
     let tempPosts = [];
@@ -57,30 +70,30 @@ function App() {
     setAllPosts(tempPosts);
   };
 
-  
-
   const getUserDataFromFirestore = async (username) => {
+    //if user is logged in, set state of current user and nav bar
     try {
       const doc = await db.collection("users").doc(username).get();
       const tempUser = {
         id: doc.data().id,
         username: doc.data().username,
         email: doc.data().email,
-        photo: doc.data().photo
-      }
+        photo: doc.data().photo,
+      };
       setCurrentUser(tempUser);
       setIsLoggedIn(true);
       setShowLoading(false);
-    } catch(err){
+    } catch (err) {
       setShowLoading(false);
       console.log("auth status error ", err.message);
     }
-    
-  }
+  };
 
   const checkFirebaseAuthentication = () => {
-    auth.onAuthStateChanged( user => {
-      if(user){
+    //check auth status if a user is logged in
+    setShowLoading(true);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
         console.log(`logged in as`, user.displayName);
         console.log(`logged in ID`, user.uid);
         getUserDataFromFirestore(user.displayName);
@@ -89,24 +102,25 @@ function App() {
         console.log("logged out");
       }
     });
-  }
-
-  
+  };
 
   //USE EFFECT
-  
-    useEffect(() => {
-      setShowLoading(true);
+  useEffect(() => {
+    checkFirebaseAuthentication();
+  }, []);
 
-      checkFirebaseAuthentication();
-  }, []); 
+  useEffect(() => {
+    console.log("got hubs from db");
+    getHubsFromFirestore();
+    return () => {getHubsFromFirestore()}
+  }, []);
+
 
 
   useEffect(() => {
     console.log("updated allPosts");
     updateAllPosts();
-  }, [allCategories]); 
-  
+  }, [allCategories]);
 
   //RENDER
   return (
@@ -121,9 +135,7 @@ function App() {
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
         />
-        {showLoading && (
-          <Loading text="Authenticating..." />
-        )}
+        {showLoading && <Loading text="Authenticating..." />}
         {showLogin && (
           <Login
             setShowLogin={setShowLogin}
@@ -149,7 +161,13 @@ function App() {
             updateAllPosts={updateAllPosts}
           />
         )}
-        {showNewHub && <NewHub setShowNewHub={setShowNewHub} />}
+        {showNewHub && (
+          <NewHub
+            setShowNewHub={setShowNewHub}
+            allCategories={allCategories}
+            setAllCategories={setAllCategories}
+          />
+        )}
         <Switch>
           <Route
             path="/reddit-clone"
@@ -200,7 +218,6 @@ function App() {
                 updateAllPosts={updateAllPosts}
                 isLoggedIn={isLoggedIn}
                 setShowLogin={setShowLogin}
-                
               />
             )}
           />

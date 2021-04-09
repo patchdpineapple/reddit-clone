@@ -2,7 +2,7 @@ import mhrise from "../images/mhrise.jpg";
 import gaminglogo from "../images/gaminglogo.png";
 import artlogo from "../images/artlogo.png";
 
-const arrCategories = [
+const arrCategories = [/*
   {
     id: "Gaming",
     name: "Gaming",
@@ -119,6 +119,6 @@ const arrCategories = [
       },
     ],
   },
-];
+*/];
 
 export default arrCategories;

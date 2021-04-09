@@ -38,7 +38,6 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
         displayName: username
       });
     }).then(()=>{
-      
       //set custom user data on firestore
       return db.collection("users").doc(auth.currentUser.displayName).set({
         id: auth.currentUser.uid,
@@ -48,6 +47,7 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
         photo: auth.currentUser.photoURL
       });
     }).then(() => {
+      //set current user state
       const tempUser = {
         id: auth.currentUser.uid,
         username: auth.currentUser.displayName,
