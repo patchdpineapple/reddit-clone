@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
 import arrCategories from "../data/categories";
+import { db } from "../firebase/config";
 
 function PostFloater({ setShowMakePost }) {
   const handleMakePost = () => {
@@ -37,24 +38,55 @@ function Category({ id, name, members, image }) {
 function Post({
   thisPost,
   currentUser,
+  allCategories,
   setAllCategories,
   updateAllPosts,
   showDelete,
   isLoggedIn,
   setShowLogin,
+  setShowLoading,
 }) {
   const [userVote, setUserVote] = useState(""); // upvote/downvote/""
 
   //functions
+  const deletePostFromFirestore = async () => {
+    //delete the post from firestore database and update states
+    try {
+      setShowLoading(true);
+      //get posts from database
+      let doc = await db.collection("hubs").doc(thisPost.category).get();
+      //record posts and remove the post with filter
+      let tempPosts = doc.data().posts;
+      let filteredPosts = tempPosts.filter((post) => post.id !== thisPost.id);
+      //update database with filtered posts
+      await db.collection("hubs").doc(thisPost.category).update({
+        posts: filteredPosts,
+      });
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+      updateAllPosts();
+      setShowLoading(false);
+    } catch (err) {
+      setShowLoading(false);
+      console.log(err.message);
+      alert(err.message);
+    }
+  };
+
   const getPostIndexes = () => {
     //returns the database indexes of this post
     //find category index
-    let categoryIndex = arrCategories.findIndex(
+    let categoryIndex = allCategories.findIndex(
       (category) => category.name === thisPost.category
     );
-    if(categoryIndex === -1) return;
+    if (categoryIndex === -1) return;
     //find post index
-    let postIndex = arrCategories[categoryIndex].posts.findIndex(
+    let postIndex = allCategories[categoryIndex].posts.findIndex(
       (post) => post.id === thisPost.id
     );
 
@@ -68,38 +100,38 @@ function Post({
     //get post and voter indexes for updating database
     let indexes = getPostIndexes();
     //find if current user voted on this post
-    let voterIndex = arrCategories[indexes.categoryIndex].posts[indexes.postIndex]
-    .voters.findIndex((voter) => voter.username === currentUser.username);
+    let voterIndex = arrCategories[indexes.categoryIndex].posts[
+      indexes.postIndex
+    ].voters.findIndex((voter) => voter.username === currentUser.username);
 
     let newVotes = thisPost.votes;
     // choice === "upvote" ? newVotes++ : newVotes--;
 
-    if(userVote === ""){
+    if (userVote === "") {
       choice === "upvote" ? newVotes++ : newVotes--;
       //create new voter based on current user
       let newVoter = {
         username: currentUser.username,
-        vote: choice
-      }
+        vote: choice,
+      };
       //add new voter to database
-      arrCategories[indexes.categoryIndex].posts[
-        indexes.postIndex
-      ].voters.push(newVoter);
-    }
-    else if(userVote === choice){
-      if(choice === "upvote") newVotes--;
+      arrCategories[indexes.categoryIndex].posts[indexes.postIndex].voters.push(
+        newVoter
+      );
+    } else if (userVote === choice) {
+      if (choice === "upvote") newVotes--;
       else newVotes++;
-       //delete vote from database
-       arrCategories[indexes.categoryIndex].posts[
-        indexes.postIndex
-      ].voters.splice(voterIndex,1);
-    }else if(userVote !== choice) {
-      if(choice === "upvote") newVotes+=2;
-      else newVotes-=2;
-      //edit voter's current vote choice
+      //delete vote from database
       arrCategories[indexes.categoryIndex].posts[
         indexes.postIndex
-      ].voters[voterIndex].vote = choice;
+      ].voters.splice(voterIndex, 1);
+    } else if (userVote !== choice) {
+      if (choice === "upvote") newVotes += 2;
+      else newVotes -= 2;
+      //edit voter's current vote choice
+      arrCategories[indexes.categoryIndex].posts[indexes.postIndex].voters[
+        voterIndex
+      ].vote = choice;
     }
 
     //set new votes to database
@@ -107,7 +139,7 @@ function Post({
       indexes.postIndex
     ].votes = newVotes;
     //set new voter choice
-   
+
     //update posts
     updateAllPosts();
     //update database state
@@ -122,13 +154,7 @@ function Post({
   };
 
   const handleDeletePost = () => {
-    let indexes = getPostIndexes();
-    //delete post
-    arrCategories[indexes.categoryIndex].posts.splice(indexes.postIndex, 1);
-    //update posts
-    updateAllPosts();
-    //update database state
-    setAllCategories(arrCategories);
+    deletePostFromFirestore();
   };
 
   const confirmDeletePost = () => {
@@ -139,21 +165,34 @@ function Post({
   const checkUserVote = () => {
     //update votes button state if the user already voted or not
     let indexes = getPostIndexes();
-    if(!indexes) return;
+    if (!indexes) return;
 
     //find if current user voted on this post
-    let voter = arrCategories[indexes.categoryIndex].posts[
+
+    let voter = allCategories[indexes.categoryIndex].posts[
       indexes.postIndex
     ].voters.find((voter) => voter.username === currentUser.username);
 
-    voter ? setUserVote(voter.vote): setUserVote("");
+    voter ? setUserVote(voter.vote) : setUserVote("");
   };
 
-  useEffect(() => {
-    if(isLoggedIn){
-      if(thisPost) checkUserVote();
-    }
-  }, [isLoggedIn, thisPost]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     if (thisPost) {
+  //       let indexes = getPostIndexes();
+  //       if (!indexes) return;
+
+  //       //find if current user voted on this post
+  //       console.log(thisPost);
+  //       console.log(allCategories);
+  //       let voter = allCategories[indexes.categoryIndex].posts[
+  //         indexes.postIndex
+  //       ].voters.find((voter) => voter.username === currentUser.username);
+
+  //       voter ? setUserVote(voter.vote) : setUserVote("");
+  //     }
+  //   }
+  // }, [isLoggedIn, thisPost, allCategories]);
 
   return (
     <div className="Post" data-id={thisPost.id}>
@@ -253,6 +292,7 @@ function Main({
   setAllCategories,
   updateAllPosts,
   setShowLogin,
+  setShowLoading,
 }) {
   const handleNewHub = () => {
     setShowNewHub(true);
@@ -283,10 +323,12 @@ function Main({
               key={post.id}
               thisPost={post}
               currentUser={currentUser}
+              allCategories={allCategories}
               setAllCategories={setAllCategories}
               updateAllPosts={updateAllPosts}
               isLoggedIn={isLoggedIn}
               setShowLogin={setShowLogin}
+              setShowLoading={setShowLoading}
             />
           );
         })}

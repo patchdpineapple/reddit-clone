@@ -12,6 +12,7 @@ function Profile({
   updateAllPosts,
   isLoggedIn,
   setShowLogin,
+  setShowLoading
 }) {
   let { username } = useParams();
   const [profUser, setProfUser] = useState(null);
@@ -76,6 +77,7 @@ function Profile({
             points: tempPoints,
           });
           console.log(`${username} profile data acquired`);
+          console.log(allCategories)
         } else {
           alert("no such user");
         }
@@ -86,6 +88,7 @@ function Profile({
       }
     };
     getUserDoc();
+    
     
   }, [username]);
 
@@ -112,11 +115,13 @@ function Profile({
                   key={post.id}
                   thisPost={post}
                   currentUser={currentUser}
+                  allCategories={allCategories}
                   setAllCategories={setAllCategories}
                   updateAllPosts={updateAllPosts}
                   showDelete={true}
                   isLoggedIn={isLoggedIn}
                   setShowLogin={setShowLogin}
+                  setShowLoading={setShowLoading}
                 />
               );
             })}

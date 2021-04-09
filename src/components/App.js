@@ -49,25 +49,37 @@ function App() {
       setAllCategories(tempHubs);
     } catch (err) {
       setShowLoading(false);
-      console.log(err.message)
+      console.log(err.message);
+      alert(err.message);
     }
   };
 
-  const updateAllPosts = () => {
+
+  const updateAllPosts = async () => {
     //get all posts from all categories
+    // allCategories.map((category) => {
+    //   category.posts.map((post) => {
+    //     tempPosts.push(post);
+    //     return post;
+    //   });
+    //   return category;
+    // });
+    try{
     let tempPosts = [];
-    allCategories.map((category) => {
-      category.posts.map((post) => {
-        tempPosts.push(post);
-        return post;
-      });
-      return category;
+    let hubs = await db.collection("hubs").get();
+    hubs.forEach( doc => {
+      tempPosts = [...tempPosts, ...doc.data().posts];
     });
 
     //sort all posts by newest to oldest
     tempPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
     //update all posts state
     setAllPosts(tempPosts);
+    console.log("updated all posts")
+    }catch(err){
+      console.log(err.message)
+    }
+    
   };
 
   const getUserDataFromFirestore = async (username) => {
@@ -116,9 +128,7 @@ function App() {
   }, []);
 
 
-
   useEffect(() => {
-    console.log("updated allPosts");
     updateAllPosts();
   }, [allCategories]);
 
@@ -159,6 +169,7 @@ function App() {
             currentCategory={currentCategory}
             currentUser={currentUser}
             updateAllPosts={updateAllPosts}
+            setShowLoading={setShowLoading}
           />
         )}
         {showNewHub && (
@@ -185,6 +196,7 @@ function App() {
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
                 setShowLogin={setShowLogin}
+                setShowLoading={setShowLoading}
               />
             )}
           />
@@ -205,6 +217,7 @@ function App() {
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
                 setShowLogin={setShowLogin}
+                setShowLoading={setShowLoading}
               />
             )}
           />
@@ -218,6 +231,7 @@ function App() {
                 updateAllPosts={updateAllPosts}
                 isLoggedIn={isLoggedIn}
                 setShowLogin={setShowLogin}
+                setShowLoading={setShowLoading}
               />
             )}
           />

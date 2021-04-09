@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./MakePost.css";
 import arrCategories from "../data/categories";
+import { db } from "../firebase/config";
 
 function MakePost({
   allCategories,
@@ -9,6 +10,7 @@ function MakePost({
   currentCategory,
   currentUser,
   updateAllPosts,
+  setShowLoading
 }) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -48,17 +50,45 @@ function MakePost({
 
   const getId = () => {
     //generate id
-    return hub + Math.floor(Math.random() * 10000);
+    return hub + Math.floor(Math.random() * 100000);
   };
+
+  const addPostToFirestore = async (newPost) => {
+    setShowLoading(true);
+    try{
+      //get current posts from database
+    let doc = await db.collection("hubs").doc(hub).get();
+    let currentPosts = doc.data().posts;
+    let newPosts = [newPost, ...currentPosts];
+    //update database posts
+    await db.collection("hubs").doc(hub).update({
+      posts: newPosts
+    })
+    //update state of all categories and posts
+    const hubs = await db.collection("hubs").get(); 
+    let tempHubs = [];
+      hubs.forEach( doc => {
+        tempHubs.push(doc.data());
+      });
+    setAllCategories(tempHubs);
+    updateAllPosts();
+    closeMakePost();
+    setShowLoading(false);
+    } catch(err){
+      setShowLoading(false);
+      console.log(err.message);
+      alert(err.message);
+    }
+  }
 
   //submit handlers
   const handleSubmit = (e) => {
     //add a new post to chosen category
     e.preventDefault();
     //find index of category where the new post will be added
-    let categoryIndex = arrCategories.findIndex(
-      (category) => category.name === hub
-    );
+    // let categoryIndex = arrCategories.findIndex(
+    //   (category) => category.name === hub
+    // );
     //create a new post object
 
     let currentDate = getCurrentDate();
@@ -83,13 +113,9 @@ function MakePost({
     };
 
     //add the post
-    arrCategories[categoryIndex].posts.unshift(newPost);
-    //update all posts list
-    updateAllPosts();
-    //update database state
-    setAllCategories(arrCategories);
-
-    closeMakePost();
+    addPostToFirestore(newPost);
+    // arrCategories[categoryIndex].posts.unshift(newPost);
+    
   };
 
   //input onchange handlers
