@@ -278,3 +278,39 @@
     text-align: center;
  }
 
+ @media (max-width: 750px) {
+    .Main {
+        grid-template-areas: 
+        "title"
+        "categories"
+        "posts";
+    }
+
+    .categories-container {
+        display: flex;
+        flex-flow: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        min-height: 150px;
+        
+    }
+    .Category {
+        flex-flow: column;
+    }
+}
+
+@media (max-width: 700px) {
+    .Main {
+        margin-top: 10%;
+    }
+}
+
+@media (max-width: 520px) {
+    .Main {
+        margin-top: 20%;
+    }
+}
+
+
+

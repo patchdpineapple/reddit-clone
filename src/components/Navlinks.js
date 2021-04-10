@@ -45,7 +45,7 @@ function Navlinks({isLoggedIn, setIsLoggedIn, setShowLogin, setShowSignup, setCu
 
   return (
   <div className="Navlinks">
-    <h1 className="nav-logo"><Link to="/" className="link" onClick={resetCurrentCategory}>The Hub</Link></h1>
+    <h1 className="nav-logo"><Link to="/" className="link" onClick={resetCurrentCategory}>TheHub</Link></h1>
         {isLoggedIn ? <LoggedIn setIsLoggedIn={setIsLoggedIn} currentUser={currentUser} setCurrentUser={setCurrentUser}/> : <LoggedOut setIsLoggedIn={setIsLoggedIn} setShowLogin={setShowLogin} setShowSignup={setShowSignup} />}
   </div>
   );

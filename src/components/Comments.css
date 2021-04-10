@@ -52,7 +52,7 @@
   min-width: 100%;
   max-width: 100%;
   min-height: 100px;
-  background-color: transparent;
+  background-color: #f4f4f4;
 
 }
 
@@ -62,10 +62,11 @@
   max-width: 100%;
   display: flex;
   flex-flow: column;
-  margin-bottom: 20px;
+  margin-bottom: 
+  0px;
   line-height: 1;
-  background-color: #f4f4f4;
-  padding: 10px;
+  background-color: transparent;
+  padding: 5px;
   border-radius: 10px;
 }
 
