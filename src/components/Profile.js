@@ -76,8 +76,8 @@ function Profile({
             posts: tempUserPosts,
             points: tempPoints,
           });
-          console.log(`${username} profile data acquired`);
-          console.log(allCategories)
+          // console.log(`${username} profile data acquired`);
+          // console.log(allCategories)
         } else {
           alert("no such user");
         }

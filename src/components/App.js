@@ -57,14 +57,16 @@ function App() {
 
   const updateAllPosts = async () => {
     //get all posts from all categories
-    // allCategories.map((category) => {
+    
+    try{
+      // allCategories.map((category) => {
     //   category.posts.map((post) => {
     //     tempPosts.push(post);
     //     return post;
     //   });
     //   return category;
     // });
-    try{
+
     let tempPosts = [];
     let hubs = await db.collection("hubs").get();
     hubs.forEach( doc => {
@@ -75,7 +77,7 @@ function App() {
     tempPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
     //update all posts state
     setAllPosts(tempPosts);
-    console.log("updated all posts")
+    console.log("app updated all posts")
     }catch(err){
       console.log(err.message)
     }
@@ -130,7 +132,7 @@ function App() {
 
   useEffect(() => {
     updateAllPosts();
-  }, [allCategories]);
+  }, []);
 
   //RENDER
   return (
@@ -260,10 +262,12 @@ function App() {
             component={() => (
               <Comments
                 isLoggedIn={isLoggedIn}
+                allCategories={allCategories}
                 setAllCategories={setAllCategories}
                 currentUser={currentUser}
                 updateAllPosts={updateAllPosts}
                 setShowLogin={setShowLogin}
+                setShowLoading={setShowLoading}
               />
             )}
           />
