@@ -46,25 +46,43 @@ function Comment({
 
   const handleDeleteComment = async () => {
     //delete comment from firestore and update state
-    //get post from firestore
-    // let category = await db.collection("hubs").doc(thisPost.category).get();
-    // let post = category.post1
+    try {
+      //get posts from firestore
+      let doc = await db.collection("hubs").doc(thisPost.category).get();
+      let posts = doc.data().posts;
+      //delete the comment
+      posts.forEach((post) => {
+        if (post.id === thisPost.id) {
+          let index = post.comments.findIndex((comment) => comment.id === id);
+          post.comments.splice(index, 1);
+        }
+      });
 
-    let indexes = getCommentIndexes();
-    //delete comment from database state
-    let tempCategories = allCategories;
-    tempCategories[indexes.categoryIndex].posts[
-      indexes.postIndex
-    ].comments.splice(indexes.commentIndex, 1);
-    let tempPosts = tempCategories[indexes.categoryIndex].posts;
-    //delete comment from firestore
-    await db.collection("hubs").doc(thisPost.category).update({
-      posts: tempPosts,
-    });
-    //update all posts state
-    updateAllPosts();
-    //update database state
-    setAllCategories(tempCategories);
+      //update firestore
+      await db.collection("hubs").doc(thisPost.category).update({
+        posts: posts,
+      });
+
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+      updateAllPosts();
+    } catch (err) {
+      console.log(err.message);
+    }
+
+    // let indexes = getCommentIndexes();
+    // //delete comment from database state
+    // let tempCategories = allCategories;
+    // tempCategories[indexes.categoryIndex].posts[
+    //   indexes.postIndex
+    // ].comments.splice(indexes.commentIndex, 1);
+    // let tempPosts = tempCategories[indexes.categoryIndex].posts;
+    // setAllCategories(tempCategories);
   };
 
   const confirmDeleteComment = () => {
@@ -176,7 +194,8 @@ function Comments({
 
     try {
       //generate id of comment
-      let commentId = thisPost.id + "Comment" + Math.floor(Math.random() * 10000);
+      let commentId =
+        thisPost.id + "Comment" + Math.floor(Math.random() * 10000);
       //record comment
       let newComment = {
         id: commentId,
