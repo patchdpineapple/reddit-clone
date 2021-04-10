@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
 import arrCategories from "../data/categories";
 import { db } from "../firebase/config";
+import Loading from "./Loading";
 
 function Comment({
   id,
@@ -14,6 +15,7 @@ function Comment({
   allCategories,
   setAllCategories,
   updateAllPosts,
+  setShowLoad
 }) {
   //states
   const [showEdit, setShowEdit] = useState(false);
@@ -47,6 +49,7 @@ function Comment({
   const handleDeleteComment = async () => {
     //delete comment from firestore and update state
     try {
+      setShowLoad(true);
       //get posts from firestore
       let doc = await db.collection("hubs").doc(thisPost.category).get();
       let posts = doc.data().posts;
@@ -71,7 +74,9 @@ function Comment({
       });
       setAllCategories(tempHubs);
       updateAllPosts();
+      setShowLoad(false);
     } catch (err) {
+      setShowLoad(false);
       console.log(err.message);
     }
 
@@ -98,22 +103,54 @@ function Comment({
     setNewComment(text);
   };
 
-  const handleSubmitEdit = (e) => {
+  const handleSubmitEdit = async (e) => {
     e.preventDefault();
     if (newComment === "" || newComment === text) {
       toggleShowEdit();
       return;
     }
 
-    let indexes = getCommentIndexes();
-    //edit comment from database
-    allCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
-      indexes.commentIndex
-    ].text = newComment;
-    //update posts
-    updateAllPosts();
-    //update database state
-    setAllCategories(arrCategories);
+    try {
+      setShowLoad(true);
+      //get posts from firestore
+      let doc = await db.collection("hubs").doc(thisPost.category).get();
+      let posts = doc.data().posts;
+      //edit the comment
+      posts.forEach((post) => {
+        if (post.id === thisPost.id) {
+          let index = post.comments.findIndex((comment) => comment.id === id);
+          post.comments[index].text = newComment;
+        }
+      });
+
+      //update firestore
+      await db.collection("hubs").doc(thisPost.category).update({
+        posts: posts,
+      });
+
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+      updateAllPosts();
+      setShowLoad(false);
+    } catch (err) {
+      setShowLoad(false);
+      console.log(err.message);
+    }
+
+    // let indexes = getCommentIndexes();
+    // //edit comment from database
+    // arrCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
+    //   indexes.commentIndex
+    // ].text = newComment;
+    // //update posts
+    // updateAllPosts();
+    // //update database state
+    // setAllCategories(arrCategories);
   };
 
   return (
@@ -167,12 +204,13 @@ function Comments({
   currentUser,
   updateAllPosts,
   setShowLogin,
-  setShowLoading,
+  setShowLoading
 }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [thisPost, setThisPost] = useState({});
   const [allComments, setAllComments] = useState([]);
+  const [showLoad, setShowLoad] = useState(false);
 
   //functions
 
@@ -193,6 +231,7 @@ function Comments({
     // );
 
     try {
+      setShowLoad(true);
       //generate id of comment
       let commentId =
         thisPost.id + "Comment" + Math.floor(Math.random() * 10000);
@@ -224,7 +263,9 @@ function Comments({
       });
       setAllCategories(tempHubs);
       setComment("");
+      setShowLoad(false);
     } catch (err) {
+      setShowLoad(false);
       console.log(err.message);
     }
     //find index of post from the same category
@@ -292,6 +333,10 @@ function Comments({
   }, [id]);
 
   return (
+    <>
+    {showLoad && (
+          <Loading text="Updating database..." />
+        )}
     <div className="Comments">
       <div className="posts-container">
         <Post
@@ -337,12 +382,14 @@ function Comments({
                 allCategories={allCategories}
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
+                setShowLoad={setShowLoad}
               />
             );
           })}
         </div>
       </div>
     </div>
+    </>
   );
 }
 
