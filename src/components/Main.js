@@ -210,7 +210,6 @@ function Post({
         if (!indexes) return;
 
         //find if current user voted on this post
-        console.log("posts", allCategories);
         if(allCategories[indexes.categoryIndex].posts[
           indexes.postIndex
         ]){

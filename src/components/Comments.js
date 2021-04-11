@@ -264,6 +264,7 @@ function Comments({
         tempHubs.push(doc.data());
       });
       setAllCategories(tempHubs);
+      updateAllPosts();
       setComment("");
       setShowLoad(false);
     } catch (err) {

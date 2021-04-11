@@ -43,6 +43,7 @@ function Profile({
   // };
 
   useEffect(() => {
+    let isMounted = true;
     const getUserDoc = async () => {
       //fetch data from database
       try {
@@ -71,11 +72,14 @@ function Profile({
           let tempPoints = 0;
           tempUserPosts.map((post) => (tempPoints += post.votes)); //record user karma/post points
           //merge all to profile data state
-          setProfUser({
-            ...tempUser,
-            posts: tempUserPosts,
-            points: tempPoints,
-          });
+          if(isMounted){
+            setProfUser({
+              ...tempUser,
+              posts: tempUserPosts,
+              points: tempPoints,
+            });
+          }
+          
           // console.log(`${username} profile data acquired`);
           // console.log(allCategories)
         } else {
@@ -89,8 +93,8 @@ function Profile({
     };
     getUserDoc();
     
-    
-  }, [username]);
+    return () => { isMounted = false };
+  }, [username, allCategories]);
 
   return (
     <div className="Profile">
