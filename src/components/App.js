@@ -41,12 +41,12 @@ function App() {
     setShowLoading(true);
     try {
       const hubs = await db.collection("hubs").get();
-      setShowLoading(false);
       let tempHubs = [];
       hubs.forEach( doc => {
         tempHubs.push(doc.data());
       });
       setAllCategories(tempHubs);
+      setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
       console.log(err.message);
@@ -103,24 +103,22 @@ function App() {
     }
   };
 
-  const checkFirebaseAuthentication = () => {
+  //USE EFFECT
+  useEffect(() => {
+    //authenticate user on mount
     //check auth status if a user is logged in
     setShowLoading(true);
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(`logged in as`, user.displayName);
         console.log(`logged in ID`, user.uid);
+        //if logged in
         getUserDataFromFirestore(user.displayName);
       } else {
         setShowLoading(false);
-        console.log("logged out");
+        console.log("not logged in");
       }
     });
-  };
-
-  //USE EFFECT
-  useEffect(() => {
-    checkFirebaseAuthentication();
   }, []);
 
   useEffect(() => {

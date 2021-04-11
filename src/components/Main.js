@@ -69,7 +69,7 @@ function Post({
         tempHubs.push(doc.data());
       });
       setAllCategories(tempHubs);
-      updateAllPosts();
+      await updateAllPosts();
       setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
@@ -96,54 +96,82 @@ function Post({
     };
   };
 
-  const vote = (choice) => {
+  const vote = async (choice) => {
     //get post and voter indexes for updating database
     let indexes = getPostIndexes();
     //find if current user voted on this post
-    let voterIndex = arrCategories[indexes.categoryIndex].posts[
-      indexes.postIndex
-    ].voters.findIndex((voter) => voter.username === currentUser.username);
+    // let voterIndex = arrCategories[indexes.categoryIndex].posts[
+    //   indexes.postIndex
+    // ].voters.findIndex((voter) => voter.username === currentUser.username);
 
-    let newVotes = thisPost.votes;
-    // choice === "upvote" ? newVotes++ : newVotes--;
+    try {
+      //get post data from db
+      // let doc = await db.collection("hubs").doc(thisPost.category).get();
+      // let posts = doc.data().posts;
+      let posts = allCategories[indexes.categoryIndex].posts;
 
-    if (userVote === "") {
-      choice === "upvote" ? newVotes++ : newVotes--;
-      //create new voter based on current user
-      let newVoter = {
-        username: currentUser.username,
-        vote: choice,
-      };
-      //add new voter to database
-      arrCategories[indexes.categoryIndex].posts[indexes.postIndex].voters.push(
-        newVoter
-      );
-    } else if (userVote === choice) {
-      if (choice === "upvote") newVotes--;
-      else newVotes++;
-      //delete vote from database
-      arrCategories[indexes.categoryIndex].posts[
-        indexes.postIndex
-      ].voters.splice(voterIndex, 1);
-    } else if (userVote !== choice) {
-      if (choice === "upvote") newVotes += 2;
-      else newVotes -= 2;
-      //edit voter's current vote choice
-      arrCategories[indexes.categoryIndex].posts[indexes.postIndex].voters[
-        voterIndex
-      ].vote = choice;
+      //get current votes
+      let newVotes = thisPost.votes;
+
+      if (userVote === "") {
+        choice === "upvote" ? newVotes++ : newVotes--;
+        //create new voter based on current user
+        let newVoter = {
+          username: currentUser.username,
+          vote: choice,
+        };
+        //add new voter, update votes
+        posts.forEach((post) => {
+          if (post.id === thisPost.id) {
+            post.voters.push(newVoter);
+            post.votes = newVotes;
+          }
+        });
+      } else if (userVote === choice) {
+        if (choice === "upvote") newVotes--;
+        else newVotes++;
+        //remove voter, update votes
+        posts.forEach((post) => {
+          if (post.id === thisPost.id) {
+            let index = post.voters.findIndex(
+              (voter) => voter.username === currentUser.username
+            );
+            post.voters.splice(index, 1);
+            post.votes = newVotes;
+          }
+        });
+      } else if (userVote !== choice) {
+        if (choice === "upvote") newVotes += 2;
+        else newVotes -= 2;
+        //edit voter choice, update votes
+        posts.forEach((post) => {
+          if (post.id === thisPost.id) {
+            let index = post.voters.findIndex(
+              (voter) => voter.username === currentUser.username
+            );
+            post.voters[index].vote = choice;
+            post.votes = newVotes;
+          }
+        });
+      }
+      //update state
+      let tempAllCategories = allCategories;
+      tempAllCategories[indexes.categoryIndex].posts = posts;
+      //update firestore
+      await db.collection("hubs").doc(thisPost.category).update({
+        posts: posts,
+      });
+      //update state of all categories and posts
+      // const hubs = await db.collection("hubs").get();
+      // let tempHubs = [];
+      // hubs.forEach((doc) => {
+      //   tempHubs.push(doc.data());
+      // });
+      setAllCategories(tempAllCategories);
+      updateAllPosts();
+    } catch (err) {
+      console.log(err.message);
     }
-
-    //set new votes to database
-    arrCategories[indexes.categoryIndex].posts[
-      indexes.postIndex
-    ].votes = newVotes;
-    //set new voter choice
-
-    //update posts
-    updateAllPosts();
-    //update database state
-    setAllCategories(arrCategories);
   };
 
   //handlers
@@ -168,7 +196,6 @@ function Post({
     if (!indexes) return;
 
     //find if current user voted on this post
-
     let voter = allCategories[indexes.categoryIndex].posts[
       indexes.postIndex
     ].voters.find((voter) => voter.username === currentUser.username);
@@ -176,23 +203,28 @@ function Post({
     voter ? setUserVote(voter.vote) : setUserVote("");
   };
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     if (thisPost) {
-  //       let indexes = getPostIndexes();
-  //       if (!indexes) return;
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (thisPost) {
+        let indexes = getPostIndexes();
+        if (!indexes) return;
 
-  //       //find if current user voted on this post
-  //       console.log(thisPost);
-  //       console.log(allCategories);
-  //       let voter = allCategories[indexes.categoryIndex].posts[
-  //         indexes.postIndex
-  //       ].voters.find((voter) => voter.username === currentUser.username);
+        //find if current user voted on this post
+        console.log("posts", allCategories);
+        if(allCategories[indexes.categoryIndex].posts[
+          indexes.postIndex
+        ]){
+          let voter = allCategories[indexes.categoryIndex].posts[
+          indexes.postIndex
+        ].voters.find((voter) => voter.username === currentUser.username);
 
-  //       voter ? setUserVote(voter.vote) : setUserVote("");
-  //     }
-  //   }
-  // }, [isLoggedIn, thisPost, allCategories]);
+        voter ? setUserVote(voter.vote) : setUserVote("");
+
+        }
+        
+      }
+    }
+  }, [isLoggedIn, thisPost, allCategories]);
 
   return (
     <div className="Post" data-id={thisPost.id}>
@@ -334,7 +366,7 @@ function Main({
         })}
       </div>
       <div className="categories-container container">
-        <p className="category-header">Categories</p>
+        <p className="category-header">Hubs</p>
         {allCategories.map((category) => {
           return (
             <Category
@@ -348,7 +380,7 @@ function Main({
         })}
         {isLoggedIn && (
           <button className="btn btn-new-category" onClick={handleNewHub}>
-            Add Category
+            New
           </button>
         )}
       </div>

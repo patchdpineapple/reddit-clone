@@ -46,6 +46,56 @@ function Comment({
 
   //handlers
 
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    if (newComment === "" || newComment === text) {
+      toggleShowEdit();
+      return;
+    }
+
+    try {
+      setShowLoad(true);
+      //get posts from firestore
+      let doc = await db.collection("hubs").doc(thisPost.category).get();
+      let posts = doc.data().posts;
+      //edit the comment
+      posts.forEach((post) => {
+        if (post.id === thisPost.id) {
+          let index = post.comments.findIndex((comment) => comment.id === id);
+          post.comments[index].text = newComment;
+        }
+      });
+
+      //update firestore
+      await db.collection("hubs").doc(thisPost.category).update({
+        posts: posts,
+      });
+
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+      updateAllPosts();
+      setShowLoad(false);
+    } catch (err) {
+      setShowLoad(false);
+      console.log(err.message);
+    }
+
+    // let indexes = getCommentIndexes();
+    // //edit comment from database
+    // arrCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
+    //   indexes.commentIndex
+    // ].text = newComment;
+    // //update posts
+    // updateAllPosts();
+    // //update database state
+    // setAllCategories(arrCategories);
+  };
+
   const handleDeleteComment = async () => {
     //delete comment from firestore and update state
     try {
@@ -103,55 +153,7 @@ function Comment({
     setNewComment(text);
   };
 
-  const handleSubmitEdit = async (e) => {
-    e.preventDefault();
-    if (newComment === "" || newComment === text) {
-      toggleShowEdit();
-      return;
-    }
-
-    try {
-      setShowLoad(true);
-      //get posts from firestore
-      let doc = await db.collection("hubs").doc(thisPost.category).get();
-      let posts = doc.data().posts;
-      //edit the comment
-      posts.forEach((post) => {
-        if (post.id === thisPost.id) {
-          let index = post.comments.findIndex((comment) => comment.id === id);
-          post.comments[index].text = newComment;
-        }
-      });
-
-      //update firestore
-      await db.collection("hubs").doc(thisPost.category).update({
-        posts: posts,
-      });
-
-      //update state of all categories and posts
-      const hubs = await db.collection("hubs").get();
-      let tempHubs = [];
-      hubs.forEach((doc) => {
-        tempHubs.push(doc.data());
-      });
-      setAllCategories(tempHubs);
-      updateAllPosts();
-      setShowLoad(false);
-    } catch (err) {
-      setShowLoad(false);
-      console.log(err.message);
-    }
-
-    // let indexes = getCommentIndexes();
-    // //edit comment from database
-    // arrCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
-    //   indexes.commentIndex
-    // ].text = newComment;
-    // //update posts
-    // updateAllPosts();
-    // //update database state
-    // setAllCategories(arrCategories);
-  };
+  
 
   return (
     <div className="Comment">
