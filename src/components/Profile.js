@@ -102,7 +102,7 @@ function Profile({
       {profUser && (
         <>
           <div className="profile-info">
-            <img src="" className="profile-pic" alt="" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fprofile_placeholder2.png?alt=media&token=5f64c241-7b43-42d4-88ec-b61b4f5e9fcf" className="profile-pic" alt="" />
             <h2>{profUser.username}</h2>
             {currentUser.username === username && (
               <h3>Email: {profUser.email}</h3>

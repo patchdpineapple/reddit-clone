@@ -22,7 +22,7 @@ function Category({ id, name, members, image }) {
   return (
     <div className="Category" data-id={id}>
       <div className="category-info">
-        <img className="category-img" src={image} alt="" />
+        <img className="category-img" src={image || "https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fhub_placeholder.png?alt=media&token=4a0422f5-0dba-4ecd-91b2-ff60c8d6d8f1"} alt="" />
         <div className="category-text-container">
           <Link to={`/hub/${name}`} className="link">
             <strong className="category-title">/{name}</strong>

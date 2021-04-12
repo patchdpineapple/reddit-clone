@@ -41,6 +41,7 @@
   height: 1px;
   background-color: #0d2e49;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .comments-container {
@@ -53,7 +54,6 @@
   max-width: 100%;
   min-height: 100px;
   background-color: #f4f4f4;
-
 }
 
 /* Comment */

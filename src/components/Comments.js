@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Comments.css";
 import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
@@ -15,7 +15,7 @@ function Comment({
   allCategories,
   setAllCategories,
   updateAllPosts,
-  setShowLoad
+  setShowLoad,
 }) {
   //states
   const [showEdit, setShowEdit] = useState(false);
@@ -153,8 +153,6 @@ function Comment({
     setNewComment(text);
   };
 
-  
-
   return (
     <div className="Comment">
       <Link to={`/profile/${user}`} className="link">
@@ -206,7 +204,7 @@ function Comments({
   currentUser,
   updateAllPosts,
   setShowLogin,
-  setShowLoading
+  setShowLoading,
 }) {
   const { id } = useParams();
   const [comment, setComment] = useState("");
@@ -293,7 +291,7 @@ function Comments({
   };
 
   //USE EFFECT
-  const getPostAndCommentsData = async () => {
+  const getPostAndCommentsData = useCallback(async (isMounted) => {
     //find the post and its comments from the database and set as state
     try {
       //gets all hubs/categories from firestore and set as state
@@ -315,10 +313,15 @@ function Comments({
       });
       //set states
       // setAllCategories(tempHubs);
-      setThisPost(tempPost);
+      if(isMounted){
+        console.log("comment mounted");
+        setThisPost(tempPost);
       setAllComments(tempPost.comments);
+      }
+      
       setShowLoading(false);
     } catch (err) {
+      setShowLoading(false);
       console.log(err.message);
     }
 
@@ -329,69 +332,74 @@ function Comments({
     //   });
     //   return category;
     // });
-  };
+  }, [id, setShowLoading]);
 
   useEffect(() => {
-    getPostAndCommentsData();
-  }, [id]);
+    let isMounted = true;
+    getPostAndCommentsData(isMounted);
+    return ()=>{isMounted=false};
+  }, [getPostAndCommentsData]);
 
   return (
     <>
-    {showLoad && (
-          <Loading text="Updating database..." />
-        )}
-    <div className="Comments">
-      <div className="posts-container">
-        <Post
-          key={thisPost.id}
-          thisPost={thisPost}
-          currentUser={currentUser}
-          allCategories={allCategories}
-          setAllCategories={setAllCategories}
-          updateAllPosts={updateAllPosts}
-          isLoggedIn={isLoggedIn}
-          setShowLogin={setShowLogin}
-          setShowLoading={setShowLoading}
-        />
-        {isLoggedIn && (
-          <form
-            className="comments-form"
-            onClick={(e) => e.stopPropagation()}
-            onSubmit={(e) => handleSubmit(e)}
-          >
-            <textarea
-              id="comments-textarea"
-              placeholder="What are your thoughts?"
-              onChange={(e) => handleCommentChange(e)}
-              value={comment}
-            ></textarea>
-            <button type="submit" className="btn btn-comment">
-              Post comment
-            </button>
-          </form>
-        )}
-        <div className="comments-divider"></div>
-        <h2>Comments</h2>
-        <div className="comments-container">
-          {allComments.map((comment) => {
-            return (
-              <Comment
-                key={comment.id}
-                id={comment.id}
-                user={comment.user}
-                text={comment.text}
-                thisPost={thisPost}
-                currentUser={currentUser}
-                allCategories={allCategories}
-                setAllCategories={setAllCategories}
-                updateAllPosts={updateAllPosts}
-                setShowLoad={setShowLoad}
-              />
-            );
-          })}
+      {showLoad && <Loading text="Updating database..." />}
+      <div className="Comments">
+        <div className="posts-container">
+          <Post
+            key={thisPost.id}
+            thisPost={thisPost}
+            currentUser={currentUser}
+            allCategories={allCategories}
+            setAllCategories={setAllCategories}
+            updateAllPosts={updateAllPosts}
+            isLoggedIn={isLoggedIn}
+            setShowLogin={setShowLogin}
+            setShowLoading={setShowLoading}
+          />
+          {isLoggedIn && (
+            <form
+              className="comments-form"
+              onClick={(e) => e.stopPropagation()}
+              onSubmit={(e) => handleSubmit(e)}
+            >
+              <textarea
+                id="comments-textarea"
+                placeholder="What are your thoughts?"
+                onChange={(e) => handleCommentChange(e)}
+                value={comment}
+              ></textarea>
+              <button type="submit" className="btn btn-comment">
+                Post comment
+              </button>
+            </form>
+          )}
+          <div className="comments-divider"></div>
+          {/* <h2>Comments</h2> */}
+          {
+            allComments.length === 0 && <h1 style={{ marginTop: 20 }}>No comments yet..</h1>
+          }
+          { allComments.length > 0 && (
+            <div className="comments-container">
+            {allComments.map((comment) => {
+              return (
+                <Comment
+                  key={comment.id}
+                  id={comment.id}
+                  user={comment.user}
+                  text={comment.text}
+                  thisPost={thisPost}
+                  currentUser={currentUser}
+                  allCategories={allCategories}
+                  setAllCategories={setAllCategories}
+                  updateAllPosts={updateAllPosts}
+                  setShowLoad={setShowLoad}
+                />
+              );
+            })}
+          </div>)
+          }
         </div>
       </div>
-    </div>
     </>
   );
 }
