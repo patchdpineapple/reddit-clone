@@ -15,9 +15,6 @@ import Comments from "./Comments";
 import NewHub from "./NewHub";
 import Loading from "./Loading";
 
-//data
-import arrCategories from "../data/categories";
-
 /* COMPONENT */
 function App() {
   //ui state
@@ -42,51 +39,42 @@ function App() {
     try {
       const hubs = await db.collection("hubs").get();
       let tempHubs = [];
-      hubs.forEach( doc => {
+      hubs.forEach((doc) => {
         tempHubs.push(doc.data());
       });
       setAllCategories(tempHubs);
       setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
-      console.log(err.message);
       alert(err.message);
     }
   };
 
-
   const updateAllPosts = async () => {
     //get all posts from all categories
-    
-    try{
-      // allCategories.map((category) => {
-    //   category.posts.map((post) => {
-    //     tempPosts.push(post);
-    //     return post;
-    //   });
-    //   return category;
-    // });
+    try {
+      let tempPosts = [];
+      let hubs = await db.collection("hubs").get();
+      hubs.forEach((doc) => {
+        tempPosts = [...tempPosts, ...doc.data().posts];
+      });
 
-    let tempPosts = [];
-    let hubs = await db.collection("hubs").get();
-    hubs.forEach( doc => {
-      tempPosts = [...tempPosts, ...doc.data().posts];
-    });
-
-    //sort all posts by newest to oldest
-    tempPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
-    //update all posts state
-    setAllPosts(tempPosts);
-    console.log("app updated all posts")
-    }catch(err){
-      console.log(err.message)
+      //sort all posts by newest to oldest
+      tempPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
+      //update all posts state
+      setAllPosts(tempPosts);
+    } catch (err) {
+      alert(err.message);
     }
-    
   };
 
   const getUserDataFromFirestore = async (username) => {
     //if user is logged in, set state of current user and nav bar
     try {
+      if(!username){
+      setShowLoading(false);
+        return;
+      }
       const doc = await db.collection("users").doc(username).get();
       const tempUser = {
         id: doc.data().id,
@@ -99,7 +87,8 @@ function App() {
       setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
-      console.log("auth status error ", err.message);
+      console.log(err.code);
+      console.log(err.message);
     }
   };
 
@@ -110,23 +99,20 @@ function App() {
     setShowLoading(true);
     auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log(`logged in as`, user.displayName);
-        console.log(`logged in ID`, user.uid);
         //if logged in
         getUserDataFromFirestore(user.displayName);
       } else {
         setShowLoading(false);
-        console.log("not logged in");
       }
     });
   }, []);
 
   useEffect(() => {
-    console.log("got hubs from db");
     getHubsFromFirestore();
-    return () => {getHubsFromFirestore()}
+    return () => {
+      getHubsFromFirestore();
+    };
   }, []);
-
 
   useEffect(() => {
     updateAllPosts();
@@ -147,12 +133,7 @@ function App() {
         />
         {showLoading && <Loading text="Authenticating..." />}
         {showLogin && (
-          <Login
-            setShowLogin={setShowLogin}
-            setIsLoggedIn={setIsLoggedIn}
-            setCurrentUser={setCurrentUser}
-            setShowLoading={setShowLoading}
-          />
+          <Login setShowLogin={setShowLogin} setShowLoading={setShowLoading} />
         )}
         {showSignup && (
           <Signup

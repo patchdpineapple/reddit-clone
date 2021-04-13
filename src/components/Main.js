@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
-import arrCategories from "../data/categories";
 import { db, storage } from "../firebase/config";
 
 function PostFloater({ setShowMakePost }) {
@@ -18,13 +17,22 @@ function PostFloater({ setShowMakePost }) {
   );
 }
 
-function Category({ id, name, members, image, currentUser, setShowLoading, setAllCategories, updateAllPosts }) {
+function Category({
+  id,
+  name,
+  members,
+  image,
+  currentUser,
+  setShowLoading,
+  setAllCategories,
+  updateAllPosts,
+}) {
   const deleteHubFromFirestore = async () => {
     try {
       setShowLoading(true);
 
       //delete hub
-      await db.collection("hubs").doc(id).delete(); 
+      await db.collection("hubs").doc(id).delete();
       //update state of all categories and posts
       const hubs = await db.collection("hubs").get();
       let tempHubs = [];
@@ -35,17 +43,16 @@ function Category({ id, name, members, image, currentUser, setShowLoading, setAl
       await updateAllPosts();
 
       setShowLoading(false);
-
-    } catch(err){
+    } catch (err) {
       setShowLoading(false);
-      alert(err.message)
+      alert(err.message);
     }
-  }
+  };
   const handleDeleteHub = () => {
-    if(currentUser.username === "patchdpineapple"){
+    if (currentUser.username === "patchdpineapple") {
       if (window.confirm("Delete hub?")) deleteHubFromFirestore();
-    } else  console.log("must be admin to delete hub")
-  }
+    }
+  };
 
   return (
     <div className="Category" data-id={id}>
@@ -65,7 +72,11 @@ function Category({ id, name, members, image, currentUser, setShowLoading, setAl
           <span className="category-members">{members} members</span>
         </div>
       </div>
-      <button className="btn btn-join" onClick={handleDeleteHub}>Join</button>
+      {currentUser.username === "patchdpineapple" && (
+        <button className="btn btn-join" onClick={handleDeleteHub}>
+        Join
+      </button>
+      )}
     </div>
   );
 }
@@ -106,12 +117,11 @@ function Post({
       await updateAllPosts();
     } catch (err) {
       setShowLoading(false);
-      console.log(err.message);
       alert(err.message);
     }
   };
 
-  const getPostIndexes = () => {
+  const getPostIndexes = useCallback(() => {
     //returns the database indexes of this post
     //find category index
     let categoryIndex = allCategories.findIndex(
@@ -127,20 +137,14 @@ function Post({
       categoryIndex: categoryIndex,
       postIndex: postIndex,
     };
-  };
+  }, [allCategories, thisPost.category, thisPost.id]);
 
   const vote = async (choice) => {
     //get post and voter indexes for updating database
     let indexes = getPostIndexes();
     //find if current user voted on this post
-    // let voterIndex = arrCategories[indexes.categoryIndex].posts[
-    //   indexes.postIndex
-    // ].voters.findIndex((voter) => voter.username === currentUser.username);
-
     try {
       //get post data from db
-      // let doc = await db.collection("hubs").doc(thisPost.category).get();
-      // let posts = doc.data().posts;
       let posts = allCategories[indexes.categoryIndex].posts;
 
       //get current votes
@@ -194,16 +198,11 @@ function Post({
       await db.collection("hubs").doc(thisPost.category).update({
         posts: posts,
       });
-      //update state of all categories and posts
-      // const hubs = await db.collection("hubs").get();
-      // let tempHubs = [];
-      // hubs.forEach((doc) => {
-      //   tempHubs.push(doc.data());
-      // });
+
       setAllCategories(tempAllCategories);
       updateAllPosts();
     } catch (err) {
-      console.log(err.message);
+      alert(err.message);
     }
   };
 
@@ -219,7 +218,9 @@ function Post({
       setShowLoading(true);
       //delete image from storage then delete post from firestore
       if (thisPost.imageURL !== "") {
-        let storageRef = storage.ref(`postImages/${thisPost.id}/${thisPost.image}`);
+        let storageRef = storage.ref(
+          `postImages/${thisPost.id}/${thisPost.image}`
+        );
         await storageRef.delete();
         await deletePostFromFirestore();
         setShowLoading(false);
@@ -238,19 +239,6 @@ function Post({
   };
 
   //USE EFFECT
-  const checkUserVote = () => {
-    //update votes button state if the user already voted or not
-    let indexes = getPostIndexes();
-    if (!indexes) return;
-
-    //find if current user voted on this post
-    let voter = allCategories[indexes.categoryIndex].posts[
-      indexes.postIndex
-    ].voters.find((voter) => voter.username === currentUser.username);
-
-    voter ? setUserVote(voter.vote) : setUserVote("");
-  };
-
   useEffect(() => {
     if (isLoggedIn) {
       if (thisPost) {
@@ -267,7 +255,13 @@ function Post({
         }
       }
     }
-  }, [isLoggedIn, thisPost, allCategories]);
+  }, [
+    isLoggedIn,
+    thisPost,
+    allCategories,
+    getPostIndexes,
+    currentUser.username,
+  ]);
 
   return (
     <div className="Post" data-id={thisPost.id}>
@@ -384,7 +378,7 @@ function Main({
     } else {
       setCategoryPosts(allPosts);
     }
-  }, [allCategories, categoryName]);
+  }, [allCategories, allPosts, categoryName, setCategoryPosts]);
 
   return (
     <div className="Main container">

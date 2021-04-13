@@ -1,74 +1,72 @@
 .MakePost {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    z-index: 20;
-    background-color: rgba(0, 0, 0, 0.205);
-    position: fixed;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.205);
+  position: fixed;
 }
 
 .post-form {
-    width: 600px;
-    min-height: 500px;
-    background-color: #f4f4f4;
-    box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.425);
-    display: flex;
-    flex-flow: column;
-    justify-content: flex-start;
-    align-items: center;
-    border-radius: 20px;
-    padding: 20px;
+  width: 600px;
+  min-height: 500px;
+  background-color: #f4f4f4;
+  box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.425);
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 20px;
+  padding: 20px;
 }
 
 .post-form > * {
-    margin: 5px;
+  margin: 5px;
 }
 
 #make-post-title {
-    width: 90%;
+  width: 90%;
 }
 
 #make-post-message {
-    width: 90%;
-    height: 50%
+  width: 90%;
+  height: 50%;
 }
 
 .btn-attach-img {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    width: 90%;
-    height: 30px;
-    background-color: #f4f4f4;
-    border: 1px solid #0d2e49;
-    overflow: hidden;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  width: 90%;
+  height: 30px;
+  background-color: #f4f4f4;
+  border: 1px solid #0d2e49;
+  overflow: hidden;
 }
 
 #attach-image {
-    display:none;
+  display: none;
 }
 
 .btn-submit-post {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    width: 90%;
-    height: 30px;
-    background-color: #0d2e49;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  width: 90%;
+  height: 30px;
+  background-color: #0d2e49;
   color: #f4f4f4;
 }
 
 @media (max-width: 600px) {
-    .post-form {
-        width: 95vw;
-       
-    }
-    
+  .post-form {
+    width: 95vw;
+  }
 }

@@ -1,31 +1,30 @@
 .Profile {
-    display:flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20vh;
-
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20vh;
 }
 
 .profile-pic {
-    width: 150px;
-    height: 150px;
-    background: lightgray;
+  width: 150px;
+  height: 150px;
+  background: lightgray;
 }
 
 .profile-divider {
-    width: 50vw;
-    height: 1px;
-    background-color: #0d2e49;
-    margin-top: 20px;
+  width: 50vw;
+  height: 1px;
+  background-color: #0d2e49;
+  margin-top: 20px;
 }
 
 .profile-posts {
-    width: 50vw;
-    margin-top: 20px;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    width: 50vw;
+  width: 50vw;
+  margin-top: 20px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
 }

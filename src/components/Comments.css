@@ -18,8 +18,7 @@
 }
 
 .comments-form {
-    width: 100%;
-
+  width: 100%;
 }
 
 #comments-textarea {
@@ -29,11 +28,11 @@
 }
 
 .btn-comment {
-    width: 100%;
-    border: 1px solid #0d2e49;
-    background-color: #0d2e49;
-    color: #f4f4f4;
-    margin-top: 10px;
+  width: 100%;
+  border: 1px solid #0d2e49;
+  background-color: #0d2e49;
+  color: #f4f4f4;
+  margin-top: 10px;
 }
 
 .comments-divider {
@@ -62,8 +61,7 @@
   max-width: 100%;
   display: flex;
   flex-flow: column;
-  margin-bottom: 
-  0px;
+  margin-bottom: 0px;
   line-height: 1;
   background-color: transparent;
   padding: 5px;
@@ -75,7 +73,6 @@
 }
 
 .Comment > p {
-  
   font-size: 14px;
 }
 
@@ -109,35 +106,36 @@
   background-color: #ff2424;
   font-size: 12px;
   margin: 0;
-  opacity: .5;
-  
+  opacity: 0.5;
 }
 
 .btn-delete {
-    margin: 10px;
-    padding: 10px;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ff2424;
-    font-size: 12px;
-    margin: 0;
-    opacity: .5;
+  margin: 10px;
+  padding: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff2424;
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.5;
 }
 
-.btn-show-edit, .btn-delete {
- margin-left: 5px;
+.btn-show-edit,
+.btn-delete {
+  margin-left: 5px;
 }
 
-.btn-show-edit:hover, .btn-delete:hover {
+.btn-show-edit:hover,
+.btn-delete:hover {
   opacity: 1;
 }
 
-.fa-edit, .fa-times {
+.fa-edit,
+.fa-times {
   color: #f4f4f4;
-
 }
 
 /* Edit */
@@ -156,13 +154,9 @@
 }
 
 .btn-edit {
-  
   border: 1px solid #0d2e49;
   background-color: #0d2e49;
   color: #f4f4f4;
   margin: 10px;
   padding: 5px;
-
 }
-
-

@@ -21,7 +21,7 @@ function HubPage({
   let { category } = useParams();
   useEffect(() => {
     setCurrentCategory(category);
-  }, [category]);
+  }, [category, setCurrentCategory]);
 
   return (
     <>

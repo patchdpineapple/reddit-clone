@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Signup.css";
-import accounts from "../data/accounts";
 import { auth, db } from "../firebase/config";
 import Loading from "./Loading";
 
@@ -16,95 +15,72 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
     //if not, creates a new user account and user details in database
     let usernameExist;
     let documents = await db.collection("users").get();
-    documents.forEach( doc => {
-      if(doc.data().username.toUpperCase() === username.toUpperCase()){
+    documents.forEach((doc) => {
+      if (doc.data().username.toUpperCase() === username.toUpperCase()) {
         usernameExist = true;
       }
     });
-    if(usernameExist) {
+    if (usernameExist) {
       setShowLoading(false);
       alert("Username already exists");
     } else {
-    signupToFirebase(email, password, username);
+      signupToFirebase(email, password, username);
     }
-    
-  }
-
-  const signupToFirebase = (email, password, username) => {
-    
-    //adds a new user to firebase auth with email, password and username
-    auth.createUserWithEmailAndPassword(email, password).then( cred => {
-      return cred.user.updateProfile({
-        displayName: username
-      });
-    }).then(()=>{
-      //set custom user data on firestore
-      return db.collection("users").doc(auth.currentUser.displayName).set({
-        id: auth.currentUser.uid,
-        username: auth.currentUser.displayName,
-        email: auth.currentUser.email,
-        password: password,
-        photo: auth.currentUser.photoURL
-      });
-    }).then(() => {
-      //set current user state
-      const tempUser = {
-        id: auth.currentUser.uid,
-        username: auth.currentUser.displayName,
-        email: auth.currentUser.email,
-        password: password,
-        photo: auth.currentUser.photoURL
-      }
-      setCurrentUser(tempUser);
-      setUsername("");
-      setPassword("");
-      setEmail("");
-      setIsLoggedIn(true);
-      closeSignup();
-      setShowLoading(false);
-      alert(`Signup successful. You are now logged in as ${auth.currentUser.displayName}`);
-    })
-    
-    .catch(err => {
-      setShowLoading(false);
-      console.log(err.code, err.message);
-      if(err.code === "auth/email-already-in-use"){
-        alert("Email already in use.");
-      } else alert(err.message)
-    })
-
-  }
-
-  //submit handlers
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    //display loading
-    setShowLoading(true);
-    checkUsernameFromDatabase();
-    // check if account exists
-    // let user = accounts.find(
-    //   (account) => account.username.toUpperCase() === username.toUpperCase()
-    // );
-    // if (user) alert("Account already exists");
-    // else {
-    //   //add new user account to database
-    //   let newUser = {
-    //     id: Math.floor(Math.random() * 10000),
-    //     username: username,
-    //     password: password,
-    //     email: email,
-    //   };
-    //   accounts.push(newUser);
-
-    //   //automatically login the newly created account
-    //    user = accounts.find(
-    //     (account) => account.username.toUpperCase() === username.toUpperCase()
-    //   );
-    // }
-
   };
 
-  //input onchange handlers
+  const signupToFirebase = (email, password, username) => {
+    //adds a new user to firebase auth with email, password and username
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((cred) => {
+        return cred.user.updateProfile({
+          displayName: username,
+        });
+      })
+      .then(() => {
+        //set custom user data on firestore
+        return db.collection("users").doc(auth.currentUser.displayName).set({
+          id: auth.currentUser.uid,
+          username: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          password: password,
+          photo: auth.currentUser.photoURL,
+        });
+      })
+      .then(() => {
+        //set current user state
+        const tempUser = {
+          id: auth.currentUser.uid,
+          username: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          password: password,
+          photo: auth.currentUser.photoURL,
+        };
+        setCurrentUser(tempUser);
+        setUsername("");
+        setPassword("");
+        setEmail("");
+        setIsLoggedIn(true);
+        closeSignup();
+        setShowLoading(false);
+        alert(
+          `Signup successful. You are now logged in as ${auth.currentUser.displayName}`
+        );
+      })
+
+      .catch((err) => {
+        setShowLoading(false);
+        alert(err.message);
+      });
+  };
+
+  //handlers
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowLoading(true);
+    checkUsernameFromDatabase();
+  };
+
   const closeSignup = () => {
     setShowSignup(false);
   };
@@ -167,9 +143,7 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
           Submit
         </button>
       </form>
-      {showLoading && (
-          <Loading text="Signing up..." />
-        )}
+      {showLoading && <Loading text="Signing up..." />}
     </div>
   );
 }

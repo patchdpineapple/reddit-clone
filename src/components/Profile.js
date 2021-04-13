@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import { useParams } from "react-router-dom";
 import { Post } from "./Main";
-import accounts from "../data/accounts";
-import { auth, db } from "../firebase/config";
+import { db } from "../firebase/config";
 
 function Profile({
   allCategories,
@@ -12,36 +11,12 @@ function Profile({
   updateAllPosts,
   isLoggedIn,
   setShowLogin,
-  setShowLoading
+  setShowLoading,
 }) {
   let { username } = useParams();
   const [profUser, setProfUser] = useState(null);
-  const [profPosts, setProfPosts] = useState([]);
-  const [profPoints, setProfPoints] = useState([]);
 
   //USE EFFECT
-
-  // const handleGetProfileData = () => {
-  //   let tempUser = accounts.find((account) => account.username === username);
-  //   let tempUserPosts = [];
-  //   allCategories.map((category) => {
-  //     category.posts.map((post) => {
-  //       if (post.poster === username) {
-  //         tempUserPosts.push(post);
-  //       }
-  //       return post;
-  //     });
-  //     return category;
-  //   });
-
-  //   tempUserPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
-  //   let tempPoints = 0;
-  //   tempUserPosts.map((post) => (tempPoints += post.votes));
-  //   setProfUser(tempUser);
-  //   setProfPosts(tempUserPosts);
-  //   setProfPoints(tempPoints);
-  // };
-
   useEffect(() => {
     let isMounted = true;
     const getUserDoc = async () => {
@@ -67,33 +42,30 @@ function Profile({
             });
             return category;
           });
-    
+
           tempUserPosts.sort((a, b) => (a.datems < b.datems ? 1 : -1));
           let tempPoints = 0;
           tempUserPosts.map((post) => (tempPoints += post.votes)); //record user karma/post points
           //merge all to profile data state
-          if(isMounted){
+          if (isMounted) {
             setProfUser({
               ...tempUser,
               posts: tempUserPosts,
               points: tempPoints,
             });
           }
-          
-          // console.log(`${username} profile data acquired`);
-          // console.log(allCategories)
         } else {
           alert("no such user");
         }
-        
       } catch (err) {
-        console.log(err.message);
-        
+        alert(err.message);
       }
     };
     getUserDoc();
-    
-    return () => { isMounted = false };
+
+    return () => {
+      isMounted = false;
+    };
   }, [username, allCategories]);
 
   return (
@@ -102,7 +74,11 @@ function Profile({
       {profUser && (
         <>
           <div className="profile-info">
-            <img src="https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fprofile_placeholder2.png?alt=media&token=5f64c241-7b43-42d4-88ec-b61b4f5e9fcf" className="profile-pic" alt="" />
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fprofile_placeholder2.png?alt=media&token=5f64c241-7b43-42d4-88ec-b61b4f5e9fcf"
+              className="profile-pic"
+              alt=""
+            />
             <h2>{profUser.username}</h2>
             {currentUser.username === username && (
               <h3>Email: {profUser.email}</h3>

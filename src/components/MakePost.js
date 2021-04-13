@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./MakePost.css";
-import arrCategories from "../data/categories";
 import { db, storage } from "../firebase/config";
 
 function MakePost({
@@ -10,22 +9,33 @@ function MakePost({
   currentCategory,
   currentUser,
   updateAllPosts,
-  setShowLoading
+  setShowLoading,
 }) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [hub, setHub] = useState(currentCategory);
-  const [progress, setProgress] = [0];
 
   //FUNCTIONS
-  const getCurrentDate = () => {  
+  const getCurrentDate = () => {
     //generate a new current date and time
     let date = new Date();
 
     //get date with format yyyy-mm-dd
-    let allMonths = ["January", "February", "March", "April", "May", "June", 
-    "July", "August", "September", "October", "November", "December"];
+    let allMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
     let year = date.getFullYear();
     let month = allMonths[date.getMonth()];
     let day = date.getDate();
@@ -35,13 +45,15 @@ function MakePost({
     let hours = date.getHours();
     let meridiem = hours > 11 ? "PM" : "AM";
 
-    if(hours === 0) {
-        hours = 12;
+    if (hours === 0) {
+      hours = 12;
     } else if (hours > 12) {
-        hours = hours - 12;
+      hours = hours - 12;
     }
     let minutes = date.getMinutes();
-    let combinedTime = `${hours}:${minutes < 10 ? `0${minutes}` : minutes} ${meridiem}`;
+    let combinedTime = `${hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    } ${meridiem}`;
 
     return {
       date: combineDate,
@@ -51,37 +63,35 @@ function MakePost({
   };
 
   const getId = () => {
-    //generate id
+    //generate post id
     return hub + Math.floor(Math.random() * 100000);
   };
 
   const addPostToFirestore = async (newPost, imageFile) => {
-    try{
-     
+    try {
       //get current posts from database
-    let doc = await db.collection("hubs").doc(hub).get();
-    let currentPosts = doc.data().posts;
-    let newPosts = [newPost, ...currentPosts];
-    //update database posts
-    await db.collection("hubs").doc(hub).update({
-      posts: newPosts
-    })
-    //update state of all categories and posts
-    const hubs = await db.collection("hubs").get(); 
-    let tempHubs = [];
-      hubs.forEach( doc => {
+      let doc = await db.collection("hubs").doc(hub).get();
+      let currentPosts = doc.data().posts;
+      let newPosts = [newPost, ...currentPosts];
+      //update database posts
+      await db.collection("hubs").doc(hub).update({
+        posts: newPosts,
+      });
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
         tempHubs.push(doc.data());
       });
-    setAllCategories(tempHubs);
-    updateAllPosts();
-    closeMakePost();
-    } catch(err){
-      console.log(err.code, err.message);
+      setAllCategories(tempHubs);
+      updateAllPosts();
+      closeMakePost();
+    } catch (err) {
       alert(err.message);
     }
-  }
+  };
 
-  //submit handlers
+  //handlers
   const handleSubmit = async (e) => {
     //add a new post to chosen category
     e.preventDefault();
@@ -107,41 +117,39 @@ function MakePost({
       voters: [
         {
           username: currentUser.username,
-          vote: "upvote"
-    }
-    ],
+          vote: "upvote",
+        },
+      ],
       comments: [],
     };
 
     //if an image is selected,upload image to firebase storage
-    
-      if(selectedImage){
-        const storageRef = storage.ref(`postImages/${postId}/${selectedImage.name}`);
-        const uploadTask = storageRef.put(selectedImage);
-        uploadTask.on("state_changed", (snapshot)=>{
-          console.log("status", snapshot.state)
-        }, (err)=>{
+    if (selectedImage) {
+      const storageRef = storage.ref(
+        `postImages/${postId}/${selectedImage.name}`
+      );
+      const uploadTask = storageRef.put(selectedImage);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => {
           alert(err.message);
-        },async () => {
+        },
+        async () => {
           imageURL = await storageRef.getDownloadURL();
           newPost.image = selectedImage.name;
           newPost.imageURL = imageURL;
-          console.log("upload sucess url: ", imageURL);
           await addPostToFirestore(newPost);
           setSelectedImage(null);
           setShowLoading(false);
-        })
-      } else {
-        await addPostToFirestore(newPost);
-        setShowLoading(false);
-      }
-    
-    //add the post
-    // arrCategories[categoryIndex].posts.unshift(newPost);
-    
+        }
+      );
+    } else {
+      await addPostToFirestore(newPost);
+      setShowLoading(false);
+    }
   };
 
-  //input onchange handlers
   const closeMakePost = () => {
     setShowMakePost(false);
   };
@@ -164,15 +172,13 @@ function MakePost({
     const types = ["image/png", "image/jpg", "image/jpeg"];
     let selected = e.target.files[0];
 
-    if(selected && types.includes(selected.type)){
+    if (selected && types.includes(selected.type)) {
       setSelectedImage(selected);
     } else {
       setSelectedImage(null);
-      alert("Only jpg or png images are allowed.")
+      alert("Only jpg or png images are allowed.");
     }
   };
-
-  //USE EFFECT
 
   return (
     <div className="MakePost" onClick={closeMakePost}>
@@ -181,7 +187,7 @@ function MakePost({
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
       >
-        <h1>MAKE POST</h1>
+        <h1>CREATE NEW POST</h1>
         <label htmlFor="make-post-category" style={{ fontSize: "10px" }}>
           Select Hub &nbsp;
           <select
@@ -201,7 +207,6 @@ function MakePost({
             })}
           </select>
         </label>
-
         <input
           type="title"
           id="make-post-title"
@@ -217,11 +222,16 @@ function MakePost({
           onChange={(e) => handleMessageChange(e)}
           value={message}
         ></textarea>
-        {/* <span className="btn btn-attach-img">Attach image</span> */}
-        
-          <label for="attach-image" className="btn btn-attach-img">{selectedImage ? `${selectedImage.name}`: "Attach image"}</label>
-          <input type="file" id="attach-image" name="attach-image" accept="image/png, image/jpeg" onChange={(e) => handleAttachImage(e)} />
-        
+        <label for="attach-image" className="btn btn-attach-img">
+          {selectedImage ? `${selectedImage.name}` : "Attach image"}
+        </label>
+        <input
+          type="file"
+          id="attach-image"
+          name="attach-image"
+          accept="image/png, image/jpeg"
+          onChange={(e) => handleAttachImage(e)}
+        />
         <button className="btn btn-submit-post" type="submit">
           Post
         </button>

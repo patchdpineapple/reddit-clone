@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import "./Comments.css";
 import { Link, useParams } from "react-router-dom";
 import { Post } from "./Main";
-import arrCategories from "../data/categories";
 import { db } from "../firebase/config";
 import Loading from "./Loading";
 
@@ -12,7 +11,6 @@ function Comment({
   text,
   thisPost,
   currentUser,
-  allCategories,
   setAllCategories,
   updateAllPosts,
   setShowLoad,
@@ -21,31 +19,7 @@ function Comment({
   const [showEdit, setShowEdit] = useState(false);
   const [newComment, setNewComment] = useState(text);
 
-  //functions
-  const getCommentIndexes = () => {
-    //returns indexes for finding this comment from the database
-    //find index of category where post belongs
-    let categoryIndex = allCategories.findIndex(
-      (category) => category.name === thisPost.category
-    );
-    //find index of post from the same category
-    let postIndex = allCategories[categoryIndex].posts.findIndex(
-      (post) => post.id === thisPost.id
-    );
-    //find index of comment
-    let commentIndex = allCategories[categoryIndex].posts[
-      postIndex
-    ].comments.findIndex((comment) => comment.id === id);
-
-    return {
-      categoryIndex: categoryIndex,
-      postIndex: postIndex,
-      commentIndex: commentIndex,
-    };
-  };
-
   //handlers
-
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     if (newComment === "" || newComment === text) {
@@ -82,18 +56,8 @@ function Comment({
       setShowLoad(false);
     } catch (err) {
       setShowLoad(false);
-      console.log(err.message);
+      alert(err.message);
     }
-
-    // let indexes = getCommentIndexes();
-    // //edit comment from database
-    // arrCategories[indexes.categoryIndex].posts[indexes.postIndex].comments[
-    //   indexes.commentIndex
-    // ].text = newComment;
-    // //update posts
-    // updateAllPosts();
-    // //update database state
-    // setAllCategories(arrCategories);
   };
 
   const handleDeleteComment = async () => {
@@ -127,17 +91,8 @@ function Comment({
       setShowLoad(false);
     } catch (err) {
       setShowLoad(false);
-      console.log(err.message);
+      alert(err.message);
     }
-
-    // let indexes = getCommentIndexes();
-    // //delete comment from database state
-    // let tempCategories = allCategories;
-    // tempCategories[indexes.categoryIndex].posts[
-    //   indexes.postIndex
-    // ].comments.splice(indexes.commentIndex, 1);
-    // let tempPosts = tempCategories[indexes.categoryIndex].posts;
-    // setAllCategories(tempCategories);
   };
 
   const confirmDeleteComment = () => {
@@ -196,6 +151,7 @@ function Comment({
     </div>
   );
 }
+
 /***** PARENT COMPONENT *****/
 function Comments({
   isLoggedIn,
@@ -212,23 +168,13 @@ function Comments({
   const [allComments, setAllComments] = useState([]);
   const [showLoad, setShowLoad] = useState(false);
 
-  //functions
+  
 
   //handlers
   const handleSubmit = async (e) => {
     //add comment to database
-
     e.preventDefault();
     if (comment === "") return;
-
-    //find index of category where post belongs
-    // let categoryIndex = arrCategories.findIndex(
-    //   (category) => category.name === thisPost.category
-    // );
-    //find index of post from the same category
-    // let postIndex = arrCategories[categoryIndex].posts.findIndex(
-    //   (post) => post.id === thisPost.id
-    // );
 
     try {
       setShowLoad(true);
@@ -267,22 +213,8 @@ function Comments({
       setShowLoad(false);
     } catch (err) {
       setShowLoad(false);
-      console.log(err.message);
+      alert(err.message);
     }
-    //find index of post from the same category
-    // postIndex = hub.posts.findIndex(
-    //   (post) => post.id === thisPost.id
-    // );
-    // hub.posts[postIndex].comments.unshift(newComment);
-    /* 
-    hub.update({
-      posts: editedPosts
-    })
-    */
-
-    //add the comment using both indices
-    // arrCategories[categoryIndex].posts[postIndex].comments.unshift(newComment);
-    //update database state
   };
 
   const handleCommentChange = (e) => {
@@ -291,53 +223,49 @@ function Comments({
   };
 
   //USE EFFECT
-  const getPostAndCommentsData = useCallback(async (isMounted) => {
-    //find the post and its comments from the database and set as state
-    try {
-      //gets all hubs/categories from firestore and set as state
-      let hubs = await db.collection("hubs").get();
-      let tempHubs = [];
-      hubs.forEach((doc) => {
-        tempHubs.push(doc.data());
-      });
+  const getPostAndCommentsData = useCallback(
+    async (isMounted) => {
+      //find the post and its comments from the database and set as state
+      try {
+        //gets all hubs/categories from firestore and set as state
+        let hubs = await db.collection("hubs").get();
+        let tempHubs = [];
+        hubs.forEach((doc) => {
+          tempHubs.push(doc.data());
+        });
 
-      //get all posts only
-      let tempPosts = [];
-      hubs.forEach((doc) => {
-        tempPosts = [...tempPosts, ...doc.data().posts];
-      });
+        //get all posts only
+        let tempPosts = [];
+        hubs.forEach((doc) => {
+          tempPosts = [...tempPosts, ...doc.data().posts];
+        });
 
-      //find specific post
-      let tempPost = tempPosts.find((post) => {
-        return post.id === id;
-      });
-      //set states
-      // setAllCategories(tempHubs);
-      if(isMounted){
-        console.log("comment mounted");
-        setThisPost(tempPost);
-      setAllComments(tempPost.comments);
+        //find specific post
+        let tempPost = tempPosts.find((post) => {
+          return post.id === id;
+        });
+        //set states
+        // setAllCategories(tempHubs);
+        if (isMounted) {
+          setThisPost(tempPost);
+          setAllComments(tempPost.comments);
+        }
+
+        setShowLoading(false);
+      } catch (err) {
+        setShowLoading(false);
+        alert(err.message);
       }
-      
-      setShowLoading(false);
-    } catch (err) {
-      setShowLoading(false);
-      console.log(err.message);
-    }
-
-    // arrCategories.map((category) => {
-    //   category.posts.map((post) => {
-    //     tempPosts.push(post);
-    //     return post;
-    //   });
-    //   return category;
-    // });
-  }, [id, setShowLoading]);
+    },
+    [id, setShowLoading]
+  );
 
   useEffect(() => {
     let isMounted = true;
     getPostAndCommentsData(isMounted);
-    return ()=>{isMounted=false};
+    return () => {
+      isMounted = false;
+    };
   }, [getPostAndCommentsData]);
 
   return (
@@ -374,30 +302,28 @@ function Comments({
             </form>
           )}
           <div className="comments-divider"></div>
-          {/* <h2>Comments</h2> */}
-          {
-            allComments.length === 0 && <h1 style={{ marginTop: 20 }}>No comments yet..</h1>
-          }
-          { allComments.length > 0 && (
+          {allComments.length === 0 && (
+            <h1 style={{ marginTop: 20 }}>No comments yet..</h1>
+          )}
+          {allComments.length > 0 && (
             <div className="comments-container">
-            {allComments.map((comment) => {
-              return (
-                <Comment
-                  key={comment.id}
-                  id={comment.id}
-                  user={comment.user}
-                  text={comment.text}
-                  thisPost={thisPost}
-                  currentUser={currentUser}
-                  allCategories={allCategories}
-                  setAllCategories={setAllCategories}
-                  updateAllPosts={updateAllPosts}
-                  setShowLoad={setShowLoad}
-                />
-              );
-            })}
-          </div>)
-          }
+              {allComments.map((comment) => {
+                return (
+                  <Comment
+                    key={comment.id}
+                    id={comment.id}
+                    user={comment.user}
+                    text={comment.text}
+                    thisPost={thisPost}
+                    currentUser={currentUser}
+                    setAllCategories={setAllCategories}
+                    updateAllPosts={updateAllPosts}
+                    setShowLoad={setShowLoad}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </>

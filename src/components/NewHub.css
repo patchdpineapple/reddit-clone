@@ -1,44 +1,44 @@
 .NewHub {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    z-index: 20;
-    background-color: rgba(0, 0, 0, 0.205);
-    position: fixed;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.205);
+  position: fixed;
 }
 
 .newhub-form {
-    padding: 20px;
-    background-color: #f4f4f4;
-    box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.425);
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 20px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.425);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
 }
 
 .input-newhub {
-    margin: 5px;
-    height: 30px;
+  margin: 5px;
+  height: 30px;
 }
 
 .btn-submit-newhub {
-    margin: 10px;
-    padding: 10px;
-    height: 20px;
-    border: 1px solid #0d2e49;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #0d2e49;
-    color: #f4f4f4;
+  margin: 10px;
+  padding: 10px;
+  height: 20px;
+  border: 1px solid #0d2e49;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0d2e49;
+  color: #f4f4f4;
 }
 
-.input-newhub, .btn-submit-newhub  {
-    width: 200px;
+.input-newhub,
+.btn-submit-newhub {
+  width: 200px;
 }
-
