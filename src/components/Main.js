@@ -18,7 +18,36 @@ function PostFloater({ setShowMakePost }) {
   );
 }
 
-function Category({ id, name, members, image }) {
+function Category({ id, name, members, image, currentUser, setShowLoading, setAllCategories, updateAllPosts }) {
+  const deleteHubFromFirestore = async () => {
+    try {
+      setShowLoading(true);
+
+      //delete hub
+      await db.collection("hubs").doc(id).delete(); 
+      //update state of all categories and posts
+      const hubs = await db.collection("hubs").get();
+      let tempHubs = [];
+      hubs.forEach((doc) => {
+        tempHubs.push(doc.data());
+      });
+      setAllCategories(tempHubs);
+      await updateAllPosts();
+
+      setShowLoading(false);
+      alert("Hub deleted");
+
+    } catch(err){
+      setShowLoading(false);
+      alert(err.message)
+    }
+  }
+  const handleDeleteHub = () => {
+    if(currentUser.username === "patchdpineapple"){
+      if (window.confirm("Delete hub?")) deleteHubFromFirestore();
+    } else  console.log("must be admin to delete hub")
+  }
+
   return (
     <div className="Category" data-id={id}>
       <div className="category-info">
@@ -37,7 +66,7 @@ function Category({ id, name, members, image }) {
           <span className="category-members">{members} members</span>
         </div>
       </div>
-      <button className="btn btn-join">Join</button>
+      <button className="btn btn-join" onClick={handleDeleteHub}>Join</button>
     </div>
   );
 }
@@ -390,6 +419,10 @@ function Main({
               name={category.name}
               members={category.members}
               image={category.image}
+              currentUser={currentUser}
+              setShowLoading={setShowLoading}
+              setAllCategories={setAllCategories}
+              updateAllPosts={updateAllPosts}
             />
           );
         })}
