@@ -46,6 +46,11 @@
     height: 30px;
     background-color: #f4f4f4;
     border: 1px solid #0d2e49;
+    overflow: hidden;
+}
+
+#attach-image {
+    display:none;
 }
 
 .btn-submit-post {

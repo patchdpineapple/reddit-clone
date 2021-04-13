@@ -81,20 +81,6 @@ function MakePost({
     }
   }
 
-  const uploadImage =  (file, postId) => {
-    const storageRef = storage.ref(`postImages/${postId}/${selectedImage.name}`);
-    let url;
-     storageRef.put(file).on("state_changed", (snapshot)=>{
-      console.log("status", snapshot.state)
-    }, (err)=>{
-      alert(err.message);
-    },async () => {
-      url = await storageRef.getDownloadURL();
-    })
-    console.log("upload successful url: ", url);
-    return url;
-  }
-
   //submit handlers
   const handleSubmit = async (e) => {
     //add a new post to chosen category
@@ -103,7 +89,7 @@ function MakePost({
 
     let currentDate = getCurrentDate();
     let postId = getId();
-    let imageURL="";
+    let imageURL = "";
 
     //create a new post object
     let newPost = {
@@ -115,7 +101,8 @@ function MakePost({
       datems: currentDate.datems,
       title: title,
       text: message,
-      image: imageURL,
+      image: "",
+      imageURL: imageURL,
       votes: 1,
       voters: [
         {
@@ -137,7 +124,8 @@ function MakePost({
           alert(err.message);
         },async () => {
           imageURL = await storageRef.getDownloadURL();
-          newPost.image = imageURL;
+          newPost.image = selectedImage.name;
+          newPost.imageURL = imageURL;
           console.log("upload sucess url: ", imageURL);
           await addPostToFirestore(newPost);
           setSelectedImage(null);
@@ -230,7 +218,10 @@ function MakePost({
           value={message}
         ></textarea>
         {/* <span className="btn btn-attach-img">Attach image</span> */}
-        <input type="file" id="attach-image" name="attach-image" accept="image/png, image/jpeg" onChange={(e) => handleAttachImage(e)} />
+        
+          <label for="attach-image" className="btn btn-attach-img">{selectedImage ? `${selectedImage.name}`: "Attach image"}</label>
+          <input type="file" id="attach-image" name="attach-image" accept="image/png, image/jpeg" onChange={(e) => handleAttachImage(e)} />
+        
         <button className="btn btn-submit-post" type="submit">
           Post
         </button>

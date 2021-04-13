@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Main.css";
 import { Link } from "react-router-dom";
 import arrCategories from "../data/categories";
-import { db } from "../firebase/config";
+import { db, storage } from "../firebase/config";
 
 function PostFloater({ setShowMakePost }) {
   const handleMakePost = () => {
@@ -22,7 +22,14 @@ function Category({ id, name, members, image }) {
   return (
     <div className="Category" data-id={id}>
       <div className="category-info">
-        <img className="category-img" src={image || "https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fhub_placeholder.png?alt=media&token=4a0422f5-0dba-4ecd-91b2-ff60c8d6d8f1"} alt="" />
+        <img
+          className="category-img"
+          src={
+            image ||
+            "https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fhub_placeholder.png?alt=media&token=4a0422f5-0dba-4ecd-91b2-ff60c8d6d8f1"
+          }
+          alt=""
+        />
         <div className="category-text-container">
           <Link to={`/hub/${name}`} className="link">
             <strong className="category-title">/{name}</strong>
@@ -52,7 +59,6 @@ function Post({
   const deletePostFromFirestore = async () => {
     //delete the post from firestore database and update states
     try {
-      setShowLoading(true);
       //get posts from database
       let doc = await db.collection("hubs").doc(thisPost.category).get();
       //record posts and remove the post with filter
@@ -70,7 +76,6 @@ function Post({
       });
       setAllCategories(tempHubs);
       await updateAllPosts();
-      setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
       console.log(err.message);
@@ -181,8 +186,23 @@ function Post({
     } else setShowLogin(true);
   };
 
-  const handleDeletePost = () => {
-    deletePostFromFirestore();
+  const handleDeletePost = async () => {
+    try {
+      setShowLoading(true);
+      //delete image from storage then delete post from firestore
+      if (thisPost.imageURL !== "") {
+        let storageRef = storage.ref(`postImages/${thisPost.id}/${thisPost.image}`);
+        await storageRef.delete();
+        await deletePostFromFirestore();
+        setShowLoading(false);
+      } else {
+        await deletePostFromFirestore();
+        setShowLoading(false);
+      }
+    } catch (err) {
+      setShowLoading(false);
+      alert(err.message);
+    }
   };
 
   const confirmDeletePost = () => {
@@ -210,17 +230,13 @@ function Post({
         if (!indexes) return;
 
         //find if current user voted on this post
-        if(allCategories[indexes.categoryIndex].posts[
-          indexes.postIndex
-        ]){
+        if (allCategories[indexes.categoryIndex].posts[indexes.postIndex]) {
           let voter = allCategories[indexes.categoryIndex].posts[
-          indexes.postIndex
-        ].voters.find((voter) => voter.username === currentUser.username);
+            indexes.postIndex
+          ].voters.find((voter) => voter.username === currentUser.username);
 
-        voter ? setUserVote(voter.vote) : setUserVote("");
-
+          voter ? setUserVote(voter.vote) : setUserVote("");
         }
-        
       }
     }
   }, [isLoggedIn, thisPost, allCategories]);
@@ -288,7 +304,7 @@ function Post({
           </Link>
           <p className="post-message">{thisPost.text}</p>
           <div className="post-img-container">
-            <img className="post-img" src={thisPost.image} alt="" />
+            <img className="post-img" src={thisPost.imageURL} alt="" />
           </div>
           <div className="post-comment-container">
             <div className="post-comment">
