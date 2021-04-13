@@ -178,6 +178,7 @@
     border-radius: 10px;
     margin-right: 10%;
     grid-area: categories;
+    overflow: hidden;
 }
 
 .category-header {
@@ -208,7 +209,6 @@
     align-items: center;
     width: 100%;
     padding: 10px;
-
 }
 
 .category-info {
@@ -230,6 +230,8 @@
     justify-content: flex-start;
     align-items: flex-start;
     margin-left: 5px;
+    padding-right: 10px;
+
 }
 
 .category-title {
@@ -238,7 +240,6 @@
     cursor: pointer;
     word-wrap: break-word;
     max-width: 10vw;
-
 }
 
 .category-members {
@@ -278,33 +279,70 @@
     text-align: center;
  }
 
- @media (max-width: 750px) {
+ @media (max-width: 950px) {
     .Main {
-        grid-template-areas: 
-        "title"
-        "categories"
-        "posts";
+       width: 90%;
     }
+
+
 
     .categories-container {
         display: flex;
         flex-flow: column;
         justify-content: flex-start;
         align-items: center;
-        width: 100%;
+        min-width: 100%;
         min-height: 150px;
+        margin-right: 0;
         
     }
     .Category {
-        flex-flow: column;
+        flex-flow: row;
+    }
+
+    .category-title {
+        max-width: 300px;
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 780px) {
     .Main {
+       width: 100%;
         margin-top: 10%;
     }
+    
 }
+
+@media (max-width: 720px) {
+    .Main {
+        grid-template-areas: 
+        "title"
+        "categories"
+        "posts";
+        justify-content: center;
+        align-items: center;
+    }
+
+    .posts-container {
+        min-width: 70%;
+
+    }
+
+    .categories-container {
+        width: 100%;
+    }
+
+
+
+    .Category {
+        justify-content: center;
+    align-items: center;
+    }
+    
+}
+
+
+
 
 @media (max-width: 520px) {
     .Main {

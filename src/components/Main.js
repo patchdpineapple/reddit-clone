@@ -35,7 +35,6 @@ function Category({ id, name, members, image, currentUser, setShowLoading, setAl
       await updateAllPosts();
 
       setShowLoading(false);
-      alert("Hub deleted");
 
     } catch(err){
       setShowLoading(false);

@@ -61,3 +61,34 @@
   font-size: 12px;
 
 }
+
+@media (max-width: 450px) {
+  .Navlinks { 
+  justify-content: center;
+
+  }
+
+  .btn-login,
+.btn-signup {
+  border: 3px solid #0d2e49;
+  height: 40px;
+  width: 60px;
+  font-size: 10px;
+  margin: 0 5px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-username {
+  font-size: 16x;
+  padding: 10px;
+}
+
+.btn-logout {
+  font-size: 12px;
+  padding: 10px;
+}
+  
+}
