@@ -1,5 +1,21 @@
 # Final Project: Reddit Clone
-This is the final project of the Javascript course from The Odin Project.
+
+This is the final project of the Javascript course from The Odin Project.\
+The project is a clone of the popular social media site Reddit.
+
+#### Live preview
+
+Click [here](http://patchdpineapple.github.io/reddit-clone) for the live preview of this project hosted on github pages
+
+#### Core features
+
+User authentication
+Login and Signup system
+Create new hubs/categories(subreddit on Reddit)
+Create a post with attached image
+Upvote and Downvote posts
+Comment on posts
+Edit and Delete your own posts and comments
 
 ### How to run the app
 
@@ -25,6 +41,3 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
-
-#### Live preview
-Click [here](http://patchdpineapple.github.io/where-is-waldo) for the live preview of this project hosted on github pages
