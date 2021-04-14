@@ -23,12 +23,11 @@
 .loader {
   border: 16px solid #f4f4f4;
   border-radius: 50%;
-  border-top: 16px solid cadetblue;
-  border-bottom: 16px solid cadetblue;
+  border-top: 16px solid var(--primary);
   width: 10vw;
   height: 10vw;
-  -webkit-animation: spin 1s linear infinite; /* Safari */
-  animation: spin 1s linear infinite;
+  -webkit-animation: spin .5s linear infinite; /* Safari */
+  animation: spin .5s linear infinite;
 }
 
 /* Safari */

@@ -1,17 +1,17 @@
 .Navlinks {
   display: flex;
-  background-color: #f4f4f4;
+  background-color: var(--secondary);
   justify-content: space-between;
   width: 100vw;
   padding: 10px;
   position: fixed;
   z-index: 10;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid var(--border);
   box-shadow: 0 0px 10px -5px rgba(0, 0, 0, 0.425);
 }
 
 .nav-logo {
-  color: #0d2e49;
+  color: var(--text);
   margin-left: 15%;
   cursor: pointer;
 }
@@ -32,7 +32,7 @@
 
 .btn-login,
 .btn-signup {
-  border: 3px solid #0d2e49;
+  border: 3px solid var(--primary);
   height: 40px;
   width: 100px;
   font-size: 12px;
@@ -41,6 +41,7 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  font-weight: 700;
 }
 
 .btn-login {
@@ -48,8 +49,8 @@
 }
 
 .btn-signup {
-  background-color: #0d2e49;
-  color: #f4f4f4;
+  background-color: var(--primary);
+  color: var(--secondary);
 }
 
 .btn-username {
@@ -67,15 +68,9 @@
 
   .btn-login,
   .btn-signup {
-    border: 3px solid #0d2e49;
-    height: 40px;
     width: 60px;
-    font-size: 10px;
+    font-size: 16px;
     margin: 0 5px;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
   }
 
   .btn-username {

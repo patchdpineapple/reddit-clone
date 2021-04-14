@@ -113,7 +113,6 @@ function Comment({
       <Link to={`/profile/${user}`} className="link">
         <span>{user}</span>
       </Link>
-
       <div className="text-container">
         <p className="comment-text">{text}</p>
         <div className="btn-container">

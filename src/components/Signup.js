@@ -105,35 +105,36 @@ function Signup({ setShowSignup, setIsLoggedIn, setCurrentUser }) {
         onSubmit={(e) => handleSubmit(e)}
       >
         <h1>Signup</h1>
-        <label htmlFor="signup-username">Username:</label>
+        {/* <label htmlFor="signup-username">Username:</label> */}
         <input
           className="input-signup"
           type="text"
           id="signup-username"
           name="username"
-          placeholder="User"
+          placeholder="USERNAME"
+          maxLength={20}
           onChange={handleUsernameChange}
           value={username}
           required
         />
-        <label htmlFor="signup-email">Email:</label>
+        {/* <label htmlFor="signup-email">Email:</label> */}
         <input
           className="input-signup"
           type="email"
           id="signup-email"
           name="email"
-          placeholder="sample@sample.com"
+          placeholder="EMAIL"
           onChange={handleEmailChange}
           value={email}
           required
         />
-        <label htmlFor="signup-password">Password:</label>
+        {/* <label htmlFor="signup-password">Password:</label> */}
         <input
           className="input-signup"
           type="password"
           id="signup-password"
           name="password"
-          placeholder="password"
+          placeholder="PASSWORD"
           minLength={6}
           onChange={handlePasswordChange}
           value={password}

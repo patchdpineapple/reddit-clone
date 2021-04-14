@@ -59,24 +59,24 @@ function Login({ setShowLogin, setShowLoading }) {
         onSubmit={(e) => handleSubmit(e)}
       >
         <h1>Login</h1>
-        <label htmlFor="login-email">Email:</label>
+        {/* <label htmlFor="login-email">Email:</label> */}
         <input
           className="input-login"
           type="text"
           id="login-email"
           name="email"
-          placeholder="email"
+          placeholder="EMAIL"
           onChange={handleEmailChange}
           value={email}
           required
         />
-        <label htmlFor="password">Password:</label>
+        {/* <label htmlFor="password">Password:</label> */}
         <input
           className="input-login"
           type="password"
           id="login-password"
           name="password"
-          placeholder="password"
+          placeholder="PASSWORD"
           onChange={handlePasswordChange}
           value={password}
           required

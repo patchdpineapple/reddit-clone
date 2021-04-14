@@ -8,7 +8,7 @@
   align-items: flex-start;
   padding: 10px;
   width: 80%;
-  margin-top: 7%;
+  margin-top: 5%;
   margin-bottom: 50px;
 }
 
@@ -25,16 +25,19 @@
 .current-category {
   grid-area: title;
 }
+.current-category > h2 {
+  color: var(--secondary);
+}
 
 /* Post  */
 .Post {
   padding: 5px;
-  background-color: #f4f4f4;
+  background-color: var(--secondary);
   width: 100%;
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   align-items: flex-start;
-  border: 1px solid lightgray;
+  border: 1px solid var(--border);
   margin-bottom: 2vh;
 }
 
@@ -84,8 +87,9 @@
 .post-group,
 .post-postedBy,
 .post-user,
-.post-time {
+.post-time, .post-time > span {
   font-size: 12px;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .post-group,
@@ -98,7 +102,13 @@
 .post-message {
   word-wrap: break-word;
   max-width: 50vw;
+  
 }
+
+.post-message {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
 .post-postedBy,
 .post-user,
 .post-time {
@@ -180,9 +190,9 @@
   width: 20vw;
   min-height: 150px;
   padding: 10px;
-  background-color: #f4f4f4;
-  border: 1px solid lightgray;
-  border-radius: 10px;
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
   margin-right: 10%;
   grid-area: categories;
   overflow: hidden;
@@ -196,12 +206,12 @@
   margin: 10px;
   padding: 10px;
   height: 20px;
-  border: 1px solid #0d2e49;
+  border: 1px solid var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  color: #0d2e49;
+  color: var(--primary);
 }
 
 .btn-new-category:hover {
@@ -249,12 +259,13 @@
 .category-members {
   display: block;
   font-size: 10px;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
-.btn-join {
+.btn-del {
   padding: 10px;
   border-radius: 10px;
-  background-color: #0d2e49;
+  background-color: var(--primary);
   color: #f4f4f4;
 }
 
@@ -269,7 +280,7 @@
 }
 
 .btn-post-floater {
-  border: 1px solid #0d2e49;
+  border: 3px solid var(--border);
   width: 50px;
   height: 50px;
   font-size: 24px;
@@ -280,6 +291,10 @@
   box-shadow: 0 0px 5px 3px rgba(0, 0, 0, 0.288);
   background-color: #f4f4f4;
   text-align: center;
+}
+
+.fa-plus {
+  color: var(--text)
 }
 
 @media (max-width: 950px) {

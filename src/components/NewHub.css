@@ -24,17 +24,18 @@
 .input-newhub {
   margin: 5px;
   height: 30px;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .btn-submit-newhub {
   margin: 10px;
   padding: 10px;
   height: 20px;
-  border: 1px solid #0d2e49;
+  border: 1px solid var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0d2e49;
+  background-color: var(--primary);
   color: #f4f4f4;
 }
 

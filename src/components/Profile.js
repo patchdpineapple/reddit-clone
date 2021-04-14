@@ -75,7 +75,7 @@ function Profile({
         <>
           <div className="profile-info">
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fprofile_placeholder2.png?alt=media&token=5f64c241-7b43-42d4-88ec-b61b4f5e9fcf"
+              src="https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fprofplaceholder3.jpg?alt=media&token=5ca527e4-baad-44fa-b3e2-8001b80cfe00"
               className="profile-pic"
               alt=""
             />

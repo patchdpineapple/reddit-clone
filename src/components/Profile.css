@@ -6,16 +6,25 @@
   margin-top: 20vh;
 }
 
+.Profile > * {
+  color: var(--secondary)
+}
+
+.profile-info * {
+  color: var(--secondary)
+}
+
 .profile-pic {
   width: 150px;
   height: 150px;
   background: lightgray;
+  border: 1px solid var(--border);
 }
 
 .profile-divider {
   width: 50vw;
   height: 1px;
-  background-color: #0d2e49;
+  background-color: transparent;
   margin-top: 20px;
 }
 

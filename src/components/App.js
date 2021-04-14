@@ -87,8 +87,7 @@ function App() {
       setShowLoading(false);
     } catch (err) {
       setShowLoading(false);
-      console.log(err.code);
-      console.log(err.message);
+      alert(err.message);
     }
   };
 

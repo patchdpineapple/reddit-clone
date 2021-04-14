@@ -27,13 +27,14 @@
   margin: 5px;
 }
 
-#make-post-title {
-  width: 90%;
-}
 
 #make-post-message {
-  width: 90%;
   height: 50%;
+}
+
+#make-post-title, #make-post-message {
+  width: 90%;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .btn-attach-img {
@@ -61,8 +62,8 @@
   margin: 5px;
   width: 90%;
   height: 30px;
-  background-color: #0d2e49;
-  color: #f4f4f4;
+  background-color: var(--primary);
+  color: var(--secondary);
 }
 
 @media (max-width: 600px) {

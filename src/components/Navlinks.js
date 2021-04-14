@@ -74,11 +74,11 @@ function Navlinks({
 
   return (
     <div className="Navlinks">
-      <h1 className="nav-logo">
+      <h2 className="nav-logo">
         <Link to="/" className="link" onClick={resetCurrentCategory}>
           TheHub
         </Link>
-      </h1>
+      </h2>
       {isLoggedIn ? (
         <LoggedIn
           setIsLoggedIn={setIsLoggedIn}

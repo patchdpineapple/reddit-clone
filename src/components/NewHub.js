@@ -63,21 +63,20 @@ function NewHub({ setShowNewHub, allCategories, setAllCategories }) {
         onClick={(e) => e.stopPropagation()}
         onSubmit={(e) => handleSubmit(e)}
       >
-        <label htmlFor="newhub-name">Enter Hub Name:</label>
+        <label htmlFor="newhub-name">New Hub</label>
         <input
           className="input-newhub"
           type="text"
           id="newhub-name"
           name="newhub-name"
-          placeholder="Hub"
+          placeholder="HUB NAME"
           value={hubName}
           onChange={handleChangeHubName}
-          maxLength="40"
+          maxLength="20"
           required
         />
-
         <button className="btn btn-submit-newhub" type="submit">
-          Done
+          Submit
         </button>
       </form>
     </div>

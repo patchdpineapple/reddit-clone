@@ -61,7 +61,7 @@ function Category({
           className="category-img"
           src={
             image ||
-            "https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fhub_placeholder.png?alt=media&token=4a0422f5-0dba-4ecd-91b2-ff60c8d6d8f1"
+            "https://firebasestorage.googleapis.com/v0/b/thehub-reddit-clone.appspot.com/o/placeholders%2Fhubplaceholder2.png?alt=media&token=09a2d7f5-ecf9-4211-ba91-6f7b56393b8c"
           }
           alt=""
         />
@@ -73,8 +73,8 @@ function Category({
         </div>
       </div>
       {currentUser.username === "patchdpineapple" && (
-        <button className="btn btn-join" onClick={handleDeleteHub}>
-        Join
+        <button className="btn btn-del" onClick={handleDeleteHub}>
+        Del
       </button>
       )}
     </div>
@@ -383,7 +383,7 @@ function Main({
   return (
     <div className="Main container">
       <div className="current-category">
-        <h1>{categoryName ? `/${categoryName}` : "/All"}</h1>
+        <h2>{categoryName ? `/${categoryName}` : "/All"}</h2>
       </div>
       <div className="posts-container container">
         {categoryPosts.map((post) => {
