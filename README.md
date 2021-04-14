@@ -9,12 +9,12 @@ Click [here](http://patchdpineapple.github.io/reddit-clone) for the live preview
 
 #### Core features
 
-User authentication
-Login and Signup system
-Create new hubs/categories(subreddit on Reddit)
-Create a post with attached image
-Upvote and Downvote posts
-Comment on posts
+User authentication\
+Login and Signup system\
+Create new hubs/categories(subreddit on Reddit)\
+Create a post with attached image\
+Upvote and Downvote posts\
+Comment on posts\
 Edit and Delete your own posts and comments
 
 ### How to run the app
