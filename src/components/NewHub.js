@@ -34,6 +34,11 @@ function NewHub({ setShowNewHub, allCategories, setAllCategories }) {
     //add a new category
     e.preventDefault();
 
+    if(hubName.includes("/") || hubName.includes("\\")){
+      alert(`Hub name must not contain "/" or "\\"`);
+      return;
+    }
+
     let newCategory = {
       id: hubName,
       name: hubName,
