@@ -371,8 +371,6 @@ function Main({
   useEffect(() => {
     //get posts from same category only or all posts if no category name
     if (categoryName && allCategories.length > 0) {
-      console.log(categoryName)
-      console.log(allCategories)
       let categoryIndex = allCategories.findIndex(
         (category) => category.name === categoryName
       );
