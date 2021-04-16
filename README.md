@@ -5,7 +5,7 @@ The project is a clone of the popular social media site Reddit.
 
 #### Live preview
 
-Click [here](http://patchdpineapple.github.io/reddit-clone) for the live preview of this project hosted on github pages
+Click [https://thehub-reddit-clone.web.app/](https://thehub-reddit-clone.web.app/)
 
 #### Core features
 
