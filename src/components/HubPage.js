@@ -16,12 +16,15 @@ function HubPage({
   currentUser,
   setAllCategories,
   updateAllPosts,
-  setShowLogin
+  setShowLogin,
+  setShowLoading,
 }) {
   let { category } = useParams();
   useEffect(() => {
     setCurrentCategory(category);
   }, [category, setCurrentCategory]);
+
+  // 
 
   return (
     <>
@@ -38,6 +41,7 @@ function HubPage({
         setAllCategories={setAllCategories}
         updateAllPosts={updateAllPosts}
         setShowLogin={setShowLogin}
+        setShowLoading={setShowLoading}
       />
     </>
   );

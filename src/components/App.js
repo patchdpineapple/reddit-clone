@@ -232,6 +232,7 @@ function App() {
                 setAllCategories={setAllCategories}
                 updateAllPosts={updateAllPosts}
                 setShowLogin={setShowLogin}
+                setShowLoading={setShowLoading}
               />
             )}
           />
