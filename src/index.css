@@ -20,12 +20,6 @@
   font-weight: 700;
 }
 
-.mycolors {
-  color: #5f9ea0;
-  color: #f4f4f4;
-  color: #1d1d1d;
-}
-
 body {
   background-color:var(--primary);
 }
